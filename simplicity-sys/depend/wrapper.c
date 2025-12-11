@@ -92,4 +92,13 @@ void c_skipBits(frameItem *frame, size_t n)
     skipBits(frame, n);
 }
 
+/* Write a 256-bit hash value to the 'dst' frame, advancing the cursor 256 cells.
+ *
+ * Precondition: '*dst' is a valid write frame for 256 more cells;
+ *               NULL != h;
+ */
+void rustsimplicity_0_6_writeHash(frameItem* dst, const sha256_midstate* h) {
+  write32s(dst, h->s, 8);
+}
+
 #endif

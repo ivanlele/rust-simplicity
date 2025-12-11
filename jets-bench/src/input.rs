@@ -309,8 +309,8 @@ impl FlatValue {
         unsafe {
             use simplicity::elements::hashes::Hash as _;
 
-            let mut dst_inner = [0usize; MAX_VALUE_BYTES / mem::size_of::<usize>()];
-            let mut src_inner = [0usize; MAX_VALUE_BYTES / mem::size_of::<usize>()];
+            let mut dst_inner = [0u16; MAX_VALUE_BYTES / mem::size_of::<usize>()];
+            let mut src_inner = [0u16; MAX_VALUE_BYTES / mem::size_of::<usize>()];
 
             let mut src_bytes = self.inner;
             // See below block comment on the write frame for justification of this
@@ -322,7 +322,7 @@ impl FlatValue {
                 MAX_VALUE_BYTES,
             );
             for us in &mut src_inner {
-                *us = usize::from_be(us.swap_bytes());
+                *us = u16::from_be(us.swap_bytes());
             }
 
             let src_read_frame = CFrameItem::new_read(self.len_bits, src_inner.as_ptr());
@@ -1365,8 +1365,12 @@ impl InputSample for DivMod12864Input {
             for (bit1, bit2) in sample_1.bit_iter().zip(sample_2.bit_iter()) {
                 match (bit1, bit2) {
                     (false, false) | (true, true) => {} // both equal
-                    (true, false) => return FlatValue::product(&[sample_2, UniformBits.sample(0, 64), sample_1]),
-                    (false, true) => return FlatValue::product(&[sample_1, UniformBits.sample(0, 64), sample_2]),
+                    (true, false) => {
+                        return FlatValue::product(&[sample_2, UniformBits.sample(0, 64), sample_1])
+                    }
+                    (false, true) => {
+                        return FlatValue::product(&[sample_1, UniformBits.sample(0, 64), sample_2])
+                    }
                 }
             }
             unreachable!("if we get here, two uniform 63-bit samples were exactly equal")
