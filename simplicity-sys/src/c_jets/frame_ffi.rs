@@ -24,4 +24,14 @@ extern "C" {
     pub fn c_writeBit(frame: &mut CFrameItem, bit: bool);
     pub fn c_forwardBits(frame: &mut CFrameItem, n: usize);
     pub fn c_skipBits(frame: &mut CFrameItem, n: usize);
+
+    /// Write a 256-bit hash value to the 'dst' frame, advancing the cursor 256 cells.
+    ///
+    /// # Safety
+    ///
+    /// Precondition: 'dst' is a valid write frame for 256 more cells; h is not null.
+    pub fn rustsimplicity_0_6_writeHash(
+        dst: *mut CFrameItem,
+        h: *const crate::ffi::sha256::CSha256Midstate,
+    );
 }

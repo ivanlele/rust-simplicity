@@ -86,7 +86,7 @@ extern crate test;
 #[macro_use]
 mod macros;
 
-mod analysis;
+pub mod analysis;
 mod bit_encoding;
 pub mod bit_machine;
 pub mod dag;
