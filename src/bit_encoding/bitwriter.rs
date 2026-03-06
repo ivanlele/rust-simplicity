@@ -103,19 +103,18 @@ impl<W: io::Write> BitWriter<W> {
 /// I/O to a vector never fails.
 pub fn write_to_vec<F>(f: F) -> Vec<u8>
 where
-    F: FnOnce(&mut BitWriter<&mut Vec<u8>>) -> io::Result<usize>,
+    F: FnOnce(&mut BitWriter<Vec<u8>>) -> io::Result<usize>,
 {
-    let mut bytes = Vec::new();
-    let mut bits = BitWriter::new(&mut bytes);
+    let bytes = Vec::new();
+    let mut bits = BitWriter::new(bytes);
     f(&mut bits).expect("I/O to vector never fails");
     bits.flush_all().expect("I/O to vector never fails");
-    bytes
+    bits.w
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::jet::Core;
     use crate::node::CoreConstructible;
     use crate::types;
     use crate::ConstructNode;
@@ -124,7 +123,7 @@ mod tests {
     #[test]
     fn vec() {
         types::Context::with_context(|ctx| {
-            let program = Arc::<ConstructNode<Core>>::unit(&ctx);
+            let program = Arc::<ConstructNode>::unit(&ctx);
             let _ = write_to_vec(|w| program.encode_without_witness(w));
         })
     }

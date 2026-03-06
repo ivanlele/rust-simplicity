@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 
 use crate::dag::{DagLike, MaxSharing, NoSharing, PostOrderIterItem};
-use crate::jet::Jet;
 use crate::types::arrow::{Arrow, FinalArrow};
 use crate::{encode, types, Value};
 use crate::{Amr, BitIter, BitWriter, Cmr, DecodeError, Ihr, Imr};
@@ -12,31 +11,27 @@ use super::{
 };
 
 use std::io;
-use std::marker::PhantomData;
 use std::sync::Arc;
 
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Debug, Hash)]
-pub struct Commit<J> {
+pub struct Commit {
     /// Makes the type non-constructible.
     never: std::convert::Infallible,
-    /// Required by Rust.
-    phantom: std::marker::PhantomData<J>,
 }
 
-impl<J: Jet> Marker for Commit<J> {
-    type CachedData = Arc<CommitData<J>>;
+impl Marker for Commit {
+    type CachedData = Arc<CommitData>;
     type Witness = NoWitness;
     type Disconnect = NoDisconnect;
     type SharingId = Ihr;
-    type Jet = J;
 
-    fn compute_sharing_id(_: Cmr, cached_data: &Arc<CommitData<J>>) -> Option<Ihr> {
+    fn compute_sharing_id(_: Cmr, cached_data: &Arc<CommitData>) -> Option<Ihr> {
         cached_data.ihr
     }
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-pub struct CommitData<J> {
+pub struct CommitData {
     /// The source and target types of the node
     arrow: FinalArrow,
     /// The IMR of the node if it exists. This is distinct from its IHR; it is
@@ -48,13 +43,9 @@ pub struct CommitData<J> {
     /// The IHR of the node if it exists, meaning, if it is not (an ancestor of)
     /// a witness or disconnect node.
     ihr: Option<Ihr>,
-    /// This isn't really necessary, but it helps type inference if every
-    /// struct has a \<J\> parameter, since it forces the choice of jets to
-    /// be consistent without the user needing to specify it too many times.
-    phantom: PhantomData<J>,
 }
 
-impl<J: Jet> CommitData<J> {
+impl CommitData {
     /// Accessor for the node's arrow
     pub fn arrow(&self) -> &FinalArrow {
         &self.arrow
@@ -67,7 +58,7 @@ impl<J: Jet> CommitData<J> {
 
     /// Helper function to compute a cached AMR
     fn incomplete_amr(
-        inner: Inner<&Arc<Self>, J, &NoDisconnect, &NoWitness>,
+        inner: Inner<&Arc<Self>, &NoDisconnect, &NoWitness>,
         arrow: &FinalArrow,
     ) -> Option<Amr> {
         match inner {
@@ -97,13 +88,13 @@ impl<J: Jet> CommitData<J> {
             Inner::Disconnect(..) => None,
             Inner::Witness(..) => None,
             Inner::Fail(entropy) => Some(Amr::fail(entropy)),
-            Inner::Jet(jet) => Some(Amr::jet(jet)),
+            Inner::Jet(jet) => Some(Amr::jet(&jet)),
             Inner::Word(ref val) => Some(Amr::const_word(val)),
         }
     }
 
     /// Helper function to compute a cached first-pass IHR
-    fn imr(inner: Inner<&Arc<Self>, J, &NoDisconnect, &NoWitness>) -> Option<Imr> {
+    fn imr(inner: Inner<&Arc<Self>, &NoDisconnect, &NoWitness>) -> Option<Imr> {
         match inner {
             Inner::Iden => Some(Imr::iden()),
             Inner::Unit => Some(Imr::unit()),
@@ -119,14 +110,14 @@ impl<J: Jet> CommitData<J> {
             Inner::Disconnect(..) => None,
             Inner::Witness(..) => None,
             Inner::Fail(entropy) => Some(Imr::fail(entropy)),
-            Inner::Jet(jet) => Some(Imr::jet(jet)),
+            Inner::Jet(jet) => Some(Imr::jet(&jet)),
             Inner::Word(ref val) => Some(Imr::const_word(val)),
         }
     }
 
     pub fn new(
         arrow: &Arrow,
-        inner: Inner<&Arc<Self>, J, &NoDisconnect, &NoWitness>,
+        inner: Inner<&Arc<Self>, &NoDisconnect, &NoWitness>,
     ) -> Result<Self, types::Error> {
         let final_arrow = arrow.finalize()?;
         let imr = Self::imr(inner.clone());
@@ -136,13 +127,12 @@ impl<J: Jet> CommitData<J> {
             amr,
             ihr: imr.map(|ihr| Ihr::from_imr(ihr, &final_arrow)),
             arrow: final_arrow,
-            phantom: PhantomData,
         })
     }
 
     pub fn from_final(
         arrow: FinalArrow,
-        inner: Inner<&Arc<Self>, J, &NoDisconnect, &NoWitness>,
+        inner: Inner<&Arc<Self>, &NoDisconnect, &NoWitness>,
     ) -> Self {
         let imr = Self::imr(inner.clone());
         let amr = Self::incomplete_amr(inner, &arrow);
@@ -151,14 +141,13 @@ impl<J: Jet> CommitData<J> {
             amr,
             ihr: imr.map(|ihr| Ihr::from_imr(ihr, &arrow)),
             arrow,
-            phantom: PhantomData,
         }
     }
 }
 
-pub type CommitNode<J> = Node<Commit<J>>;
+pub type CommitNode = Node<Commit>;
 
-impl<J: Jet> CommitNode<J> {
+impl CommitNode {
     /// Accessor for the node's arrow
     pub fn arrow(&self) -> &FinalArrow {
         &self.data.arrow
@@ -179,28 +168,27 @@ impl<J: Jet> CommitNode<J> {
     ///
     /// This is a thin wrapper around [`Node::convert`] which fixes a few types to make
     /// it easier to use.
-    pub fn finalize<C: Converter<Commit<J>, Redeem<J>>>(
+    pub fn finalize<C: Converter<Commit, Redeem>>(
         &self,
         converter: &mut C,
-    ) -> Result<Arc<RedeemNode<J>>, C::Error> {
-        self.convert::<NoSharing, Redeem<J>, _>(converter)
+    ) -> Result<Arc<RedeemNode>, C::Error> {
+        self.convert::<NoSharing, Redeem, _>(converter)
     }
 
     /// Convert a [`CommitNode`] back to a [`ConstructNode`] by redoing type inference
     pub fn unfinalize_types<'brand>(
         &self,
         inference_context: &types::Context<'brand>,
-    ) -> Result<Arc<ConstructNode<'brand, J>>, types::Error> {
-        struct UnfinalizeTypes<'a, 'brand, J: Jet> {
+    ) -> Result<Arc<ConstructNode<'brand>>, types::Error> {
+        struct UnfinalizeTypes<'a, 'brand> {
             inference_context: &'a types::Context<'brand>,
-            phantom: PhantomData<J>,
         }
 
-        impl<'brand, J: Jet> Converter<Commit<J>, Construct<'brand, J>> for UnfinalizeTypes<'_, 'brand, J> {
+        impl<'brand> Converter<Commit, Construct<'brand>> for UnfinalizeTypes<'_, 'brand> {
             type Error = types::Error;
             fn convert_witness(
                 &mut self,
-                _: &PostOrderIterItem<&CommitNode<J>>,
+                _: &PostOrderIterItem<&CommitNode>,
                 _: &NoWitness,
             ) -> Result<Option<Value>, Self::Error> {
                 Ok(None)
@@ -208,23 +196,22 @@ impl<J: Jet> CommitNode<J> {
 
             fn convert_disconnect(
                 &mut self,
-                _: &PostOrderIterItem<&CommitNode<J>>,
-                _: Option<&Arc<ConstructNode<'brand, J>>>,
+                _: &PostOrderIterItem<&CommitNode>,
+                _: Option<&Arc<ConstructNode<'brand>>>,
                 _: &NoDisconnect,
-            ) -> Result<Option<Arc<ConstructNode<'brand, J>>>, Self::Error> {
+            ) -> Result<Option<Arc<ConstructNode<'brand>>>, Self::Error> {
                 Ok(None)
             }
 
             fn convert_data(
                 &mut self,
-                _: &PostOrderIterItem<&CommitNode<J>>,
+                _: &PostOrderIterItem<&CommitNode>,
                 inner: Inner<
-                    &Arc<ConstructNode<'brand, J>>,
-                    J,
-                    &Option<Arc<ConstructNode<'brand, J>>>,
+                    &Arc<ConstructNode<'brand>>,
+                    &Option<Arc<ConstructNode<'brand>>>,
                     &Option<Value>,
                 >,
-            ) -> Result<ConstructData<'brand, J>, Self::Error> {
+            ) -> Result<ConstructData<'brand>, Self::Error> {
                 let inner = inner
                     .map(|node| node.arrow())
                     .map_disconnect(|maybe_node| maybe_node.as_ref().map(|node| node.arrow()));
@@ -236,10 +223,7 @@ impl<J: Jet> CommitNode<J> {
             }
         }
 
-        self.convert::<MaxSharing<Commit<J>>, _, _>(&mut UnfinalizeTypes {
-            inference_context,
-            phantom: PhantomData,
-        })
+        self.convert::<MaxSharing<Commit>, _, _>(&mut UnfinalizeTypes { inference_context })
     }
 
     /// Decode a Simplicity program from bits, without witness data.
@@ -261,7 +245,7 @@ impl<J: Jet> CommitNode<J> {
             construct.finalize_types().map_err(DecodeError::Type)
         })?;
         // 2. Do sharing check, using incomplete IHRs
-        if program.as_ref().is_shared_as::<MaxSharing<Commit<J>>>() {
+        if program.as_ref().is_shared_as::<MaxSharing<Commit>>() {
             Ok(program)
         } else {
             Err(DecodeError::Decode(decode::Error::SharingNotMaximal))
@@ -283,7 +267,7 @@ impl<J: Jet> CommitNode<J> {
 
     /// Encode a Simplicity expression to bits without any witness data
     #[deprecated(since = "0.5.0", note = "use Self::encode_without_witness instead")]
-    pub fn encode<W: io::Write>(&self, w: &mut BitWriter<W>) -> io::Result<usize> {
+    pub fn encode(&self, w: &mut BitWriter<Vec<u8>>) -> io::Result<usize> {
         let program_bits = encode::encode_program(self, w)?;
         w.flush_all()?;
         Ok(program_bits)
@@ -310,19 +294,18 @@ mod tests {
 
     use crate::decode::Error;
     use crate::human_encoding::Forest;
-    use crate::jet::Core;
     use crate::node::SimpleFinalizer;
     use crate::{BitMachine, Value};
 
     #[cfg_attr(not(feature = "base64"), allow(unused_variables))]
     #[track_caller]
-    fn assert_program_deserializable<J: Jet>(
+    fn assert_program_deserializable(
         prog_str: &str,
         prog_bytes: &[u8],
         cmr_str: &str,
         b64_str: &str,
-    ) -> Arc<CommitNode<J>> {
-        let forest = match Forest::<J>::parse(prog_str) {
+    ) -> Arc<CommitNode> {
+        let forest = match Forest::parse(prog_str) {
             Ok(forest) => forest,
             Err(e) => panic!("Failed to parse program `{}`: {}", prog_str, e),
         };
@@ -349,7 +332,7 @@ mod tests {
         );
 
         let iter = BitIter::from(prog_bytes);
-        let prog = match CommitNode::<J>::decode(iter) {
+        let prog = match CommitNode::decode(iter) {
             Ok(prog) => prog,
             Err(e) => panic!("program {} failed: {}", prog_hex, e),
         };
@@ -383,12 +366,12 @@ mod tests {
     }
 
     #[track_caller]
-    fn assert_program_not_deserializable<J: Jet>(prog: &[u8], err: &dyn fmt::Display) {
+    fn assert_program_not_deserializable(prog: &[u8], err: &dyn fmt::Display) {
         let prog_hex = prog.as_hex();
         let err_str = err.to_string();
 
         let iter = BitIter::from(prog);
-        match CommitNode::<J>::decode(iter) {
+        match CommitNode::decode(iter) {
             Ok(prog) => panic!(
                 "Program {} succeded (expected error {}). Program parsed as:\n{:?}",
                 prog_hex, err, prog
@@ -406,13 +389,10 @@ mod tests {
         // "main = comp unit iden", but with the iden serialized before the unit
         // To obtain this test vector I temporarily swapped `get_left` and `get_right`
         // in the implementation of `PostOrderIter`
-        assert_program_not_deserializable::<Core>(&[0xa8, 0x48, 0x10], &Error::NotInCanonicalOrder);
+        assert_program_not_deserializable(&[0xa8, 0x48, 0x10], &Error::NotInCanonicalOrder);
 
         // "main = iden", but prefixed by some unused nodes, the first of which is also iden.
-        assert_program_not_deserializable::<Core>(
-            &[0xc1, 0x00, 0x06, 0x20],
-            &Error::NotInCanonicalOrder,
-        );
+        assert_program_not_deserializable(&[0xc1, 0x00, 0x06, 0x20], &Error::NotInCanonicalOrder);
     }
 
     #[test]
@@ -426,7 +406,7 @@ mod tests {
             0x7e, 0xf5, 0x6d, 0xf7, 0x7e, 0xf5, 0x6d, 0xf7,
             78,
         ];
-        assert_program_not_deserializable::<Core>(&hidden, &Error::HiddenNode);
+        assert_program_not_deserializable(&hidden, &Error::HiddenNode);
 
         // main = comp witness hidden deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef
         let hidden = [
@@ -434,7 +414,7 @@ mod tests {
             0xd5, 0xb7, 0xdd, 0xfb, 0xd5, 0xb7, 0xdd, 0xfb, 0xd5, 0xb7, 0xdd, 0xfb, 0xd5, 0xb7,
             0xdd, 0xfb, 0xd5, 0xb7, 0xdd, 0xe0, 0x80,
         ];
-        assert_program_not_deserializable::<Core>(&hidden, &Error::HiddenNode);
+        assert_program_not_deserializable(&hidden, &Error::HiddenNode);
     }
 
     #[test]
@@ -449,7 +429,7 @@ mod tests {
             0xdf, 0xbd, 0x5b, 0x7d, 0xdf, 0xbd, 0x5b, 0x7d,
             0xde, 0x10,
         ];
-        assert_program_not_deserializable::<Core>(&hidden, &Error::BothChildrenHidden);
+        assert_program_not_deserializable(&hidden, &Error::BothChildrenHidden);
     }
 
     #[test]
@@ -469,12 +449,12 @@ mod tests {
             0x29, 0xdb, 0xa3, 0x3e, 0x60, 0x30, 0x2c, 0x00,
             0xd0, 0x48, 0x20,
         ];
-        assert_program_not_deserializable::<Core>(&hidden, &Error::SharingNotMaximal);
+        assert_program_not_deserializable(&hidden, &Error::SharingNotMaximal);
     }
 
     #[test]
     fn shared_witnesses() {
-        assert_program_deserializable::<Core>(
+        assert_program_deserializable(
             "main := witness",
             &[0x38],
             "a0fc8debd6796917c86b77aded82e6c61649889ae8f2ed65b57b41aa9d90e375",
@@ -499,7 +479,7 @@ mod tests {
             ],
         ];
         for bad_diff1 in bad_diff1s {
-            assert_program_not_deserializable::<Core>(&bad_diff1, &Error::SharingNotMaximal);
+            assert_program_not_deserializable(&bad_diff1, &Error::SharingNotMaximal);
         }
 
         #[rustfmt::skip]
@@ -549,7 +529,7 @@ mod tests {
         ];
 
         for (prog_str, diff1, cmr, b64) in diff1s {
-            let diff1_prog = crate::node::commit::tests::assert_program_deserializable::<Core>(
+            let diff1_prog = crate::node::commit::tests::assert_program_deserializable(
                 prog_str, &diff1, cmr, b64,
             );
 
@@ -573,7 +553,7 @@ mod tests {
     fn extra_nodes() {
         // main = comp unit unit # but with an extra unconnected `unit` stuck on the beginning
         // I created this unit test by hand
-        assert_program_not_deserializable::<Core>(&[0xa9, 0x48, 0x00], &Error::NotInCanonicalOrder);
+        assert_program_not_deserializable(&[0xa9, 0x48, 0x00], &Error::NotInCanonicalOrder);
     }
 
     #[test]
@@ -589,7 +569,7 @@ mod tests {
             id := iden
             main := case (drop id) id
         ";
-        match Forest::<Core>::parse(bad_prog) {
+        match Forest::parse(bad_prog) {
             Ok(_) => panic!("program should have failed"),
             Err(set) => {
                 let mut errs_happened = (false, false);

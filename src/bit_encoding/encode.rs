@@ -8,7 +8,6 @@
 //! to read it visually the way you can with Bitcoin Script.
 
 use crate::dag::{Dag, DagLike, PostOrderIterItem, SharingTracker};
-use crate::jet::Jet;
 use crate::node::{self, Disconnectable};
 use crate::{BitWriter, Cmr, Value};
 
@@ -154,9 +153,9 @@ impl<N: node::Marker> SharingTracker<EncodeNode<'_, N>> for EncodeSharing<N> {
 /// Encode a Simplicity program to bits, without witness data.
 ///
 /// Returns the number of written bits.
-pub fn encode_program<W: io::Write, N: node::Marker>(
+pub fn encode_program<N: node::Marker>(
     program: &node::Node<N>,
-    w: &mut BitWriter<W>,
+    w: &mut BitWriter<Vec<u8>>,
 ) -> io::Result<usize> {
     let iter = EncodeNode::Node(program).post_order_iter::<EncodeSharing<N>>();
 
@@ -172,9 +171,9 @@ pub fn encode_program<W: io::Write, N: node::Marker>(
 }
 
 /// Encode a node to bits.
-fn encode_node<W: io::Write, N: node::Marker>(
+fn encode_node<N: node::Marker>(
     data: PostOrderIterItem<EncodeNode<N>>,
-    w: &mut BitWriter<W>,
+    w: &mut BitWriter<Vec<u8>>,
 ) -> io::Result<()> {
     // Handle Hidden nodes specially
     let node = match data.node {

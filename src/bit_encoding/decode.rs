@@ -12,7 +12,7 @@ use crate::node::{
     ConstructNode, CoreConstructible, DisconnectConstructible, JetConstructible,
     WitnessConstructible,
 };
-use crate::types;
+use crate::types::{self, Context};
 use crate::value::Word;
 use crate::{BitIter, FailEntropy};
 use std::collections::HashSet;
@@ -21,7 +21,7 @@ use std::{cmp, error, fmt};
 
 use super::bititer::{u2, DecodeNaturalError};
 
-type ArcNode<'brand, J> = Arc<ConstructNode<'brand, J>>;
+type ArcNode<'brand> = Arc<ConstructNode<'brand>>;
 
 /// Decoding error
 #[non_exhaustive]
@@ -104,7 +104,7 @@ impl error::Error for Error {
 }
 
 #[derive(Debug)]
-enum DecodeNode<J: Jet> {
+enum DecodeNode {
     Iden,
     Unit,
     InjL(usize),
@@ -119,14 +119,14 @@ enum DecodeNode<J: Jet> {
     Witness,
     Fail(FailEntropy),
     Hidden(Cmr),
-    Jet(J),
+    Jet(Box<dyn Jet>),
     Word(Word),
 }
 
-impl<J: Jet> DagLike for (usize, &'_ [DecodeNode<J>]) {
-    type Node = DecodeNode<J>;
+impl DagLike for (usize, &'_ [DecodeNode]) {
+    type Node = DecodeNode;
 
-    fn data(&self) -> &DecodeNode<J> {
+    fn data(&self) -> &DecodeNode {
         &self.1[self.0]
     }
 
@@ -153,17 +153,17 @@ impl<J: Jet> DagLike for (usize, &'_ [DecodeNode<J>]) {
     }
 }
 
-pub fn decode_expression<'brand, I: Iterator<Item = u8>, J: Jet>(
+pub fn decode_expression<'brand, I: Iterator<Item = u8>>(
     ctx: &types::Context<'brand>,
     bits: &mut BitIter<I>,
-) -> Result<ArcNode<'brand, J>, Error> {
-    enum Converted<'brand, J: Jet> {
-        Node(ArcNode<'brand, J>),
+) -> Result<ArcNode<'brand>, Error> {
+    enum Converted<'brand> {
+        Node(ArcNode<'brand>),
         Hidden(Cmr),
     }
     use Converted::{Hidden, Node};
-    impl<'brand, J: Jet> Converted<'brand, J> {
-        fn get(&self) -> Result<&ArcNode<'brand, J>, Error> {
+    impl<'brand> Converted<'brand> {
+        fn get(&self) -> Result<&ArcNode<'brand>, Error> {
             match self {
                 Node(arc) => Ok(arc),
                 Hidden(_) => Err(Error::HiddenNode),
@@ -183,7 +183,7 @@ pub fn decode_expression<'brand, I: Iterator<Item = u8>, J: Jet>(
     // It is a sharing violation for any hidden node to be repeated. Track them in this set.
     let mut hidden_set = HashSet::<Cmr>::new();
     // Convert the DecodeNode structure into a CommitNode structure
-    let mut converted = Vec::<Converted<J>>::with_capacity(len);
+    let mut converted = Vec::<Converted>::with_capacity(len);
     for data in (nodes.len() - 1, &nodes[..]).post_order_iter::<InternalSharing>() {
         // Check canonical order as we go
         if data.index != data.node.0 {
@@ -237,10 +237,11 @@ pub fn decode_expression<'brand, I: Iterator<Item = u8>, J: Jet>(
 
 /// Decode a single Simplicity node from bits and
 /// insert it into a hash map at its index for future reference by ancestor nodes.
-fn decode_node<I: Iterator<Item = u8>, J: Jet>(
+fn decode_node<I: Iterator<Item = u8>>(
     bits: &mut BitIter<I>,
     index: usize,
-) -> Result<DecodeNode<J>, Error> {
+    ctx: types::Context<'_>,
+) -> Result<DecodeNode, Error> {
     // First bit: 1 for jets/words, 0 for normal combinators
     if bits.read_bit()? {
         // Second bit: 1 for jets, 0 for words
@@ -306,7 +307,6 @@ fn decode_node<I: Iterator<Item = u8>, J: Jet>(
 mod tests {
     use super::*;
     use crate::encode;
-    use crate::jet::Core;
     use crate::node::{CommitNode, RedeemNode};
     use crate::BitWriter;
 
@@ -317,14 +317,14 @@ mod tests {
         // Should be able to decode this as an expression...
         let mut iter = BitIter::from(&justjet[..]);
         types::Context::with_context(|ctx| {
-            decode_expression::<_, Core>(&ctx, &mut iter).unwrap();
+            decode_expression::<_>(&ctx, &mut iter).unwrap();
         });
         // ...but NOT as a CommitNode
         let iter = BitIter::from(&justjet[..]);
-        CommitNode::<Core>::decode(iter).unwrap_err();
+        CommitNode::decode(iter).unwrap_err();
         // ...or as a RedeemNode
         let iter = BitIter::from(&justjet[..]);
-        RedeemNode::<Core>::decode(iter, BitIter::from(&[][..])).unwrap_err();
+        RedeemNode::decode(iter, BitIter::from(&[][..])).unwrap_err();
     }
 
     #[test]

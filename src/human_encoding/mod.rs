@@ -11,7 +11,6 @@ mod named_node;
 mod parse;
 
 use crate::dag::{DagLike, MaxSharing};
-use crate::jet::Jet;
 use crate::node::{self, CommitNode, NoWitness};
 use crate::types;
 use crate::{Cmr, ConstructNode, Ihr, Value};
@@ -83,18 +82,18 @@ impl From<&'_ NoWitness> for WitnessOrHole {
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Forest<J: Jet> {
-    roots: HashMap<Arc<str>, Arc<NamedCommitNode<J>>>,
+pub struct Forest {
+    roots: HashMap<Arc<str>, Arc<NamedCommitNode>>,
 }
 
-impl<J: Jet> Forest<J> {
+impl Forest {
     /// Parses a forest from a string
     pub fn parse(s: &str) -> Result<Self, ErrorSet> {
         parse::parse(s).map(|roots| Forest { roots })
     }
 
     /// Parses a program from a bytestring
-    pub fn from_program(root: Arc<CommitNode<J>>) -> Self {
+    pub fn from_program(root: Arc<CommitNode>) -> Self {
         let root = NamedCommitNode::from_node(&root);
         let mut roots = HashMap::new();
         roots.insert("main".into(), root);
@@ -102,7 +101,7 @@ impl<J: Jet> Forest<J> {
     }
 
     /// Accessor for the map of roots of this forest
-    pub fn roots(&self) -> &HashMap<Arc<str>, Arc<NamedCommitNode<J>>> {
+    pub fn roots(&self) -> &HashMap<Arc<str>, Arc<NamedCommitNode>> {
         &self.roots
     }
 
@@ -215,7 +214,7 @@ impl<J: Jet> Forest<J> {
         &self,
         inference_context: &types::Context<'brand>,
         witness: &HashMap<Arc<str>, Value>,
-    ) -> Option<Arc<ConstructNode<'brand, J>>> {
+    ) -> Option<Arc<ConstructNode<'brand>>> {
         let main = self.roots.get("main")?;
         Some(main.to_construct_node(inference_context, witness, self.roots()))
     }
@@ -224,19 +223,14 @@ impl<J: Jet> Forest<J> {
 #[cfg(test)]
 mod tests {
     use crate::human_encoding::Forest;
-    use crate::jet::{Core, Jet};
     use crate::types;
     use crate::{BitMachine, Value};
     use std::collections::HashMap;
     use std::sync::Arc;
 
-    fn assert_finalize_ok<J: Jet>(
-        s: &str,
-        witness: &HashMap<Arc<str>, Value>,
-        env: &J::Environment,
-    ) {
+    fn assert_finalize_ok(s: &str, witness: &HashMap<Arc<str>, Value>, env: &J::Environment) {
         types::Context::with_context(|ctx| {
-            let program = Forest::<J>::parse(s)
+            let program = Forest::parse(s)
                 .expect("Failed to parse human encoding")
                 .to_witness_node(&ctx, witness)
                 .expect("Forest is missing expected root")
@@ -247,14 +241,14 @@ mod tests {
         });
     }
 
-    fn assert_finalize_err<J: Jet>(
+    fn assert_finalize_err(
         s: &str,
         witness: &HashMap<Arc<str>, Value>,
         env: &J::Environment,
         err_msg: &'static str,
     ) {
         types::Context::with_context(|ctx| {
-            let program = match Forest::<J>::parse(s)
+            let program = match Forest::parse(s)
                 .expect("Failed to parse human encoding")
                 .to_witness_node(&ctx, witness)
                 .expect("Forest is missing expected root")
@@ -290,19 +284,19 @@ mod tests {
             (Arc::from("a"), Value::u8(0x00)),
             (Arc::from("b"), Value::u8(0x01)),
         ]);
-        assert_finalize_ok::<Core>(s, &a_less_than_b, &());
+        assert_finalize_ok(s, &a_less_than_b, &());
 
         let b_greater_equal_a = HashMap::from([
             (Arc::from("a"), Value::u8(0x01)),
             (Arc::from("b"), Value::u8(0x01)),
         ]);
-        assert_finalize_err::<Core>(s, &b_greater_equal_a, &(), "Jet failed during execution");
+        assert_finalize_err(s, &b_greater_equal_a, &(), "Jet failed during execution");
     }
 
     #[test]
     fn executed_witness_without_value() {
         let witness = HashMap::from([(Arc::from("wit1"), Value::u32(1337))]);
-        assert_finalize_err::<Core>(
+        assert_finalize_err(
             "
                 wit1 := witness : 1 -> 2^32
                 wit2 := witness : 1 -> 2^32
@@ -326,22 +320,22 @@ mod tests {
             main := comp input comp process jet_verify : 1 -> 1
         ";
         let wit2_is_pruned = HashMap::from([(Arc::from("wit1"), Value::u1(0))]);
-        assert_finalize_ok::<Core>(s, &wit2_is_pruned, &());
+        assert_finalize_ok(s, &wit2_is_pruned, &());
 
         let wit2_is_missing = HashMap::from([(Arc::from("wit1"), Value::u1(1))]);
-        assert_finalize_err::<Core>(s, &wit2_is_missing, &(), "Jet failed during execution");
+        assert_finalize_err(s, &wit2_is_missing, &(), "Jet failed during execution");
 
         let wit2_is_present = HashMap::from([
             (Arc::from("wit1"), Value::u1(1)),
             (Arc::from("wit2"), Value::u64(u64::MAX)),
         ]);
-        assert_finalize_ok::<Core>(s, &wit2_is_present, &());
+        assert_finalize_ok(s, &wit2_is_present, &());
     }
 
     #[test]
     fn executed_hole_with_value() {
         let empty = HashMap::new();
-        assert_finalize_ok::<Core>(
+        assert_finalize_ok(
             "
                 id1 := iden : 2^256 * 1 -> 2^256 * 1
                 main := comp (disconnect id1 ?hole) unit
@@ -355,7 +349,7 @@ mod tests {
     #[test]
     fn executed_hole_without_value() {
         let empty = HashMap::new();
-        assert_finalize_err::<Core>(
+        assert_finalize_err(
             "
                 wit1 := witness
                 main := comp wit1 comp disconnect iden ?dis2 unit
@@ -374,9 +368,9 @@ mod tests {
             main := comp wit2 jet_verify : 1 -> 1
         ";
         let wit1_populated = HashMap::from([(Arc::from("wit1"), Value::u1(1))]);
-        assert_finalize_err::<Core>(s, &wit1_populated, &(), "Jet failed during execution");
+        assert_finalize_err(s, &wit1_populated, &(), "Jet failed during execution");
 
         let wit2_populated = HashMap::from([(Arc::from("wit2"), Value::u1(1))]);
-        assert_finalize_ok::<Core>(s, &wit2_populated, &());
+        assert_finalize_ok(s, &wit2_populated, &());
     }
 }

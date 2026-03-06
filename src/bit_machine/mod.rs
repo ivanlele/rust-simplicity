@@ -46,7 +46,7 @@ pub struct BitMachine {
 
 impl BitMachine {
     /// Construct a Bit Machine with enough space to execute the given program.
-    pub fn for_program<J: Jet>(program: &RedeemNode<J>) -> Result<Self, LimitError> {
+    pub fn for_program(program: &RedeemNode) -> Result<Self, LimitError> {
         LimitError::check_program(program)?;
         let io_width = program.arrow().source.bit_width() + program.arrow().target.bit_width();
 
@@ -60,8 +60,8 @@ impl BitMachine {
     }
 
     #[cfg(test)]
-    pub fn test_exec<J: Jet>(
-        program: Arc<crate::node::ConstructNode<J>>,
+    pub fn test_exec(
+        program: Arc<crate::node::ConstructNode>,
         env: &J::Environment,
     ) -> Result<Value, ExecutionError> {
         use crate::node::SimpleFinalizer;
@@ -220,9 +220,9 @@ impl BitMachine {
     ///  ## Precondition
     ///
     /// The Bit Machine is constructed via [`Self::for_program()`] to ensure enough space.
-    pub fn exec<J: Jet>(
+    pub fn exec(
         &mut self,
-        program: &RedeemNode<J>,
+        program: &RedeemNode,
         env: &J::Environment,
     ) -> Result<Value, ExecutionError> {
         self.exec_with_tracker(program, env, &mut NoTracker)
@@ -236,14 +236,14 @@ impl BitMachine {
     ///  ## Precondition
     ///
     /// The Bit Machine is constructed via [`Self::for_program()`] to ensure enough space.
-    pub fn exec_with_tracker<J: Jet, T: ExecTracker<J>>(
+    pub fn exec_with_tracker<T: ExecTracker>(
         &mut self,
-        program: &RedeemNode<J>,
+        program: &RedeemNode,
         env: &J::Environment,
         tracker: &mut T,
     ) -> Result<Value, ExecutionError> {
-        enum CallStack<'a, J: Jet> {
-            Goto(&'a RedeemNode<J>),
+        enum CallStack<'a> {
+            Goto(&'a RedeemNode),
             MoveWriteFrameToRead,
             DropReadFrame,
             CopyFwd(usize),
@@ -251,7 +251,7 @@ impl BitMachine {
         }
 
         // Not used, but useful for debugging, so keep it around
-        impl<J: Jet> fmt::Debug for CallStack<'_, J> {
+        impl fmt::Debug for CallStack<'_> {
             fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
                 match self {
                     CallStack::Goto(ins) => write!(f, "goto {}", ins.inner()),
@@ -435,7 +435,7 @@ impl BitMachine {
         }
     }
 
-    fn exec_jet<J: Jet>(&mut self, jet: J, env: &J::Environment) -> Result<(), JetFailed> {
+    fn exec_jet(&mut self, jet: Box<dyn Jet>, env: &J::Environment) -> Result<(), JetFailed> {
         use crate::ffi::c_jets::frame_ffi::{c_readBit, c_writeBit, CFrameItem};
         use crate::ffi::c_jets::uword_width;
         use crate::ffi::ffi::UWORD;
@@ -599,7 +599,7 @@ mod tests {
     use super::*;
 
     #[cfg(feature = "elements")]
-    use crate::jet::{elements::ElementsEnv, Elements};
+    use crate::jet::elements::ElementsEnv;
     #[cfg(feature = "elements")]
     use crate::{node::RedeemNode, BitIter};
     #[cfg(feature = "elements")]
@@ -617,7 +617,7 @@ mod tests {
 
         let prog = BitIter::from(prog_bytes);
         let witness = BitIter::from(witness_bytes);
-        let prog = match RedeemNode::<Elements>::decode(prog, witness) {
+        let prog = match RedeemNode::decode(prog, witness) {
             Ok(prog) => prog,
             Err(e) => panic!("program {} failed: {}", prog_hex, e),
         };
@@ -687,12 +687,12 @@ mod tests {
     fn crash_regression2() {
         use crate::node::{CoreConstructible as _, JetConstructible as _};
 
-        type Node<'brand> = Arc<crate::ConstructNode<'brand, crate::jet::Core>>;
+        type Node<'brand> = Arc<crate::ConstructNode<'brand>>;
 
         crate::types::Context::with_context(|ctx| {
             let mut bomb = Node::jet(
                 &ctx,
-                crate::jet::Core::Ch8, // arbitrary jet with nonzero output size
+                Box::new(crate::jet::Core::Ch8), // arbitrary jet with nonzero output size
             );
             for _ in 0..100 {
                 bomb = Node::pair(&bomb, &bomb).unwrap();

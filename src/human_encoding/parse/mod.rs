@@ -5,7 +5,6 @@
 mod ast;
 
 use crate::dag::{Dag, DagLike, InternalSharing};
-use crate::jet::Jet;
 use crate::node;
 use crate::types::{self, Type};
 use std::collections::HashMap;
@@ -19,12 +18,12 @@ use super::{Position, WitnessOrHole};
 use super::{Error, ErrorSet};
 
 #[derive(Clone)]
-struct UnresolvedExpression<'brand, J: Jet> {
-    inner: UnresolvedInner<'brand, J>,
+struct UnresolvedExpression<'brand> {
+    inner: UnresolvedInner<'brand>,
     position: Position,
 }
 
-impl<'brand, J: Jet> UnresolvedExpression<'brand, J> {
+impl<'brand> UnresolvedExpression<'brand> {
     fn from_name(name: Arc<str>, position: Position) -> Self {
         UnresolvedExpression {
             inner: UnresolvedInner::NoExpr {
@@ -36,7 +35,7 @@ impl<'brand, J: Jet> UnresolvedExpression<'brand, J> {
         }
     }
 
-    fn from_inline_expression(expr_inner: ast::ExprInner<J>, position: Position) -> Self {
+    fn from_inline_expression(expr_inner: ast::ExprInner, position: Position) -> Self {
         UnresolvedExpression {
             inner: UnresolvedInner::Inline { expr_inner },
             position,
@@ -45,7 +44,7 @@ impl<'brand, J: Jet> UnresolvedExpression<'brand, J> {
 
     fn add_expression(
         &mut self,
-        expr_inner: ast::ExprInner<J>,
+        expr_inner: ast::ExprInner,
         position: Position,
     ) -> Result<(), ErrorSet> {
         match self.inner {
@@ -108,25 +107,25 @@ impl<'brand, J: Jet> UnresolvedExpression<'brand, J> {
 }
 
 #[derive(Clone)]
-enum UnresolvedInner<'brand, J: Jet> {
+enum UnresolvedInner<'brand> {
     NoExpr {
         name: Arc<str>,
         user_source_types: Vec<Type<'brand>>,
         user_target_types: Vec<Type<'brand>>,
     },
     Inline {
-        expr_inner: ast::ExprInner<J>,
+        expr_inner: ast::ExprInner,
     },
     Named {
         name: Arc<str>,
         user_source_types: Vec<Type<'brand>>,
         user_target_types: Vec<Type<'brand>>,
-        expr_inner: ast::ExprInner<J>,
+        expr_inner: ast::ExprInner,
     },
 }
 
-struct ResolvedExpression<'brand, J: Jet> {
-    inner: ResolvedInner<'brand, J>,
+struct ResolvedExpression<'brand> {
+    inner: ResolvedInner<'brand>,
     position: Position,
 
     name: Option<Arc<str>>,
@@ -136,9 +135,9 @@ struct ResolvedExpression<'brand, J: Jet> {
     in_degree: AtomicUsize,
 }
 
-impl<'brand, J: Jet> DagLike for &'_ ResolvedExpression<'brand, J> {
-    type Node = ResolvedExpression<'brand, J>;
-    fn data(&self) -> &ResolvedExpression<'brand, J> {
+impl<'brand> DagLike for &'_ ResolvedExpression<'brand> {
+    type Node = ResolvedExpression<'brand>;
+    fn data(&self) -> &ResolvedExpression<'brand> {
         self
     }
 
@@ -157,48 +156,45 @@ impl<'brand, J: Jet> DagLike for &'_ ResolvedExpression<'brand, J> {
     }
 }
 
-enum ResolvedCmr<'brand, J: Jet> {
-    Expr(Arc<ResolvedExpression<'brand, J>>),
+enum ResolvedCmr<'brand> {
+    Expr(Arc<ResolvedExpression<'brand>>),
     Literal,
 }
 
-enum ResolvedInner<'brand, J: Jet> {
+enum ResolvedInner<'brand> {
     /// A reference to a missing expression
     Missing { name: Arc<str> },
     /// A reference to a name with no associated expression
     NoExpr { name: Arc<str> },
     /// A reference to another expression
-    Reference(Arc<ResolvedExpression<'brand, J>>),
+    Reference(Arc<ResolvedExpression<'brand>>),
     /// A left assertion (referring to the CMR of an expression on the right)
-    AssertL(Arc<ResolvedExpression<'brand, J>>, ResolvedCmr<'brand, J>),
+    AssertL(Arc<ResolvedExpression<'brand>>, ResolvedCmr<'brand>),
     /// A right assertion (referring to the CMR of an expression on the left)
-    AssertR(ResolvedCmr<'brand, J>, Arc<ResolvedExpression<'brand, J>>),
+    AssertR(ResolvedCmr<'brand>, Arc<ResolvedExpression<'brand>>),
     /// An inline expression
     Inline(
         node::Inner<
-            Arc<ResolvedExpression<'brand, J>>,
-            J,
-            Arc<ResolvedExpression<'brand, J>>,
+            Arc<ResolvedExpression<'brand>>,
+            Arc<ResolvedExpression<'brand>>,
             WitnessOrHole,
         >,
     ),
 }
 
-pub fn parse<J: Jet + 'static>(
-    program: &str,
-) -> Result<HashMap<Arc<str>, Arc<NamedCommitNode<J>>>, ErrorSet> {
+pub fn parse(program: &str) -> Result<HashMap<Arc<str>, Arc<NamedCommitNode>>, ErrorSet> {
     types::Context::with_context(|ctx| parse_inner(ctx, program))
 }
 
-fn parse_inner<J: Jet + 'static>(
+fn parse_inner(
     inference_context: types::Context<'_>,
     program: &str,
-) -> Result<HashMap<Arc<str>, Arc<NamedCommitNode<J>>>, ErrorSet> {
+) -> Result<HashMap<Arc<str>, Arc<NamedCommitNode>>, ErrorSet> {
     let mut errors = ErrorSet::new();
     // **
     // Step 1: Read expressions into HashMap, checking for dupes and illegal names.
     // **
-    let mut unresolved_map = HashMap::<Arc<str>, UnresolvedExpression<J>>::new();
+    let mut unresolved_map = HashMap::<Arc<str>, UnresolvedExpression>::new();
     for line in ast::parse_line_vector(program)? {
         if line.name.as_ref() == "_" || line.name.starts_with("prim") {
             errors.add(line.position, Error::NameIllegal(Arc::clone(&line.name)));
@@ -232,15 +228,15 @@ fn parse_inner<J: Jet + 'static>(
     // we may have multiple disconnected components.
     // **
     let mut resolved_map =
-        HashMap::<Arc<str>, Arc<ResolvedExpression<J>>>::with_capacity(unresolved_map.len());
+        HashMap::<Arc<str>, Arc<ResolvedExpression>>::with_capacity(unresolved_map.len());
 
     while let Some(name) = unresolved_map.keys().next() {
         let name = Arc::clone(name);
         let expr = unresolved_map.remove(&name).unwrap();
 
         #[derive(Clone)]
-        struct StackItem<'brand, J: Jet> {
-            expr: UnresolvedExpression<'brand, J>,
+        struct StackItem<'brand> {
+            expr: UnresolvedExpression<'brand>,
             name: Option<Arc<str>>,
             done_children: bool,
         }
@@ -263,7 +259,7 @@ fn parse_inner<J: Jet + 'static>(
         // On the other hand, inline expressions do not have names or any other identifying
         // characteristics except the order in which they appear. So for these we need to
         // use the `inline_stack` to keep track of which ones we've already resolved..
-        let mut inline_stack: Vec<Arc<ResolvedExpression<J>>> = vec![];
+        let mut inline_stack: Vec<Arc<ResolvedExpression>> = vec![];
         stack.push(StackItem {
             expr,
             name: Some(Arc::clone(&name)),
@@ -276,7 +272,7 @@ fn parse_inner<J: Jet + 'static>(
                 stack_item.done_children = true;
                 stack.push(stack_item.clone());
 
-                let push_ast_expr = |stack: &mut Vec<_>, expr: &ast::Expression<_>| {
+                let push_ast_expr = |stack: &mut Vec<_>, expr: &ast::Expression| {
                     stack.push(StackItem {
                         expr: UnresolvedExpression::from_inline_expression(
                             expr.inner.clone(),
@@ -325,7 +321,7 @@ fn parse_inner<J: Jet + 'static>(
                 continue;
             }
 
-            let mut convert_expr_inner = |expr_inner: &ast::ExprInner<J>| match expr_inner {
+            let mut convert_expr_inner = |expr_inner: &ast::ExprInner| match expr_inner {
                 ast::ExprInner::Reference(ref ref_name) => {
                     if let Some(referent) = resolved_map.get(ref_name) {
                         referent.in_degree.fetch_add(1, Ordering::SeqCst);
@@ -384,7 +380,7 @@ fn parse_inner<J: Jet + 'static>(
             // Then, convert the node. At this point if we are missing any children
             // it is because there was a resolution error, i.e. the expression
             // references a child that doesn't exist.
-            let resolved: ResolvedExpression<J> = match stack_item.expr.inner {
+            let resolved: ResolvedExpression = match stack_item.expr.inner {
                 UnresolvedInner::NoExpr {
                     ref name,
                     ref user_source_types,
@@ -433,14 +429,14 @@ fn parse_inner<J: Jet + 'static>(
     drop(unresolved_map);
 
     // ** Step 3: convert each DAG of names/expressions into a DAG of NamedNodes.
-    let mut roots = HashMap::<Arc<str>, Arc<NamedCommitNode<J>>>::new();
+    let mut roots = HashMap::<Arc<str>, Arc<NamedCommitNode>>::new();
     for (name, expr) in &resolved_map {
         if expr.in_degree.load(Ordering::SeqCst) > 0 {
             continue;
         }
 
         let mut namer = Namer::new();
-        let mut converted: Vec<Option<Arc<NamedConstructNode<J>>>> = vec![];
+        let mut converted: Vec<Option<Arc<NamedConstructNode>>> = vec![];
         for data in expr.as_ref().post_order_iter::<InternalSharing>() {
             let left = data
                 .left_index
@@ -586,18 +582,17 @@ mod tests {
 
     use crate::dag::MaxSharing;
     use crate::human_encoding::Forest;
-    use crate::jet::{Core, Jet};
     use crate::node::Inner;
     use crate::value::Word;
     use crate::{BitMachine, Value};
 
-    fn assert_cmr_witness<J: Jet>(
+    fn assert_cmr_witness(
         s: &str,
         cmr: &str,
         witness: &HashMap<Arc<str>, Value>,
         env: &J::Environment,
     ) {
-        match parse::<J>(s) {
+        match parse(s) {
             Ok(forest) => {
                 assert_eq!(forest.len(), 1);
                 let main = &forest["main"];
@@ -635,8 +630,8 @@ mod tests {
         }
     }
 
-    fn assert_const<J: Jet>(s: &str, word: Word) {
-        match parse::<J>(s) {
+    fn assert_const(s: &str, word: Word) {
+        match parse(s) {
             Ok(forest) => {
                 assert_eq!(forest.len(), 1);
                 let main = &forest["main"];
@@ -657,15 +652,15 @@ mod tests {
     #[test]
     fn errors() {
         error_contains(
-            parse::<Core>("main := a"),
+            parse("main := a"),
             "name `a` is referred to but does not exist",
         );
         error_contains(
-            parse::<Core>("main := unit : 1 -> 2"),
+            parse("main := unit : 1 -> 2"),
             "failed to apply bound `2` to existing bound `1`",
         );
         error_contains(
-            parse::<Core>("main := pair unit unit"),
+            parse("main := pair unit unit"),
             "failed to apply bound `1 × 1` to existing bound `1`",
         );
     }
@@ -673,7 +668,7 @@ mod tests {
     #[test]
     fn simple_program() {
         let empty = HashMap::new();
-        assert_cmr_witness::<Core>(
+        assert_cmr_witness(
             "main := unit",
             "c40a10263f7436b4160acbef1c36fba4be4d95df181a968afeab5eac247adff7",
             &empty,
@@ -684,7 +679,7 @@ mod tests {
             (Arc::from("wit1"), Value::u32(0x00010203)),
             (Arc::from("wit2"), Value::u32(0x00010203)),
         ]);
-        assert_cmr_witness::<Core>(
+        assert_cmr_witness(
             "
                 wit1 := witness : 1 -> 2^32
                 wit2 := witness : 1 -> 2^32
@@ -701,14 +696,14 @@ mod tests {
     #[test]
     fn circular_program() {
         error_contains(
-            parse::<Core>("main := comp main unit"),
+            parse("main := comp main unit"),
             "name `main` is referred to but does not exist",
         );
     }
 
     #[test]
     fn preserve_name() {
-        let program = &Forest::<Core>::parse("main := x    x := unit").unwrap();
+        let program = &Forest::parse("main := x    x := unit").unwrap();
         assert!(program.string_serialize().contains("main := unit"));
     }
 
@@ -716,11 +711,10 @@ mod tests {
     #[cfg(feature = "elements")]
     fn bip340_program() {
         use crate::jet::elements::ElementsEnv;
-        use crate::jet::Elements;
 
         let empty = HashMap::new();
         let dummy = ElementsEnv::dummy();
-        assert_cmr_witness::<Elements>(
+        assert_cmr_witness(
             "main := unit",
             "c40a10263f7436b4160acbef1c36fba4be4d95df181a968afeab5eac247adff7",
             &empty,
@@ -737,7 +731,7 @@ mod tests {
         ];
 
         let signature = HashMap::from([(Arc::from("wit1"), Value::u512(sig))]);
-        assert_cmr_witness::<Elements>(
+        assert_cmr_witness(
             "
                 -- Witnesses
                 wit1 := witness : 1 -> 2^512
@@ -786,14 +780,14 @@ mod tests {
 
         for (human, word) in human_words {
             let s = format!("main := comp const {human} unit");
-            assert_const::<Core>(s.as_str(), word);
+            assert_const(s.as_str(), word);
         }
     }
 
     #[test]
     fn duplicate_witness_in_disconnected_branch() {
         error_contains(
-            parse::<Core>(
+            parse(
                 "
                 wit1 := witness
                 main := comp wit1 comp disconnect iden ?dis2 unit

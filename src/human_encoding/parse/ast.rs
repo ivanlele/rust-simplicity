@@ -17,25 +17,25 @@ use santiago::lexer::{Lexeme, LexerRules};
 ///
 /// A program is simply a list of such lines
 #[derive(Debug, PartialEq, Eq, Clone, Hash)]
-pub struct Line<J> {
+pub struct Line {
     /// Position of the first character of the line.
     pub position: Position,
     /// The name of the expression being named on the line.
     pub name: Arc<str>,
     /// The actual expression, if present (missing for type declarations).
-    pub expression: Option<Expression<J>>,
+    pub expression: Option<Expression>,
     /// The type of the expression, if given (inferred if missing).
     pub arrow: (Option<Type>, Option<Type>),
 }
 
 /// An expression, as represented in the AST
 #[derive(Debug, PartialEq, Eq, Clone, Hash)]
-pub struct Expression<J> {
-    pub inner: ExprInner<J>,
+pub struct Expression {
+    pub inner: ExprInner,
     pub position: Position,
 }
 
-impl<J: Jet> Expression<J> {
+impl Expression {
     fn reference(name: Arc<str>, position: Position) -> Self {
         Expression {
             inner: ExprInner::Reference(name),
@@ -46,21 +46,21 @@ impl<J: Jet> Expression<J> {
 
 /// An expression, as represented in the AST
 #[derive(Debug, PartialEq, Eq, Clone, Hash)]
-pub enum ExprInner<J> {
+pub enum ExprInner {
     /// A reference to another expression
     Reference(Arc<str>),
     /// A left assertion (referring to the CMR of an expression on the right)
-    AssertL(Arc<Expression<J>>, AstCmr<J>),
+    AssertL(Arc<Expression>, AstCmr),
     /// A right assertion (referring to the CMR of an expression on the left)
-    AssertR(AstCmr<J>, Arc<Expression<J>>),
+    AssertR(AstCmr, Arc<Expression>),
     /// An inline expression
-    Inline(node::Inner<Arc<Expression<J>>, J, Arc<Expression<J>>, WitnessOrHole>),
+    Inline(node::Inner<Arc<Expression>, Arc<Expression>, WitnessOrHole>),
 }
 
 /// A CMR, as represented in the AST
 #[derive(Debug, PartialEq, Eq, Clone, Hash)]
-pub enum AstCmr<J> {
-    Expr(Arc<Expression<J>>),
+pub enum AstCmr {
+    Expr(Arc<Expression>),
     Literal,
 }
 
@@ -108,9 +108,9 @@ impl Type {
 
 /// Takes a program as a string and parses it into an AST (actually, a vector
 /// of lines, each of which is individually an AST)
-pub fn parse_line_vector<J: Jet + 'static>(input: &str) -> Result<Vec<Line<J>>, ErrorSet> {
+pub fn parse_line_vector(input: &str) -> Result<Vec<Line>, ErrorSet> {
     let lexer_rules = lexer_rules();
-    let grammar = grammar::<J>();
+    let grammar = grammar();
 
     let lexemes = match santiago::lexer::lex(&lexer_rules, input) {
         Ok(lexemes) => lexemes,
@@ -129,7 +129,7 @@ pub fn parse_line_vector<J: Jet + 'static>(input: &str) -> Result<Vec<Line<J>>, 
 }
 
 /// Check a list of AST elements for errors; if any are errors, combine them and return the result
-fn propagate_errors<J: Jet>(ast: &[Ast<J>]) -> Option<Ast<J>> {
+fn propagate_errors(ast: &[Ast]) -> Option<Ast> {
     let mut e = ErrorSet::new();
     for elem in ast {
         if let Ast::Error(errs) = elem {
@@ -149,21 +149,21 @@ fn propagate_errors<J: Jet>(ast: &[Ast<J>]) -> Option<Ast<J>> {
 /// continually collapsed until in the end it will be in either the `Program`
 /// or `Error` variant.
 #[derive(Debug, Clone)]
-enum Ast<J: Jet> {
+enum Ast {
     Combinator {
-        comb: node::Inner<(), J, (), WitnessOrHole>,
+        comb: node::Inner<(), (), WitnessOrHole>,
         position: Position,
     },
     /// A type->type arrow
     Arrow(Option<Type>, Option<Type>),
     /// A #{expr} or #abcd CMR
-    Cmr(AstCmr<J>),
+    Cmr(AstCmr),
     /// An error occurred during parsing
     Error(ErrorSet),
     /// An expression
-    Expression(Expression<J>),
+    Expression(Expression),
     /// A full expression line
-    Line(Line<J>),
+    Line(Line),
     /// A hex or binary literal
     Literal {
         data: Vec<u8>,
@@ -171,7 +171,7 @@ enum Ast<J: Jet> {
         position: Position,
     },
     /// The top-level program
-    Program(Vec<Line<J>>),
+    Program(Vec<Line>),
     /// A symbol
     Symbol { value: Arc<str>, position: Position },
     /// A type
@@ -187,7 +187,7 @@ enum Ast<J: Jet> {
     Replaced,
 }
 
-impl<J: Jet> Ast<J> {
+impl Ast {
     /// Creates an `Ast` from a single sub-AST
     fn from_1<T, F1, F>(toks: &mut [Self], convert: F1, unconvert: F) -> Self
     where
@@ -429,7 +429,7 @@ impl<J: Jet> Ast<J> {
         }
     }
 
-    fn expect_cmr(&mut self) -> AstCmr<J> {
+    fn expect_cmr(&mut self) -> AstCmr {
         let replaced = mem::replace(self, Ast::Replaced);
         if let Ast::Cmr(cmr) = replaced {
             cmr
@@ -438,7 +438,7 @@ impl<J: Jet> Ast<J> {
         }
     }
 
-    fn expect_expression(&mut self) -> Expression<J> {
+    fn expect_expression(&mut self) -> Expression {
         let replaced = mem::replace(self, Ast::Replaced);
         if let Ast::Expression(exp) = replaced {
             exp
@@ -447,7 +447,7 @@ impl<J: Jet> Ast<J> {
         }
     }
 
-    fn expect_line(&mut self) -> Line<J> {
+    fn expect_line(&mut self) -> Line {
         let replaced = mem::replace(self, Ast::Replaced);
         if let Ast::Line(ell) = replaced {
             ell
@@ -470,7 +470,7 @@ impl<J: Jet> Ast<J> {
         }
     }
 
-    fn expect_program(&mut self) -> Vec<Line<J>> {
+    fn expect_program(&mut self) -> Vec<Line> {
         let replaced = mem::replace(self, Ast::Replaced);
         if let Ast::Program(lines) = replaced {
             lines
@@ -550,7 +550,7 @@ fn lexer_rules() -> LexerRules {
     )
 }
 
-fn grammar<J: Jet + 'static>() -> Grammar<Ast<J>> {
+fn grammar() -> Grammar<Ast> {
     santiago::grammar!(
         "program" => empty => |_| Ast::Program(vec![]);
         "program" => rules "line" "program" => |mut toks| {
@@ -800,52 +800,50 @@ fn grammar<J: Jet + 'static>() -> Grammar<Ast<J>> {
 mod tests {
     use super::*;
 
-    use crate::jet::Core;
-
     #[test]
     fn fixed_vectors() {
         // Single line
-        parse_line_vector::<Core>("a := b").unwrap();
+        parse_line_vector("a := b").unwrap();
         // Bad lex
-        parse_line_vector::<Core>("?P<").unwrap_err();
+        parse_line_vector("?P<").unwrap_err();
         // Witness
-        parse_line_vector::<Core>("U := witness").unwrap();
+        parse_line_vector("U := witness").unwrap();
         // Name with type
-        parse_line_vector::<Core>("U : T -> 1").unwrap();
-        parse_line_vector::<Core>("U : 2 -> 1").unwrap();
-        parse_line_vector::<Core>("U : 2^2 -> 1").unwrap();
-        parse_line_vector::<Core>("U : 2^512 -> 1").unwrap();
-        parse_line_vector::<Core>("U : (2^512) -> 1").unwrap();
-        parse_line_vector::<Core>("U : (2^512 * 2^512) -> 1").unwrap();
-        parse_line_vector::<Core>("U : 1 -> (2^512 * 2^512)").unwrap();
+        parse_line_vector("U : T -> 1").unwrap();
+        parse_line_vector("U : 2 -> 1").unwrap();
+        parse_line_vector("U : 2^2 -> 1").unwrap();
+        parse_line_vector("U : 2^512 -> 1").unwrap();
+        parse_line_vector("U : (2^512) -> 1").unwrap();
+        parse_line_vector("U : (2^512 * 2^512) -> 1").unwrap();
+        parse_line_vector("U : 1 -> (2^512 * 2^512)").unwrap();
         // Witness with type and expression
-        parse_line_vector::<Core>("U := witness : 1 -> 1").unwrap();
-        parse_line_vector::<Core>("U := witness : _ -> 1").unwrap();
-        parse_line_vector::<Core>("U := witness : 1 -> _").unwrap();
-        parse_line_vector::<Core>("U := witness : _ -> _").unwrap();
+        parse_line_vector("U := witness : 1 -> 1").unwrap();
+        parse_line_vector("U := witness : _ -> 1").unwrap();
+        parse_line_vector("U := witness : 1 -> _").unwrap();
+        parse_line_vector("U := witness : _ -> _").unwrap();
         // Case with nested unit
-        parse_line_vector::<Core>("ABC := case unit injl DEF").unwrap();
+        parse_line_vector("ABC := case unit injl DEF").unwrap();
         // word hex
-        parse_line_vector::<Core>("U := const 0xabcd").unwrap();
+        parse_line_vector("U := const 0xabcd").unwrap();
         // word bin
-        parse_line_vector::<Core>("U := const 0b0101001011111000").unwrap();
+        parse_line_vector("U := const 0b0101001011111000").unwrap();
 
         // asserts
-        parse_line_vector::<Core>(
+        parse_line_vector(
             "U := assertl unit #abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234",
         )
         .unwrap();
-        parse_line_vector::<Core>("U := assertl unit #{comp iden iden}").unwrap();
-        parse_line_vector::<Core>(
+        parse_line_vector("U := assertl unit #{comp iden iden}").unwrap();
+        parse_line_vector(
             "U := assertr #abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234 unit",
         )
         .unwrap();
-        parse_line_vector::<Core>("U := assertr #{comp iden iden} unit").unwrap();
+        parse_line_vector("U := assertr #{comp iden iden} unit").unwrap();
     }
 
     #[test]
     fn simple_program() {
-        parse_line_vector::<Core>(
+        parse_line_vector(
             "
             v2 := unit : B -> 1                -- 62274a89
             v1 := pair v2 v2 : B -> (1 * 1)    -- 822d5a17

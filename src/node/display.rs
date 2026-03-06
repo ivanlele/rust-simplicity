@@ -362,16 +362,15 @@ fn shorten<S: AsRef<str>>(s: S, max_len: usize) -> String {
 #[cfg(test)]
 mod tests {
     use crate::human_encoding::Forest;
-    use crate::jet::Core;
     use crate::types;
     use crate::RedeemNode;
     use std::collections::HashMap;
     use std::sync::Arc;
 
-    fn parse_program(s: &str) -> Arc<RedeemNode<Core>> {
+    fn parse_program(s: &str) -> Arc<RedeemNode> {
         types::Context::with_context(|ctx| {
             let empty_witness = HashMap::new();
-            Forest::<Core>::parse(s)
+            Forest::parse(s)
                 .unwrap()
                 .to_witness_node(&ctx, &empty_witness)
                 .unwrap()
