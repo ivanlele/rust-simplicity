@@ -1,7 +1,7 @@
 /* This file has been automatically generated. */
 
 use crate::jet::type_name::TypeName;
-use crate::jet::Jet;
+use crate::jet::{Jet, JetEnvironment};
 use crate::merkle::cmr::Cmr;
 use crate::decode_bits;
 use crate::{decode, BitIter, BitWriter};
@@ -880,13 +880,6 @@ impl Bitcoin {
 }
 
 impl Jet for Bitcoin {
-
-    type Environment = BitcoinEnv;
-    type CJetEnvironment = ();
-
-    fn c_jet_env(_env: &Self::Environment) -> &Self::CJetEnvironment {
-        unimplemented!("Unspecified CJetEnvironment for Bitcoin jets")
-    }
 
     fn cmr(&self) -> Cmr {
         unimplemented!("Bitcoin jet CMRs weights have not yet been implemented.")
@@ -4706,10 +4699,6 @@ impl Jet for Bitcoin {
         })
     }
 
-    fn c_jet_ptr(&self) -> &dyn Fn(&mut CFrameItem, CFrameItem, &Self::CJetEnvironment) -> bool {
-        unimplemented!("Bitcoin jets have not yet been implemented.")
-    }
-
     fn cost(&self) -> Cost {
         unimplemented!("Unspecified cost of Bitcoin jets")
     }
@@ -5585,5 +5574,19 @@ impl str::FromStr for Bitcoin {
             "xor_xor_8" => Ok(Bitcoin::XorXor8),
             x => Err(crate::Error::InvalidJetName(x.to_owned())),
         }
+    }
+}
+
+impl JetEnvironment for BitcoinEnv {
+
+    type Jet = Bitcoin;
+    type CJetEnvironment = ();
+
+    fn c_jet_env(&self) -> &Self::CJetEnvironment {
+        &()
+    }
+
+    fn c_jet_ptr(jet: &Self::Jet) -> fn(&mut CFrameItem, CFrameItem, &Self::CJetEnvironment) -> bool {
+        unimplemented!("Bitcoin jets have not yet been implemented.")
     }
 }
