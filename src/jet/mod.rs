@@ -69,7 +69,7 @@ pub trait JetEnvironment {
     /// Obtain the FFI C pointer for the jet.
     fn c_jet_ptr(
         jet: &Self::Jet,
-    ) -> &dyn Fn(&mut CFrameItem, CFrameItem, &Self::CJetEnvironment) -> bool;
+    ) -> fn(&mut CFrameItem, CFrameItem, &Self::CJetEnvironment) -> bool;
 }
 
 /// Family of jets that share an encoding scheme and execution environment.
@@ -83,11 +83,6 @@ pub trait JetEnvironment {
 pub trait Jet:
     Copy + Eq + Ord + Hash + std::fmt::Debug + std::fmt::Display + std::str::FromStr + 'static
 {
-    /// Environment for jet to read from
-    type Environment;
-    /// CJetEnvironment to interact with C FFI.
-    type CJetEnvironment;
-
     /// Return the CMR of the jet.
     fn cmr(&self) -> Cmr;
 
@@ -102,12 +97,6 @@ pub trait Jet:
 
     /// Decode a jet from bits.
     fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error>;
-
-    /// Obtains a C FFI compatible environment for the jet.
-    fn c_jet_env(env: &Self::Environment) -> &Self::CJetEnvironment;
-
-    /// Obtain the FFI C pointer for the jet.
-    fn c_jet_ptr(&self) -> &dyn Fn(&mut CFrameItem, CFrameItem, &Self::CJetEnvironment) -> bool;
 
     /// Return the cost of the jet.
     fn cost(&self) -> Cost;
