@@ -1754,7 +1754,7 @@ impl Jet for Bitcoin {
         TypeName(name)
     }
 
-    fn encode<W: Write>(&self, w: &mut BitWriter<W>) -> std::io::Result<usize> {
+    fn encode(&self, w: &mut BitWriter<&mut dyn Write>) -> std::io::Result<usize> {
         let (n, len) = match self {
             Bitcoin::Verify => (0, 3),
             Bitcoin::Low1 => (8, 6),
@@ -2189,7 +2189,7 @@ impl Jet for Bitcoin {
         w.write_bits_be(n, len)
     }
 
-    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error> {
+    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error> where Self: Sized {
         decode_bits!(bits, {
             0 => {
                 0 => {
@@ -4700,6 +4700,10 @@ impl Jet for Bitcoin {
 
     fn cost(&self) -> Cost {
         unimplemented!("Unspecified cost of Bitcoin jets")
+    }
+
+    fn parse(s: &str) -> Result<Self, crate::Error> where Self: Sized {
+        str::FromStr::from_str(s)
     }
 }
 

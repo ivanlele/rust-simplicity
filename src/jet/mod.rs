@@ -80,9 +80,7 @@ pub trait JetEnvironment {
 /// Jets may read values from their _environment_.
 ///
 /// Jets are **always** leaves in a Simplicity DAG.
-pub trait Jet:
-    Copy + Eq + Ord + Hash + std::fmt::Debug + std::fmt::Display + std::str::FromStr + 'static
-{
+pub trait Jet: Copy + Eq + Ord + Hash + std::fmt::Debug + std::fmt::Display + 'static {
     /// Return the CMR of the jet.
     fn cmr(&self) -> Cmr;
 
@@ -93,13 +91,18 @@ pub trait Jet:
     fn target_ty(&self) -> TypeName;
 
     /// Encode the jet to bits.
-    fn encode<W: Write>(&self, w: &mut BitWriter<W>) -> std::io::Result<usize>;
+    fn encode(&self, w: &mut BitWriter<&mut dyn Write>) -> std::io::Result<usize>;
 
     /// Decode a jet from bits.
-    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error>;
+    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error>
+    where
+        Self: Sized;
 
     /// Return the cost of the jet.
     fn cost(&self) -> Cost;
+
+    /// Parse a jet from a string.
+    fn parse(s: &str) -> Result<Self, crate::Error>;
 }
 
 #[cfg(test)]

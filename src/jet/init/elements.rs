@@ -4285,7 +4285,7 @@ impl Jet for Elements {
         TypeName(name)
     }
 
-    fn encode<W: Write>(&self, w: &mut BitWriter<W>) -> std::io::Result<usize> {
+    fn encode(&self, w: &mut BitWriter<&mut dyn Write>) -> std::io::Result<usize> {
         let (n, len) = match self {
             Elements::Verify => (0, 3),
             Elements::Low1 => (8, 6),
@@ -4763,7 +4763,7 @@ impl Jet for Elements {
         w.write_bits_be(n, len)
     }
 
-    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error> {
+    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error> where Self: Sized {
         decode_bits!(bits, {
             0 => {
                 0 => {
@@ -7893,6 +7893,10 @@ impl Jet for Elements {
             Elements::XorXor64 => Cost::from_milliweight(93),
             Elements::XorXor8 => Cost::from_milliweight(98),
         }
+    }
+
+    fn parse(s: &str) -> Result<Self, crate::Error> where Self: Sized {
+        str::FromStr::from_str(s)
     }
 }
 

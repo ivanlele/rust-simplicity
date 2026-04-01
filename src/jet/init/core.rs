@@ -3357,7 +3357,7 @@ impl Jet for Core {
         TypeName(name)
     }
 
-    fn encode<W: Write>(&self, w: &mut BitWriter<W>) -> std::io::Result<usize> {
+    fn encode(&self, w: &mut BitWriter<&mut dyn Write>) -> std::io::Result<usize> {
         let (n, len) = match self {
             Core::Verify => (0, 2),
             Core::Low1 => (8, 5),
@@ -3732,7 +3732,7 @@ impl Jet for Core {
         w.write_bits_be(n, len)
     }
 
-    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error> {
+    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error> where Self: Sized {
         decode_bits!(bits, {
             0 => {
                 0 => {Core::Verify},
@@ -6384,6 +6384,10 @@ impl Jet for Core {
             Core::XorXor64 => Cost::from_milliweight(80),
             Core::XorXor8 => Cost::from_milliweight(86),
         }
+    }
+
+    fn parse(s: &str) -> Result<Self, crate::Error> where Self: Sized {
+        str::FromStr::from_str(s)
     }
 }
 
