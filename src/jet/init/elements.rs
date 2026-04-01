@@ -1,16 +1,16 @@
 /* This file has been automatically generated. */
 
+use crate::analysis::Cost;
+use crate::decode_bits;
 use crate::jet::type_name::TypeName;
 use crate::jet::Jet;
 use crate::merkle::cmr::Cmr;
-use crate::decode_bits;
 use crate::{decode, BitIter, BitWriter};
-use crate::analysis::Cost;
 use hashes::sha256::Midstate;
+use simplicity_sys::CElementsTxEnv;
 use simplicity_sys::CFrameItem;
 use std::io::Write;
 use std::{fmt, str};
-use simplicity_sys::CElementsTxEnv;
 
 /// The Elements jet family.
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Debug, Hash)]
@@ -966,7 +966,6 @@ impl Elements {
 }
 
 impl Jet for Elements {
-
     fn cmr(&self) -> Cmr {
         let bytes = match self {
             Elements::Add16 => [
@@ -3822,8 +3821,12 @@ impl Jet for Elements {
             Elements::And32 => b"i",
             Elements::And64 => b"l",
             Elements::And8 => b"***22*22**22*22",
-            Elements::AnnexHash => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Elements::AssetAmountHash => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
+            Elements::AnnexHash => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Elements::AssetAmountHash => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
             Elements::Bip0340Verify => b"1",
             Elements::BrokenDoNotUseCheckLockDistance => b"1",
             Elements::BrokenDoNotUseCheckLockDuration => b"1",
@@ -4131,7 +4134,9 @@ impl Jet for Elements {
             Elements::Negate64 => b"*2l",
             Elements::Negate8 => b"*2***22*22**22*22",
             Elements::NewIssuanceContract => b"+1+1h",
-            Elements::NonceHash => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
+            Elements::NonceHash => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
             Elements::NumInputs => b"i",
             Elements::NumOutputs => b"i",
             Elements::One16 => b"****22*22**22*22***22*22**22*22",
@@ -4143,7 +4148,9 @@ impl Jet for Elements {
             Elements::Or32 => b"i",
             Elements::Or64 => b"l",
             Elements::Or8 => b"***22*22**22*22",
-            Elements::OutpointHash => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
+            Elements::OutpointHash => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
             Elements::OutputAmount => b"+1*+*2hh+*2hl",
             Elements::OutputAmountsHash => b"h",
             Elements::OutputAsset => b"+1+*2hh",
@@ -4160,7 +4167,9 @@ impl Jet for Elements {
             Elements::OutputSurjectionProofsHash => b"h",
             Elements::OutputsHash => b"h",
             Elements::ParseLock => b"+ii",
-            Elements::ParseSequence => b"+1+****22*22**22*22***22*22**22*22****22*22**22*22***22*22**22*22",
+            Elements::ParseSequence => {
+                b"+1+****22*22**22*22***22*22**22*22****22*22**22*22***22*22**22*22"
+            }
             Elements::PointVerify1 => b"1",
             Elements::ReissuanceBlinding => b"+1+1h",
             Elements::ReissuanceEntropy => b"+1+1h",
@@ -4231,19 +4240,43 @@ impl Jet for Elements {
             Elements::Scale => b"**hhh",
             Elements::ScriptCMR => b"h",
             Elements::Sha256Block => b"h",
-            Elements::Sha256Ctx8Add1 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Elements::Sha256Ctx8Add128 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Elements::Sha256Ctx8Add16 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Elements::Sha256Ctx8Add2 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Elements::Sha256Ctx8Add256 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Elements::Sha256Ctx8Add32 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Elements::Sha256Ctx8Add4 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Elements::Sha256Ctx8Add512 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Elements::Sha256Ctx8Add64 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Elements::Sha256Ctx8Add8 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Elements::Sha256Ctx8AddBuffer511 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
+            Elements::Sha256Ctx8Add1 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Elements::Sha256Ctx8Add128 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Elements::Sha256Ctx8Add16 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Elements::Sha256Ctx8Add2 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Elements::Sha256Ctx8Add256 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Elements::Sha256Ctx8Add32 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Elements::Sha256Ctx8Add4 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Elements::Sha256Ctx8Add512 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Elements::Sha256Ctx8Add64 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Elements::Sha256Ctx8Add8 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Elements::Sha256Ctx8AddBuffer511 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
             Elements::Sha256Ctx8Finalize => b"h",
-            Elements::Sha256Ctx8Init => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
+            Elements::Sha256Ctx8Init => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
             Elements::Sha256Iv => b"h",
             Elements::SigAllHash => b"h",
             Elements::Some1 => b"2",
@@ -4257,7 +4290,9 @@ impl Jet for Elements {
             Elements::Subtract8 => b"*2***22*22**22*22",
             Elements::Swu => b"*hh",
             Elements::TapEnvHash => b"h",
-            Elements::TapdataInit => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
+            Elements::TapdataInit => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
             Elements::TapleafHash => b"h",
             Elements::TapleafVersion => b"***22*22**22*22",
             Elements::Tappath => b"+1h",
@@ -4285,7 +4320,7 @@ impl Jet for Elements {
         TypeName(name)
     }
 
-    fn encode<W: Write>(&self, w: &mut BitWriter<W>) -> std::io::Result<usize> {
+    fn encode(&self, w: &mut BitWriter<&mut dyn Write>) -> std::io::Result<usize> {
         let (n, len) = match self {
             Elements::Verify => (0, 3),
             Elements::Low1 => (8, 6),
@@ -4761,2662 +4796,6 @@ impl Jet for Elements {
         };
 
         w.write_bits_be(n, len)
-    }
-
-    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error> {
-        decode_bits!(bits, {
-            0 => {
-                0 => {
-                    0 => {Elements::Verify},
-                    1 => {
-                        0 => {
-                            0 => {
-                                0 => {Elements::Low1},
-                                1 => {
-                                    0 => {
-                                        0 => {},
-                                        1 => {Elements::Low8}
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {Elements::Low16},
-                                                    1 => {Elements::Low32}
-                                                },
-                                                1 => {
-                                                    0 => {Elements::Low64},
-                                                    1 => {}
-                                                }
-                                            },
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    }
-                                }
-                            },
-                            1 => {
-                                0 => {Elements::High1},
-                                1 => {
-                                    0 => {
-                                        0 => {},
-                                        1 => {Elements::High8}
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {Elements::High16},
-                                                    1 => {Elements::High32}
-                                                },
-                                                1 => {
-                                                    0 => {Elements::High64},
-                                                    1 => {}
-                                                }
-                                            },
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    }
-                                }
-                            }
-                        },
-                        1 => {
-                            0 => {
-                                0 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {Elements::Complement1},
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {Elements::Complement8}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Elements::Complement16},
-                                                                1 => {Elements::Complement32}
-                                                            },
-                                                            1 => {
-                                                                0 => {Elements::Complement64},
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {Elements::And1},
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {Elements::And8}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Elements::And16},
-                                                                1 => {Elements::And32}
-                                                            },
-                                                            1 => {
-                                                                0 => {Elements::And64},
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {Elements::Or1},
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {Elements::Or8}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Elements::Or16},
-                                                                1 => {Elements::Or32}
-                                                            },
-                                                            1 => {
-                                                                0 => {Elements::Or64},
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {Elements::Xor1},
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {Elements::Xor8}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Elements::Xor16},
-                                                                1 => {Elements::Xor32}
-                                                            },
-                                                            1 => {
-                                                                0 => {Elements::Xor64},
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {Elements::Maj1},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Elements::Maj8}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Elements::Maj16},
-                                                                    1 => {Elements::Maj32}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Elements::Maj64},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {Elements::XorXor1},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Elements::XorXor8}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Elements::XorXor16},
-                                                                    1 => {Elements::XorXor32}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Elements::XorXor64},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {Elements::Ch1},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Elements::Ch8}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Elements::Ch16},
-                                                                    1 => {Elements::Ch32}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Elements::Ch64},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {Elements::Some1},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Elements::Some8}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Elements::Some16},
-                                                                    1 => {Elements::Some32}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Elements::Some64},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Elements::All8}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Elements::All16},
-                                                                    1 => {Elements::All32}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Elements::All64},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {Elements::Eq1},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Elements::Eq8}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Elements::Eq16},
-                                                                    1 => {Elements::Eq32}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Elements::Eq64},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Elements::Eq256},
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Elements::FullLeftShift8_1}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Elements::FullLeftShift16_1},
-                                                                        1 => {Elements::FullLeftShift32_1}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Elements::FullLeftShift64_1},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {Elements::FullLeftShift8_2},
-                                                                    1 => {Elements::FullLeftShift16_2}
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Elements::FullLeftShift32_2},
-                                                                                1 => {Elements::FullLeftShift64_2}
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {Elements::FullLeftShift8_4},
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {Elements::FullLeftShift16_4},
-                                                                    1 => {Elements::FullLeftShift32_4}
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Elements::FullLeftShift64_4},
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Elements::FullLeftShift16_8},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Elements::FullLeftShift32_8},
-                                                                                1 => {Elements::FullLeftShift64_8}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Elements::FullLeftShift32_16},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Elements::FullLeftShift64_16},
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {Elements::FullLeftShift64_32},
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Elements::FullRightShift8_1}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Elements::FullRightShift16_1},
-                                                                        1 => {Elements::FullRightShift32_1}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Elements::FullRightShift64_1},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {Elements::FullRightShift8_2},
-                                                                    1 => {Elements::FullRightShift16_2}
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Elements::FullRightShift32_2},
-                                                                                1 => {Elements::FullRightShift64_2}
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {Elements::FullRightShift8_4},
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {Elements::FullRightShift16_4},
-                                                                    1 => {Elements::FullRightShift32_4}
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Elements::FullRightShift64_4},
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Elements::FullRightShift16_8},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Elements::FullRightShift32_8},
-                                                                                1 => {Elements::FullRightShift64_8}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Elements::FullRightShift32_16},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Elements::FullRightShift64_16},
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {Elements::FullRightShift64_32},
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            1 => {
-                                0 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Elements::Leftmost8_1}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::Leftmost16_1},
-                                                                                        1 => {Elements::Leftmost32_1}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Elements::Leftmost64_1},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::Leftmost8_2},
-                                                                                    1 => {Elements::Leftmost16_2}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::Leftmost32_2},
-                                                                                                1 => {Elements::Leftmost64_2}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            }
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Elements::Leftmost8_4},
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::Leftmost16_4},
-                                                                                    1 => {Elements::Leftmost32_4}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::Leftmost64_4},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::Leftmost16_8},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::Leftmost32_8},
-                                                                                                1 => {Elements::Leftmost64_8}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Elements::Leftmost32_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::Leftmost64_16},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::Leftmost64_32},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Elements::Rightmost8_1}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::Rightmost16_1},
-                                                                                        1 => {Elements::Rightmost32_1}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Elements::Rightmost64_1},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::Rightmost8_2},
-                                                                                    1 => {Elements::Rightmost16_2}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::Rightmost32_2},
-                                                                                                1 => {Elements::Rightmost64_2}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            }
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Elements::Rightmost8_4},
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::Rightmost16_4},
-                                                                                    1 => {Elements::Rightmost32_4}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::Rightmost64_4},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::Rightmost16_8},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::Rightmost32_8},
-                                                                                                1 => {Elements::Rightmost64_8}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Elements::Rightmost32_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::Rightmost64_16},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::Rightmost64_32},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Elements::LeftPadLow1_8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::LeftPadLow1_16},
-                                                                                        1 => {Elements::LeftPadLow1_32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Elements::LeftPadLow1_64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::LeftPadLow8_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::LeftPadLow8_32},
-                                                                                                1 => {Elements::LeftPadLow8_64}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Elements::LeftPadLow16_32},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::LeftPadLow16_64},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::LeftPadLow32_64},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Elements::LeftPadHigh1_8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::LeftPadHigh1_16},
-                                                                                        1 => {Elements::LeftPadHigh1_32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Elements::LeftPadHigh1_64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::LeftPadHigh8_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::LeftPadHigh8_32},
-                                                                                                1 => {Elements::LeftPadHigh8_64}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Elements::LeftPadHigh16_32},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::LeftPadHigh16_64},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::LeftPadHigh32_64},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Elements::LeftExtend1_8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::LeftExtend1_16},
-                                                                                        1 => {Elements::LeftExtend1_32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Elements::LeftExtend1_64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::LeftExtend8_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::LeftExtend8_32},
-                                                                                                1 => {Elements::LeftExtend8_64}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Elements::LeftExtend16_32},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::LeftExtend16_64},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::LeftExtend32_64},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Elements::RightPadLow1_8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::RightPadLow1_16},
-                                                                                        1 => {Elements::RightPadLow1_32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Elements::RightPadLow1_64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::RightPadLow8_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::RightPadLow8_32},
-                                                                                                1 => {Elements::RightPadLow8_64}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Elements::RightPadLow16_32},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::RightPadLow16_64},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::RightPadLow32_64},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Elements::RightPadHigh1_8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::RightPadHigh1_16},
-                                                                                        1 => {Elements::RightPadHigh1_32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Elements::RightPadHigh1_64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::RightPadHigh8_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::RightPadHigh8_32},
-                                                                                                1 => {Elements::RightPadHigh8_64}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Elements::RightPadHigh16_32},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::RightPadHigh16_64},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::RightPadHigh32_64},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::RightExtend8_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::RightExtend8_32},
-                                                                                                1 => {Elements::RightExtend8_64}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Elements::RightExtend16_32},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Elements::RightExtend16_64},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Elements::RightExtend32_64},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Elements::LeftShiftWith8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::LeftShiftWith16},
-                                                                                    1 => {Elements::LeftShiftWith32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Elements::LeftShiftWith64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Elements::RightShiftWith8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::RightShiftWith16},
-                                                                                    1 => {Elements::RightShiftWith32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Elements::RightShiftWith64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Elements::LeftShift8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::LeftShift16},
-                                                                                    1 => {Elements::LeftShift32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Elements::LeftShift64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Elements::RightShift8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::RightShift16},
-                                                                                    1 => {Elements::RightShift32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Elements::RightShift64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Elements::LeftRotate8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::LeftRotate16},
-                                                                                    1 => {Elements::LeftRotate32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Elements::LeftRotate64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Elements::RightRotate8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::RightRotate16},
-                                                                                    1 => {Elements::RightRotate32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Elements::RightRotate64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            },
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    },
-                                    1 => {}
-                                },
-                                1 => {}
-                            }
-                        }
-                    }
-                },
-                1 => {
-                    0 => {
-                        0 => {
-                            0 => {
-                                0 => {},
-                                1 => {
-                                    0 => {
-                                        0 => {},
-                                        1 => {Elements::One8}
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {Elements::One16},
-                                                    1 => {Elements::One32}
-                                                },
-                                                1 => {
-                                                    0 => {Elements::One64},
-                                                    1 => {}
-                                                }
-                                            },
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    }
-                                }
-                            },
-                            1 => {
-                                0 => {
-                                    0 => {
-                                        0 => {},
-                                        1 => {
-                                            0 => {
-                                                0 => {},
-                                                1 => {Elements::FullAdd8}
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Elements::FullAdd16},
-                                                            1 => {Elements::FullAdd32}
-                                                        },
-                                                        1 => {
-                                                            0 => {Elements::FullAdd64},
-                                                            1 => {}
-                                                        }
-                                                    },
-                                                    1 => {}
-                                                },
-                                                1 => {}
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {},
-                                        1 => {
-                                            0 => {
-                                                0 => {},
-                                                1 => {Elements::Add8}
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Elements::Add16},
-                                                            1 => {Elements::Add32}
-                                                        },
-                                                        1 => {
-                                                            0 => {Elements::Add64},
-                                                            1 => {}
-                                                        }
-                                                    },
-                                                    1 => {}
-                                                },
-                                                1 => {}
-                                            }
-                                        }
-                                    }
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Elements::FullIncrement8}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Elements::FullIncrement16},
-                                                                        1 => {Elements::FullIncrement32}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Elements::FullIncrement64},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Elements::Increment8}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Elements::Increment16},
-                                                                        1 => {Elements::Increment32}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Elements::Increment64},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {},
-                                                1 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Elements::FullSubtract8}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Elements::FullSubtract16},
-                                                                        1 => {Elements::FullSubtract32}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Elements::FullSubtract64},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Elements::Subtract8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Elements::Subtract16},
-                                                                            1 => {Elements::Subtract32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Elements::Subtract64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Elements::Negate8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Elements::Negate16},
-                                                                            1 => {Elements::Negate32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Elements::Negate64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Elements::FullDecrement8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Elements::FullDecrement16},
-                                                                            1 => {Elements::FullDecrement32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Elements::FullDecrement64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Elements::Decrement8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Elements::Decrement16},
-                                                                            1 => {Elements::Decrement32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Elements::Decrement64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Elements::FullMultiply8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Elements::FullMultiply16},
-                                                                            1 => {Elements::FullMultiply32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Elements::FullMultiply64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Elements::Multiply8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Elements::Multiply16},
-                                                                            1 => {Elements::Multiply32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Elements::Multiply64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Elements::IsZero8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Elements::IsZero16},
-                                                                            1 => {Elements::IsZero32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Elements::IsZero64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Elements::IsOne8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Elements::IsOne16},
-                                                                            1 => {Elements::IsOne32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Elements::IsOne64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Elements::Le8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Elements::Le16},
-                                                                                            1 => {Elements::Le32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Elements::Le64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Elements::Lt8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Elements::Lt16},
-                                                                                            1 => {Elements::Lt32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Elements::Lt64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Elements::Min8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Elements::Min16},
-                                                                                            1 => {Elements::Min32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Elements::Min64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Elements::Max8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Elements::Max16},
-                                                                                            1 => {Elements::Max32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Elements::Max64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Elements::Median8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Elements::Median16},
-                                                                                            1 => {Elements::Median32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Elements::Median64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {},
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {},
-                                                                                        1 => {
-                                                                                            0 => {Elements::DivMod128_64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Elements::DivMod8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Elements::DivMod16},
-                                                                                            1 => {Elements::DivMod32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Elements::DivMod64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Elements::Divide8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Elements::Divide16},
-                                                                                            1 => {Elements::Divide32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Elements::Divide64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Elements::Modulo8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Elements::Modulo16},
-                                                                                            1 => {Elements::Modulo32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Elements::Modulo64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Elements::Divides8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Elements::Divides16},
-                                                                                            1 => {Elements::Divides32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Elements::Divides64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    },
-                                                    1 => {}
-                                                },
-                                                1 => {}
-                                            },
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    }
-                                }
-                            }
-                        },
-                        1 => {
-                            0 => {
-                                0 => {Elements::Sha256Block},
-                                1 => {
-                                    0 => {
-                                        0 => {Elements::Sha256Iv},
-                                        1 => {
-                                            0 => {Elements::Sha256Ctx8Add1},
-                                            1 => {
-                                                0 => {
-                                                    0 => {Elements::Sha256Ctx8Add2},
-                                                    1 => {Elements::Sha256Ctx8Add4}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Elements::Sha256Ctx8Add8},
-                                                                1 => {Elements::Sha256Ctx8Add16}
-                                                            },
-                                                            1 => {
-                                                                0 => {Elements::Sha256Ctx8Add32},
-                                                                1 => {Elements::Sha256Ctx8Add64}
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Elements::Sha256Ctx8Add128},
-                                                                    1 => {Elements::Sha256Ctx8Add256}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Elements::Sha256Ctx8Add512},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {Elements::Sha256Ctx8AddBuffer511},
-                                                    1 => {Elements::Sha256Ctx8Finalize}
-                                                },
-                                                1 => {
-                                                    0 => {Elements::Sha256Ctx8Init},
-                                                    1 => {}
-                                                }
-                                            },
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    }
-                                }
-                            },
-                            1 => {}
-                        }
-                    },
-                    1 => {
-                        0 => {
-                            0 => {
-                                0 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {Elements::PointVerify1},
-                                            1 => {}
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {Elements::Decompress},
-                                                1 => {
-                                                    0 => {Elements::LinearVerify1},
-                                                    1 => {}
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Elements::LinearCombination1},
-                                                                1 => {}
-                                                            },
-                                                            1 => {Elements::Scale}
-                                                        },
-                                                        1 => {
-                                                            0 => {Elements::Generate},
-                                                            1 => {Elements::GejInfinity}
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Elements::GejNormalize},
-                                                                1 => {Elements::GejNegate}
-                                                            },
-                                                            1 => {
-                                                                0 => {Elements::GeNegate},
-                                                                1 => {Elements::GejDouble}
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {Elements::GejAdd},
-                                                                1 => {Elements::GejGeAddEx}
-                                                            },
-                                                            1 => {
-                                                                0 => {Elements::GejGeAdd},
-                                                                1 => {Elements::GejRescale}
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Elements::GejIsInfinity},
-                                                                                1 => {Elements::GejEquiv}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Elements::GejGeEquiv},
-                                                                                1 => {Elements::GejXEquiv}
-                                                                            }
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Elements::GejYIsOdd},
-                                                                                1 => {Elements::GejIsOnCurve}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Elements::GeIsOnCurve},
-                                                                                1 => {Elements::ScalarNormalize}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Elements::ScalarNegate},
-                                                                                1 => {Elements::ScalarAdd}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Elements::ScalarSquare},
-                                                                                1 => {Elements::ScalarMultiply}
-                                                                            }
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Elements::ScalarMultiplyLambda},
-                                                                                1 => {Elements::ScalarInvert}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Elements::ScalarIsZero},
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {
-                                                                                    0 => {},
-                                                                                    1 => {Elements::FeNormalize}
-                                                                                }
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::FeNegate},
-                                                                                    1 => {Elements::FeAdd}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Elements::FeSquare},
-                                                                                    1 => {Elements::FeMultiply}
-                                                                                }
-                                                                            }
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::FeMultiplyBeta},
-                                                                                    1 => {Elements::FeInvert}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Elements::FeSquareRoot},
-                                                                                    1 => {Elements::FeIsZero}
-                                                                                }
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::FeIsOdd},
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Elements::HashToCurve},
-                                                                                    1 => {Elements::Swu}
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {Elements::CheckSigVerify},
-                                        1 => {
-                                            0 => {
-                                                0 => {Elements::Bip0340Verify},
-                                                1 => {}
-                                            },
-                                            1 => {}
-                                        }
-                                    }
-                                },
-                                1 => {
-                                    0 => {},
-                                    1 => {
-                                        0 => {Elements::ParseLock},
-                                        1 => {
-                                            0 => {
-                                                0 => {Elements::ParseSequence},
-                                                1 => {Elements::TapdataInit}
-                                            },
-                                            1 => {}
-                                        }
-                                    }
-                                }
-                            },
-                            1 => {}
-                        },
-                        1 => {}
-                    }
-                }
-            },
-            1 => {
-                0 => {
-                    0 => {Elements::SigAllHash},
-                    1 => {
-                        0 => {
-                            0 => {Elements::TxHash},
-                            1 => {Elements::TapEnvHash}
-                        },
-                        1 => {
-                            0 => {
-                                0 => {
-                                    0 => {
-                                        0 => {Elements::OutputsHash},
-                                        1 => {Elements::InputsHash}
-                                    },
-                                    1 => {
-                                        0 => {Elements::IssuancesHash},
-                                        1 => {Elements::InputUtxosHash}
-                                    }
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {Elements::OutputHash},
-                                            1 => {Elements::OutputAmountsHash}
-                                        },
-                                        1 => {
-                                            0 => {Elements::OutputScriptsHash},
-                                            1 => {Elements::OutputNoncesHash}
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {Elements::OutputRangeProofsHash},
-                                            1 => {Elements::OutputSurjectionProofsHash}
-                                        },
-                                        1 => {
-                                            0 => {Elements::InputHash},
-                                            1 => {Elements::InputOutpointsHash}
-                                        }
-                                    }
-                                }
-                            },
-                            1 => {
-                                0 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Elements::InputSequencesHash},
-                                                            1 => {Elements::InputAnnexesHash}
-                                                        },
-                                                        1 => {
-                                                            0 => {Elements::InputScriptSigsHash},
-                                                            1 => {Elements::IssuanceHash}
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {Elements::IssuanceAssetAmountsHash},
-                                                            1 => {Elements::IssuanceTokenAmountsHash}
-                                                        },
-                                                        1 => {
-                                                            0 => {Elements::IssuanceRangeProofsHash},
-                                                            1 => {Elements::IssuanceBlindingEntropyHash}
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Elements::InputUtxoHash},
-                                                            1 => {Elements::InputAmountsHash}
-                                                        },
-                                                        1 => {
-                                                            0 => {Elements::InputScriptsHash},
-                                                            1 => {Elements::TapleafHash}
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {Elements::TappathHash},
-                                                            1 => {Elements::OutpointHash}
-                                                        },
-                                                        1 => {
-                                                            0 => {Elements::AssetAmountHash},
-                                                            1 => {Elements::NonceHash}
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Elements::AnnexHash},
-                                                                1 => {Elements::BuildTapleafSimplicity}
-                                                            },
-                                                            1 => {
-                                                                0 => {Elements::BuildTapbranch},
-                                                                1 => {Elements::BuildTaptweak}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                },
-                                                1 => {}
-                                            }
-                                        },
-                                        1 => {}
-                                    },
-                                    1 => {}
-                                },
-                                1 => {}
-                            }
-                        }
-                    }
-                },
-                1 => {
-                    0 => {
-                        0 => {
-                            0 => {Elements::CheckLockHeight},
-                            1 => {
-                                0 => {
-                                    0 => {Elements::CheckLockTime},
-                                    1 => {Elements::BrokenDoNotUseCheckLockDistance}
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {Elements::BrokenDoNotUseCheckLockDuration},
-                                                1 => {Elements::TxLockHeight}
-                                            },
-                                            1 => {
-                                                0 => {Elements::TxLockTime},
-                                                1 => {Elements::BrokenDoNotUseTxLockDistance}
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {Elements::BrokenDoNotUseTxLockDuration},
-                                                    1 => {Elements::TxIsFinal}
-                                                },
-                                                1 => {}
-                                            },
-                                            1 => {}
-                                        }
-                                    },
-                                    1 => {}
-                                }
-                            }
-                        },
-                        1 => {
-                            0 => {Elements::Issuance},
-                            1 => {
-                                0 => {
-                                    0 => {Elements::IssuanceAsset},
-                                    1 => {Elements::IssuanceToken}
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {Elements::IssuanceEntropy},
-                                                1 => {Elements::CalculateIssuanceEntropy}
-                                            },
-                                            1 => {
-                                                0 => {Elements::CalculateAsset},
-                                                1 => {Elements::CalculateExplicitToken}
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {Elements::CalculateConfidentialToken},
-                                                    1 => {Elements::LbtcAsset}
-                                                },
-                                                1 => {}
-                                            },
-                                            1 => {}
-                                        }
-                                    },
-                                    1 => {}
-                                }
-                            }
-                        }
-                    },
-                    1 => {
-                        0 => {
-                            0 => {
-                                0 => {
-                                    0 => {
-                                        0 => {Elements::ScriptCMR},
-                                        1 => {
-                                            0 => {
-                                                0 => {Elements::InternalKey},
-                                                1 => {Elements::CurrentIndex}
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Elements::NumInputs},
-                                                            1 => {Elements::NumOutputs}
-                                                        },
-                                                        1 => {
-                                                            0 => {Elements::LockTime},
-                                                            1 => {Elements::OutputAsset}
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Elements::OutputAmount},
-                                                                1 => {Elements::OutputNonce}
-                                                            },
-                                                            1 => {
-                                                                0 => {Elements::OutputScriptHash},
-                                                                1 => {Elements::OutputNullDatum}
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {Elements::OutputIsFee},
-                                                                1 => {Elements::OutputSurjectionProof}
-                                                            },
-                                                            1 => {
-                                                                0 => {Elements::OutputRangeProof},
-                                                                1 => {Elements::TotalFee}
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Elements::CurrentPegin},
-                                                                                1 => {Elements::CurrentPrevOutpoint}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Elements::CurrentAsset},
-                                                                                1 => {Elements::CurrentAmount}
-                                                                            }
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Elements::CurrentScriptHash},
-                                                                                1 => {Elements::CurrentSequence}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Elements::CurrentAnnexHash},
-                                                                                1 => {Elements::CurrentScriptSigHash}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Elements::CurrentReissuanceBlinding},
-                                                                                1 => {Elements::CurrentNewIssuanceContract}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Elements::CurrentReissuanceEntropy},
-                                                                                1 => {Elements::CurrentIssuanceAssetAmount}
-                                                                            }
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Elements::CurrentIssuanceTokenAmount},
-                                                                                1 => {Elements::CurrentIssuanceAssetProof}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Elements::CurrentIssuanceTokenProof},
-                                                                                1 => {Elements::InputPegin}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::InputPrevOutpoint},
-                                                                                    1 => {Elements::InputAsset}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Elements::InputAmount},
-                                                                                    1 => {Elements::InputScriptHash}
-                                                                                }
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::InputSequence},
-                                                                                    1 => {Elements::InputAnnexHash}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Elements::InputScriptSigHash},
-                                                                                    1 => {Elements::ReissuanceBlinding}
-                                                                                }
-                                                                            }
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::NewIssuanceContract},
-                                                                                    1 => {Elements::ReissuanceEntropy}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Elements::IssuanceAssetAmount},
-                                                                                    1 => {Elements::IssuanceTokenAmount}
-                                                                                }
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::IssuanceAssetProof},
-                                                                                    1 => {Elements::IssuanceTokenProof}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Elements::TapleafVersion},
-                                                                                    1 => {Elements::Tappath}
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Elements::Version},
-                                                                                    1 => {Elements::GenesisBlockHash}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Elements::TransactionId},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        }
-                                    },
-                                    1 => {}
-                                },
-                                1 => {}
-                            },
-                            1 => {}
-                        },
-                        1 => {}
-                    }
-                }
-            }
-        })
     }
 
     fn cost(&self) -> Cost {
@@ -7915,10 +5294,18 @@ impl fmt::Display for Elements {
             Elements::AnnexHash => f.write_str("annex_hash"),
             Elements::AssetAmountHash => f.write_str("asset_amount_hash"),
             Elements::Bip0340Verify => f.write_str("bip_0340_verify"),
-            Elements::BrokenDoNotUseCheckLockDistance => f.write_str("broken_do_not_use_check_lock_distance"),
-            Elements::BrokenDoNotUseCheckLockDuration => f.write_str("broken_do_not_use_check_lock_duration"),
-            Elements::BrokenDoNotUseTxLockDistance => f.write_str("broken_do_not_use_tx_lock_distance"),
-            Elements::BrokenDoNotUseTxLockDuration => f.write_str("broken_do_not_use_tx_lock_duration"),
+            Elements::BrokenDoNotUseCheckLockDistance => {
+                f.write_str("broken_do_not_use_check_lock_distance")
+            }
+            Elements::BrokenDoNotUseCheckLockDuration => {
+                f.write_str("broken_do_not_use_check_lock_duration")
+            }
+            Elements::BrokenDoNotUseTxLockDistance => {
+                f.write_str("broken_do_not_use_tx_lock_distance")
+            }
+            Elements::BrokenDoNotUseTxLockDuration => {
+                f.write_str("broken_do_not_use_tx_lock_duration")
+            }
             Elements::BuildTapbranch => f.write_str("build_tapbranch"),
             Elements::BuildTapleafSimplicity => f.write_str("build_tapleaf_simplicity"),
             Elements::BuildTaptweak => f.write_str("build_taptweak"),
@@ -8395,8 +5782,12 @@ impl str::FromStr for Elements {
             "annex_hash" => Ok(Elements::AnnexHash),
             "asset_amount_hash" => Ok(Elements::AssetAmountHash),
             "bip_0340_verify" => Ok(Elements::Bip0340Verify),
-            "broken_do_not_use_check_lock_distance" => Ok(Elements::BrokenDoNotUseCheckLockDistance),
-            "broken_do_not_use_check_lock_duration" => Ok(Elements::BrokenDoNotUseCheckLockDuration),
+            "broken_do_not_use_check_lock_distance" => {
+                Ok(Elements::BrokenDoNotUseCheckLockDistance)
+            }
+            "broken_do_not_use_check_lock_duration" => {
+                Ok(Elements::BrokenDoNotUseCheckLockDuration)
+            }
             "broken_do_not_use_tx_lock_distance" => Ok(Elements::BrokenDoNotUseTxLockDistance),
             "broken_do_not_use_tx_lock_duration" => Ok(Elements::BrokenDoNotUseTxLockDuration),
             "build_tapbranch" => Ok(Elements::BuildTapbranch),
@@ -8855,7 +6246,9 @@ impl str::FromStr for Elements {
     }
 }
 
-pub(crate) fn c_jet_ptr(jet: &Elements) -> fn(&mut CFrameItem, CFrameItem, &CElementsTxEnv) -> bool {
+pub(crate) fn c_jet_ptr(
+    jet: &Elements,
+) -> fn(&mut CFrameItem, CFrameItem, &CElementsTxEnv) -> bool {
     match jet {
         Elements::Add16 => simplicity_sys::c_jets::jets_wrapper::add_16,
         Elements::Add32 => simplicity_sys::c_jets::jets_wrapper::add_32,
@@ -8873,17 +6266,33 @@ pub(crate) fn c_jet_ptr(jet: &Elements) -> fn(&mut CFrameItem, CFrameItem, &CEle
         Elements::AnnexHash => simplicity_sys::c_jets::jets_wrapper::annex_hash,
         Elements::AssetAmountHash => simplicity_sys::c_jets::jets_wrapper::asset_amount_hash,
         Elements::Bip0340Verify => simplicity_sys::c_jets::jets_wrapper::bip_0340_verify,
-        Elements::BrokenDoNotUseCheckLockDistance => simplicity_sys::c_jets::jets_wrapper::broken_do_not_use_check_lock_distance,
-        Elements::BrokenDoNotUseCheckLockDuration => simplicity_sys::c_jets::jets_wrapper::broken_do_not_use_check_lock_duration,
-        Elements::BrokenDoNotUseTxLockDistance => simplicity_sys::c_jets::jets_wrapper::broken_do_not_use_tx_lock_distance,
-        Elements::BrokenDoNotUseTxLockDuration => simplicity_sys::c_jets::jets_wrapper::broken_do_not_use_tx_lock_duration,
+        Elements::BrokenDoNotUseCheckLockDistance => {
+            simplicity_sys::c_jets::jets_wrapper::broken_do_not_use_check_lock_distance
+        }
+        Elements::BrokenDoNotUseCheckLockDuration => {
+            simplicity_sys::c_jets::jets_wrapper::broken_do_not_use_check_lock_duration
+        }
+        Elements::BrokenDoNotUseTxLockDistance => {
+            simplicity_sys::c_jets::jets_wrapper::broken_do_not_use_tx_lock_distance
+        }
+        Elements::BrokenDoNotUseTxLockDuration => {
+            simplicity_sys::c_jets::jets_wrapper::broken_do_not_use_tx_lock_duration
+        }
         Elements::BuildTapbranch => simplicity_sys::c_jets::jets_wrapper::build_tapbranch,
-        Elements::BuildTapleafSimplicity => simplicity_sys::c_jets::jets_wrapper::build_tapleaf_simplicity,
+        Elements::BuildTapleafSimplicity => {
+            simplicity_sys::c_jets::jets_wrapper::build_tapleaf_simplicity
+        }
         Elements::BuildTaptweak => simplicity_sys::c_jets::jets_wrapper::build_taptweak,
         Elements::CalculateAsset => simplicity_sys::c_jets::jets_wrapper::calculate_asset,
-        Elements::CalculateConfidentialToken => simplicity_sys::c_jets::jets_wrapper::calculate_confidential_token,
-        Elements::CalculateExplicitToken => simplicity_sys::c_jets::jets_wrapper::calculate_explicit_token,
-        Elements::CalculateIssuanceEntropy => simplicity_sys::c_jets::jets_wrapper::calculate_issuance_entropy,
+        Elements::CalculateConfidentialToken => {
+            simplicity_sys::c_jets::jets_wrapper::calculate_confidential_token
+        }
+        Elements::CalculateExplicitToken => {
+            simplicity_sys::c_jets::jets_wrapper::calculate_explicit_token
+        }
+        Elements::CalculateIssuanceEntropy => {
+            simplicity_sys::c_jets::jets_wrapper::calculate_issuance_entropy
+        }
         Elements::Ch1 => simplicity_sys::c_jets::jets_wrapper::ch_1,
         Elements::Ch16 => simplicity_sys::c_jets::jets_wrapper::ch_16,
         Elements::Ch32 => simplicity_sys::c_jets::jets_wrapper::ch_32,
@@ -8901,17 +6310,35 @@ pub(crate) fn c_jet_ptr(jet: &Elements) -> fn(&mut CFrameItem, CFrameItem, &CEle
         Elements::CurrentAnnexHash => simplicity_sys::c_jets::jets_wrapper::current_annex_hash,
         Elements::CurrentAsset => simplicity_sys::c_jets::jets_wrapper::current_asset,
         Elements::CurrentIndex => simplicity_sys::c_jets::jets_wrapper::current_index,
-        Elements::CurrentIssuanceAssetAmount => simplicity_sys::c_jets::jets_wrapper::current_issuance_asset_amount,
-        Elements::CurrentIssuanceAssetProof => simplicity_sys::c_jets::jets_wrapper::current_issuance_asset_proof,
-        Elements::CurrentIssuanceTokenAmount => simplicity_sys::c_jets::jets_wrapper::current_issuance_token_amount,
-        Elements::CurrentIssuanceTokenProof => simplicity_sys::c_jets::jets_wrapper::current_issuance_token_proof,
-        Elements::CurrentNewIssuanceContract => simplicity_sys::c_jets::jets_wrapper::current_new_issuance_contract,
+        Elements::CurrentIssuanceAssetAmount => {
+            simplicity_sys::c_jets::jets_wrapper::current_issuance_asset_amount
+        }
+        Elements::CurrentIssuanceAssetProof => {
+            simplicity_sys::c_jets::jets_wrapper::current_issuance_asset_proof
+        }
+        Elements::CurrentIssuanceTokenAmount => {
+            simplicity_sys::c_jets::jets_wrapper::current_issuance_token_amount
+        }
+        Elements::CurrentIssuanceTokenProof => {
+            simplicity_sys::c_jets::jets_wrapper::current_issuance_token_proof
+        }
+        Elements::CurrentNewIssuanceContract => {
+            simplicity_sys::c_jets::jets_wrapper::current_new_issuance_contract
+        }
         Elements::CurrentPegin => simplicity_sys::c_jets::jets_wrapper::current_pegin,
-        Elements::CurrentPrevOutpoint => simplicity_sys::c_jets::jets_wrapper::current_prev_outpoint,
-        Elements::CurrentReissuanceBlinding => simplicity_sys::c_jets::jets_wrapper::current_reissuance_blinding,
-        Elements::CurrentReissuanceEntropy => simplicity_sys::c_jets::jets_wrapper::current_reissuance_entropy,
+        Elements::CurrentPrevOutpoint => {
+            simplicity_sys::c_jets::jets_wrapper::current_prev_outpoint
+        }
+        Elements::CurrentReissuanceBlinding => {
+            simplicity_sys::c_jets::jets_wrapper::current_reissuance_blinding
+        }
+        Elements::CurrentReissuanceEntropy => {
+            simplicity_sys::c_jets::jets_wrapper::current_reissuance_entropy
+        }
         Elements::CurrentScriptHash => simplicity_sys::c_jets::jets_wrapper::current_script_hash,
-        Elements::CurrentScriptSigHash => simplicity_sys::c_jets::jets_wrapper::current_script_sig_hash,
+        Elements::CurrentScriptSigHash => {
+            simplicity_sys::c_jets::jets_wrapper::current_script_sig_hash
+        }
         Elements::CurrentSequence => simplicity_sys::c_jets::jets_wrapper::current_sequence,
         Elements::Decompress => simplicity_sys::c_jets::jets_wrapper::decompress,
         Elements::Decrement16 => simplicity_sys::c_jets::jets_wrapper::decrement_16,
@@ -8986,14 +6413,20 @@ pub(crate) fn c_jet_ptr(jet: &Elements) -> fn(&mut CFrameItem, CFrameItem, &CEle
         Elements::FullRightShift16_4 => simplicity_sys::c_jets::jets_wrapper::full_right_shift_16_4,
         Elements::FullRightShift16_8 => simplicity_sys::c_jets::jets_wrapper::full_right_shift_16_8,
         Elements::FullRightShift32_1 => simplicity_sys::c_jets::jets_wrapper::full_right_shift_32_1,
-        Elements::FullRightShift32_16 => simplicity_sys::c_jets::jets_wrapper::full_right_shift_32_16,
+        Elements::FullRightShift32_16 => {
+            simplicity_sys::c_jets::jets_wrapper::full_right_shift_32_16
+        }
         Elements::FullRightShift32_2 => simplicity_sys::c_jets::jets_wrapper::full_right_shift_32_2,
         Elements::FullRightShift32_4 => simplicity_sys::c_jets::jets_wrapper::full_right_shift_32_4,
         Elements::FullRightShift32_8 => simplicity_sys::c_jets::jets_wrapper::full_right_shift_32_8,
         Elements::FullRightShift64_1 => simplicity_sys::c_jets::jets_wrapper::full_right_shift_64_1,
-        Elements::FullRightShift64_16 => simplicity_sys::c_jets::jets_wrapper::full_right_shift_64_16,
+        Elements::FullRightShift64_16 => {
+            simplicity_sys::c_jets::jets_wrapper::full_right_shift_64_16
+        }
         Elements::FullRightShift64_2 => simplicity_sys::c_jets::jets_wrapper::full_right_shift_64_2,
-        Elements::FullRightShift64_32 => simplicity_sys::c_jets::jets_wrapper::full_right_shift_64_32,
+        Elements::FullRightShift64_32 => {
+            simplicity_sys::c_jets::jets_wrapper::full_right_shift_64_32
+        }
         Elements::FullRightShift64_4 => simplicity_sys::c_jets::jets_wrapper::full_right_shift_64_4,
         Elements::FullRightShift64_8 => simplicity_sys::c_jets::jets_wrapper::full_right_shift_64_8,
         Elements::FullRightShift8_1 => simplicity_sys::c_jets::jets_wrapper::full_right_shift_8_1,
@@ -9042,7 +6475,9 @@ pub(crate) fn c_jet_ptr(jet: &Elements) -> fn(&mut CFrameItem, CFrameItem, &CEle
         Elements::InputPrevOutpoint => simplicity_sys::c_jets::jets_wrapper::input_prev_outpoint,
         Elements::InputScriptHash => simplicity_sys::c_jets::jets_wrapper::input_script_hash,
         Elements::InputScriptSigHash => simplicity_sys::c_jets::jets_wrapper::input_script_sig_hash,
-        Elements::InputScriptSigsHash => simplicity_sys::c_jets::jets_wrapper::input_script_sigs_hash,
+        Elements::InputScriptSigsHash => {
+            simplicity_sys::c_jets::jets_wrapper::input_script_sigs_hash
+        }
         Elements::InputScriptsHash => simplicity_sys::c_jets::jets_wrapper::input_scripts_hash,
         Elements::InputSequence => simplicity_sys::c_jets::jets_wrapper::input_sequence,
         Elements::InputSequencesHash => simplicity_sys::c_jets::jets_wrapper::input_sequences_hash,
@@ -9060,16 +6495,28 @@ pub(crate) fn c_jet_ptr(jet: &Elements) -> fn(&mut CFrameItem, CFrameItem, &CEle
         Elements::IsZero8 => simplicity_sys::c_jets::jets_wrapper::is_zero_8,
         Elements::Issuance => simplicity_sys::c_jets::jets_wrapper::issuance,
         Elements::IssuanceAsset => simplicity_sys::c_jets::jets_wrapper::issuance_asset,
-        Elements::IssuanceAssetAmount => simplicity_sys::c_jets::jets_wrapper::issuance_asset_amount,
-        Elements::IssuanceAssetAmountsHash => simplicity_sys::c_jets::jets_wrapper::issuance_asset_amounts_hash,
+        Elements::IssuanceAssetAmount => {
+            simplicity_sys::c_jets::jets_wrapper::issuance_asset_amount
+        }
+        Elements::IssuanceAssetAmountsHash => {
+            simplicity_sys::c_jets::jets_wrapper::issuance_asset_amounts_hash
+        }
         Elements::IssuanceAssetProof => simplicity_sys::c_jets::jets_wrapper::issuance_asset_proof,
-        Elements::IssuanceBlindingEntropyHash => simplicity_sys::c_jets::jets_wrapper::issuance_blinding_entropy_hash,
+        Elements::IssuanceBlindingEntropyHash => {
+            simplicity_sys::c_jets::jets_wrapper::issuance_blinding_entropy_hash
+        }
         Elements::IssuanceEntropy => simplicity_sys::c_jets::jets_wrapper::issuance_entropy,
         Elements::IssuanceHash => simplicity_sys::c_jets::jets_wrapper::issuance_hash,
-        Elements::IssuanceRangeProofsHash => simplicity_sys::c_jets::jets_wrapper::issuance_range_proofs_hash,
+        Elements::IssuanceRangeProofsHash => {
+            simplicity_sys::c_jets::jets_wrapper::issuance_range_proofs_hash
+        }
         Elements::IssuanceToken => simplicity_sys::c_jets::jets_wrapper::issuance_token,
-        Elements::IssuanceTokenAmount => simplicity_sys::c_jets::jets_wrapper::issuance_token_amount,
-        Elements::IssuanceTokenAmountsHash => simplicity_sys::c_jets::jets_wrapper::issuance_token_amounts_hash,
+        Elements::IssuanceTokenAmount => {
+            simplicity_sys::c_jets::jets_wrapper::issuance_token_amount
+        }
+        Elements::IssuanceTokenAmountsHash => {
+            simplicity_sys::c_jets::jets_wrapper::issuance_token_amounts_hash
+        }
         Elements::IssuanceTokenProof => simplicity_sys::c_jets::jets_wrapper::issuance_token_proof,
         Elements::IssuancesHash => simplicity_sys::c_jets::jets_wrapper::issuances_hash,
         Elements::LbtcAsset => simplicity_sys::c_jets::jets_wrapper::lbtc_asset,
@@ -9178,7 +6625,9 @@ pub(crate) fn c_jet_ptr(jet: &Elements) -> fn(&mut CFrameItem, CFrameItem, &CEle
         Elements::Negate32 => simplicity_sys::c_jets::jets_wrapper::negate_32,
         Elements::Negate64 => simplicity_sys::c_jets::jets_wrapper::negate_64,
         Elements::Negate8 => simplicity_sys::c_jets::jets_wrapper::negate_8,
-        Elements::NewIssuanceContract => simplicity_sys::c_jets::jets_wrapper::new_issuance_contract,
+        Elements::NewIssuanceContract => {
+            simplicity_sys::c_jets::jets_wrapper::new_issuance_contract
+        }
         Elements::NonceHash => simplicity_sys::c_jets::jets_wrapper::nonce_hash,
         Elements::NumInputs => simplicity_sys::c_jets::jets_wrapper::num_inputs,
         Elements::NumOutputs => simplicity_sys::c_jets::jets_wrapper::num_outputs,
@@ -9201,11 +6650,17 @@ pub(crate) fn c_jet_ptr(jet: &Elements) -> fn(&mut CFrameItem, CFrameItem, &CEle
         Elements::OutputNoncesHash => simplicity_sys::c_jets::jets_wrapper::output_nonces_hash,
         Elements::OutputNullDatum => simplicity_sys::c_jets::jets_wrapper::output_null_datum,
         Elements::OutputRangeProof => simplicity_sys::c_jets::jets_wrapper::output_range_proof,
-        Elements::OutputRangeProofsHash => simplicity_sys::c_jets::jets_wrapper::output_range_proofs_hash,
+        Elements::OutputRangeProofsHash => {
+            simplicity_sys::c_jets::jets_wrapper::output_range_proofs_hash
+        }
         Elements::OutputScriptHash => simplicity_sys::c_jets::jets_wrapper::output_script_hash,
         Elements::OutputScriptsHash => simplicity_sys::c_jets::jets_wrapper::output_scripts_hash,
-        Elements::OutputSurjectionProof => simplicity_sys::c_jets::jets_wrapper::output_surjection_proof,
-        Elements::OutputSurjectionProofsHash => simplicity_sys::c_jets::jets_wrapper::output_surjection_proofs_hash,
+        Elements::OutputSurjectionProof => {
+            simplicity_sys::c_jets::jets_wrapper::output_surjection_proof
+        }
+        Elements::OutputSurjectionProofsHash => {
+            simplicity_sys::c_jets::jets_wrapper::output_surjection_proofs_hash
+        }
         Elements::OutputsHash => simplicity_sys::c_jets::jets_wrapper::outputs_hash,
         Elements::ParseLock => simplicity_sys::c_jets::jets_wrapper::parse_lock,
         Elements::ParseSequence => simplicity_sys::c_jets::jets_wrapper::parse_sequence,
@@ -9272,7 +6727,9 @@ pub(crate) fn c_jet_ptr(jet: &Elements) -> fn(&mut CFrameItem, CFrameItem, &CEle
         Elements::ScalarInvert => simplicity_sys::c_jets::jets_wrapper::scalar_invert,
         Elements::ScalarIsZero => simplicity_sys::c_jets::jets_wrapper::scalar_is_zero,
         Elements::ScalarMultiply => simplicity_sys::c_jets::jets_wrapper::scalar_multiply,
-        Elements::ScalarMultiplyLambda => simplicity_sys::c_jets::jets_wrapper::scalar_multiply_lambda,
+        Elements::ScalarMultiplyLambda => {
+            simplicity_sys::c_jets::jets_wrapper::scalar_multiply_lambda
+        }
         Elements::ScalarNegate => simplicity_sys::c_jets::jets_wrapper::scalar_negate,
         Elements::ScalarNormalize => simplicity_sys::c_jets::jets_wrapper::scalar_normalize,
         Elements::ScalarSquare => simplicity_sys::c_jets::jets_wrapper::scalar_square,
@@ -9289,8 +6746,12 @@ pub(crate) fn c_jet_ptr(jet: &Elements) -> fn(&mut CFrameItem, CFrameItem, &CEle
         Elements::Sha256Ctx8Add512 => simplicity_sys::c_jets::jets_wrapper::sha_256_ctx_8_add_512,
         Elements::Sha256Ctx8Add64 => simplicity_sys::c_jets::jets_wrapper::sha_256_ctx_8_add_64,
         Elements::Sha256Ctx8Add8 => simplicity_sys::c_jets::jets_wrapper::sha_256_ctx_8_add_8,
-        Elements::Sha256Ctx8AddBuffer511 => simplicity_sys::c_jets::jets_wrapper::sha_256_ctx_8_add_buffer_511,
-        Elements::Sha256Ctx8Finalize => simplicity_sys::c_jets::jets_wrapper::sha_256_ctx_8_finalize,
+        Elements::Sha256Ctx8AddBuffer511 => {
+            simplicity_sys::c_jets::jets_wrapper::sha_256_ctx_8_add_buffer_511
+        }
+        Elements::Sha256Ctx8Finalize => {
+            simplicity_sys::c_jets::jets_wrapper::sha_256_ctx_8_finalize
+        }
         Elements::Sha256Ctx8Init => simplicity_sys::c_jets::jets_wrapper::sha_256_ctx_8_init,
         Elements::Sha256Iv => simplicity_sys::c_jets::jets_wrapper::sha_256_iv,
         Elements::SigAllHash => simplicity_sys::c_jets::jets_wrapper::sig_all_hash,
@@ -9329,4 +6790,2662 @@ pub(crate) fn c_jet_ptr(jet: &Elements) -> fn(&mut CFrameItem, CFrameItem, &CEle
         Elements::XorXor64 => simplicity_sys::c_jets::jets_wrapper::xor_xor_64,
         Elements::XorXor8 => simplicity_sys::c_jets::jets_wrapper::xor_xor_8,
     }
+}
+
+pub(crate) fn decode<I: Iterator<Item = u8>>(
+    bits: &mut BitIter<I>,
+) -> Result<Elements, decode::Error> {
+    decode_bits!(bits, {
+        0 => {
+            0 => {
+                0 => {Elements::Verify},
+                1 => {
+                    0 => {
+                        0 => {
+                            0 => {Elements::Low1},
+                            1 => {
+                                0 => {
+                                    0 => {},
+                                    1 => {Elements::Low8}
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {Elements::Low16},
+                                                1 => {Elements::Low32}
+                                            },
+                                            1 => {
+                                                0 => {Elements::Low64},
+                                                1 => {}
+                                            }
+                                        },
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                }
+                            }
+                        },
+                        1 => {
+                            0 => {Elements::High1},
+                            1 => {
+                                0 => {
+                                    0 => {},
+                                    1 => {Elements::High8}
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {Elements::High16},
+                                                1 => {Elements::High32}
+                                            },
+                                            1 => {
+                                                0 => {Elements::High64},
+                                                1 => {}
+                                            }
+                                        },
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                }
+                            }
+                        }
+                    },
+                    1 => {
+                        0 => {
+                            0 => {
+                                0 => {
+                                    0 => {
+                                        0 => {Elements::Complement1},
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {Elements::Complement8}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Elements::Complement16},
+                                                            1 => {Elements::Complement32}
+                                                        },
+                                                        1 => {
+                                                            0 => {Elements::Complement64},
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {Elements::And1},
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {Elements::And8}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Elements::And16},
+                                                            1 => {Elements::And32}
+                                                        },
+                                                        1 => {
+                                                            0 => {Elements::And64},
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {Elements::Or1},
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {Elements::Or8}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Elements::Or16},
+                                                            1 => {Elements::Or32}
+                                                        },
+                                                        1 => {
+                                                            0 => {Elements::Or64},
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {Elements::Xor1},
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {Elements::Xor8}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Elements::Xor16},
+                                                            1 => {Elements::Xor32}
+                                                        },
+                                                        1 => {
+                                                            0 => {Elements::Xor64},
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {Elements::Maj1},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Elements::Maj8}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Elements::Maj16},
+                                                                1 => {Elements::Maj32}
+                                                            },
+                                                            1 => {
+                                                                0 => {Elements::Maj64},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {Elements::XorXor1},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Elements::XorXor8}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Elements::XorXor16},
+                                                                1 => {Elements::XorXor32}
+                                                            },
+                                                            1 => {
+                                                                0 => {Elements::XorXor64},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {Elements::Ch1},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Elements::Ch8}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Elements::Ch16},
+                                                                1 => {Elements::Ch32}
+                                                            },
+                                                            1 => {
+                                                                0 => {Elements::Ch64},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {Elements::Some1},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Elements::Some8}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Elements::Some16},
+                                                                1 => {Elements::Some32}
+                                                            },
+                                                            1 => {
+                                                                0 => {Elements::Some64},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Elements::All8}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Elements::All16},
+                                                                1 => {Elements::All32}
+                                                            },
+                                                            1 => {
+                                                                0 => {Elements::All64},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {Elements::Eq1},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Elements::Eq8}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Elements::Eq16},
+                                                                1 => {Elements::Eq32}
+                                                            },
+                                                            1 => {
+                                                                0 => {Elements::Eq64},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Elements::Eq256},
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Elements::FullLeftShift8_1}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Elements::FullLeftShift16_1},
+                                                                    1 => {Elements::FullLeftShift32_1}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Elements::FullLeftShift64_1},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {Elements::FullLeftShift8_2},
+                                                                1 => {Elements::FullLeftShift16_2}
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Elements::FullLeftShift32_2},
+                                                                            1 => {Elements::FullLeftShift64_2}
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {Elements::FullLeftShift8_4},
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {Elements::FullLeftShift16_4},
+                                                                1 => {Elements::FullLeftShift32_4}
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Elements::FullLeftShift64_4},
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Elements::FullLeftShift16_8},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Elements::FullLeftShift32_8},
+                                                                            1 => {Elements::FullLeftShift64_8}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {Elements::FullLeftShift32_16},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Elements::FullLeftShift64_16},
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {Elements::FullLeftShift64_32},
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Elements::FullRightShift8_1}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Elements::FullRightShift16_1},
+                                                                    1 => {Elements::FullRightShift32_1}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Elements::FullRightShift64_1},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {Elements::FullRightShift8_2},
+                                                                1 => {Elements::FullRightShift16_2}
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Elements::FullRightShift32_2},
+                                                                            1 => {Elements::FullRightShift64_2}
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {Elements::FullRightShift8_4},
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {Elements::FullRightShift16_4},
+                                                                1 => {Elements::FullRightShift32_4}
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Elements::FullRightShift64_4},
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Elements::FullRightShift16_8},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Elements::FullRightShift32_8},
+                                                                            1 => {Elements::FullRightShift64_8}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {Elements::FullRightShift32_16},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Elements::FullRightShift64_16},
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {Elements::FullRightShift64_32},
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        1 => {
+                            0 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Elements::Leftmost8_1}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::Leftmost16_1},
+                                                                                    1 => {Elements::Leftmost32_1}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Elements::Leftmost64_1},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Elements::Leftmost8_2},
+                                                                                1 => {Elements::Leftmost16_2}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::Leftmost32_2},
+                                                                                            1 => {Elements::Leftmost64_2}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Elements::Leftmost8_4},
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Elements::Leftmost16_4},
+                                                                                1 => {Elements::Leftmost32_4}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::Leftmost64_4},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::Leftmost16_8},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::Leftmost32_8},
+                                                                                            1 => {Elements::Leftmost64_8}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Elements::Leftmost32_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::Leftmost64_16},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::Leftmost64_32},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Elements::Rightmost8_1}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::Rightmost16_1},
+                                                                                    1 => {Elements::Rightmost32_1}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Elements::Rightmost64_1},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Elements::Rightmost8_2},
+                                                                                1 => {Elements::Rightmost16_2}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::Rightmost32_2},
+                                                                                            1 => {Elements::Rightmost64_2}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Elements::Rightmost8_4},
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Elements::Rightmost16_4},
+                                                                                1 => {Elements::Rightmost32_4}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::Rightmost64_4},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::Rightmost16_8},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::Rightmost32_8},
+                                                                                            1 => {Elements::Rightmost64_8}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Elements::Rightmost32_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::Rightmost64_16},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::Rightmost64_32},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Elements::LeftPadLow1_8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::LeftPadLow1_16},
+                                                                                    1 => {Elements::LeftPadLow1_32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Elements::LeftPadLow1_64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::LeftPadLow8_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::LeftPadLow8_32},
+                                                                                            1 => {Elements::LeftPadLow8_64}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Elements::LeftPadLow16_32},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::LeftPadLow16_64},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::LeftPadLow32_64},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Elements::LeftPadHigh1_8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::LeftPadHigh1_16},
+                                                                                    1 => {Elements::LeftPadHigh1_32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Elements::LeftPadHigh1_64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::LeftPadHigh8_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::LeftPadHigh8_32},
+                                                                                            1 => {Elements::LeftPadHigh8_64}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Elements::LeftPadHigh16_32},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::LeftPadHigh16_64},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::LeftPadHigh32_64},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Elements::LeftExtend1_8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::LeftExtend1_16},
+                                                                                    1 => {Elements::LeftExtend1_32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Elements::LeftExtend1_64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::LeftExtend8_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::LeftExtend8_32},
+                                                                                            1 => {Elements::LeftExtend8_64}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Elements::LeftExtend16_32},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::LeftExtend16_64},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::LeftExtend32_64},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Elements::RightPadLow1_8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::RightPadLow1_16},
+                                                                                    1 => {Elements::RightPadLow1_32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Elements::RightPadLow1_64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::RightPadLow8_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::RightPadLow8_32},
+                                                                                            1 => {Elements::RightPadLow8_64}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Elements::RightPadLow16_32},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::RightPadLow16_64},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::RightPadLow32_64},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Elements::RightPadHigh1_8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::RightPadHigh1_16},
+                                                                                    1 => {Elements::RightPadHigh1_32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Elements::RightPadHigh1_64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::RightPadHigh8_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::RightPadHigh8_32},
+                                                                                            1 => {Elements::RightPadHigh8_64}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Elements::RightPadHigh16_32},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::RightPadHigh16_64},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::RightPadHigh32_64},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::RightExtend8_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::RightExtend8_32},
+                                                                                            1 => {Elements::RightExtend8_64}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Elements::RightExtend16_32},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Elements::RightExtend16_64},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Elements::RightExtend32_64},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Elements::LeftShiftWith8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Elements::LeftShiftWith16},
+                                                                                1 => {Elements::LeftShiftWith32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Elements::LeftShiftWith64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Elements::RightShiftWith8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Elements::RightShiftWith16},
+                                                                                1 => {Elements::RightShiftWith32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Elements::RightShiftWith64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Elements::LeftShift8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Elements::LeftShift16},
+                                                                                1 => {Elements::LeftShift32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Elements::LeftShift64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Elements::RightShift8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Elements::RightShift16},
+                                                                                1 => {Elements::RightShift32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Elements::RightShift64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Elements::LeftRotate8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Elements::LeftRotate16},
+                                                                                1 => {Elements::LeftRotate32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Elements::LeftRotate64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Elements::RightRotate8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Elements::RightRotate16},
+                                                                                1 => {Elements::RightRotate32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Elements::RightRotate64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        },
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                },
+                                1 => {}
+                            },
+                            1 => {}
+                        }
+                    }
+                }
+            },
+            1 => {
+                0 => {
+                    0 => {
+                        0 => {
+                            0 => {},
+                            1 => {
+                                0 => {
+                                    0 => {},
+                                    1 => {Elements::One8}
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {Elements::One16},
+                                                1 => {Elements::One32}
+                                            },
+                                            1 => {
+                                                0 => {Elements::One64},
+                                                1 => {}
+                                            }
+                                        },
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                }
+                            }
+                        },
+                        1 => {
+                            0 => {
+                                0 => {
+                                    0 => {},
+                                    1 => {
+                                        0 => {
+                                            0 => {},
+                                            1 => {Elements::FullAdd8}
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Elements::FullAdd16},
+                                                        1 => {Elements::FullAdd32}
+                                                    },
+                                                    1 => {
+                                                        0 => {Elements::FullAdd64},
+                                                        1 => {}
+                                                    }
+                                                },
+                                                1 => {}
+                                            },
+                                            1 => {}
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {},
+                                    1 => {
+                                        0 => {
+                                            0 => {},
+                                            1 => {Elements::Add8}
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Elements::Add16},
+                                                        1 => {Elements::Add32}
+                                                    },
+                                                    1 => {
+                                                        0 => {Elements::Add64},
+                                                        1 => {}
+                                                    }
+                                                },
+                                                1 => {}
+                                            },
+                                            1 => {}
+                                        }
+                                    }
+                                }
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Elements::FullIncrement8}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Elements::FullIncrement16},
+                                                                    1 => {Elements::FullIncrement32}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Elements::FullIncrement64},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Elements::Increment8}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Elements::Increment16},
+                                                                    1 => {Elements::Increment32}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Elements::Increment64},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {},
+                                            1 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Elements::FullSubtract8}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Elements::FullSubtract16},
+                                                                    1 => {Elements::FullSubtract32}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Elements::FullSubtract64},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Elements::Subtract8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Elements::Subtract16},
+                                                                        1 => {Elements::Subtract32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Elements::Subtract64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Elements::Negate8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Elements::Negate16},
+                                                                        1 => {Elements::Negate32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Elements::Negate64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Elements::FullDecrement8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Elements::FullDecrement16},
+                                                                        1 => {Elements::FullDecrement32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Elements::FullDecrement64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Elements::Decrement8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Elements::Decrement16},
+                                                                        1 => {Elements::Decrement32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Elements::Decrement64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Elements::FullMultiply8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Elements::FullMultiply16},
+                                                                        1 => {Elements::FullMultiply32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Elements::FullMultiply64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Elements::Multiply8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Elements::Multiply16},
+                                                                        1 => {Elements::Multiply32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Elements::Multiply64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Elements::IsZero8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Elements::IsZero16},
+                                                                        1 => {Elements::IsZero32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Elements::IsZero64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Elements::IsOne8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Elements::IsOne16},
+                                                                        1 => {Elements::IsOne32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Elements::IsOne64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Elements::Le8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Elements::Le16},
+                                                                                        1 => {Elements::Le32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Elements::Le64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Elements::Lt8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Elements::Lt16},
+                                                                                        1 => {Elements::Lt32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Elements::Lt64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Elements::Min8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Elements::Min16},
+                                                                                        1 => {Elements::Min32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Elements::Min64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Elements::Max8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Elements::Max16},
+                                                                                        1 => {Elements::Max32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Elements::Max64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Elements::Median8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Elements::Median16},
+                                                                                        1 => {Elements::Median32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Elements::Median64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {},
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {},
+                                                                                    1 => {
+                                                                                        0 => {Elements::DivMod128_64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Elements::DivMod8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Elements::DivMod16},
+                                                                                        1 => {Elements::DivMod32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Elements::DivMod64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Elements::Divide8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Elements::Divide16},
+                                                                                        1 => {Elements::Divide32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Elements::Divide64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Elements::Modulo8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Elements::Modulo16},
+                                                                                        1 => {Elements::Modulo32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Elements::Modulo64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Elements::Divides8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Elements::Divides16},
+                                                                                        1 => {Elements::Divides32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Elements::Divides64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                },
+                                                1 => {}
+                                            },
+                                            1 => {}
+                                        },
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                }
+                            }
+                        }
+                    },
+                    1 => {
+                        0 => {
+                            0 => {Elements::Sha256Block},
+                            1 => {
+                                0 => {
+                                    0 => {Elements::Sha256Iv},
+                                    1 => {
+                                        0 => {Elements::Sha256Ctx8Add1},
+                                        1 => {
+                                            0 => {
+                                                0 => {Elements::Sha256Ctx8Add2},
+                                                1 => {Elements::Sha256Ctx8Add4}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Elements::Sha256Ctx8Add8},
+                                                            1 => {Elements::Sha256Ctx8Add16}
+                                                        },
+                                                        1 => {
+                                                            0 => {Elements::Sha256Ctx8Add32},
+                                                            1 => {Elements::Sha256Ctx8Add64}
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Elements::Sha256Ctx8Add128},
+                                                                1 => {Elements::Sha256Ctx8Add256}
+                                                            },
+                                                            1 => {
+                                                                0 => {Elements::Sha256Ctx8Add512},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {Elements::Sha256Ctx8AddBuffer511},
+                                                1 => {Elements::Sha256Ctx8Finalize}
+                                            },
+                                            1 => {
+                                                0 => {Elements::Sha256Ctx8Init},
+                                                1 => {}
+                                            }
+                                        },
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                }
+                            }
+                        },
+                        1 => {}
+                    }
+                },
+                1 => {
+                    0 => {
+                        0 => {
+                            0 => {
+                                0 => {
+                                    0 => {
+                                        0 => {Elements::PointVerify1},
+                                        1 => {}
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {Elements::Decompress},
+                                            1 => {
+                                                0 => {Elements::LinearVerify1},
+                                                1 => {}
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Elements::LinearCombination1},
+                                                            1 => {}
+                                                        },
+                                                        1 => {Elements::Scale}
+                                                    },
+                                                    1 => {
+                                                        0 => {Elements::Generate},
+                                                        1 => {Elements::GejInfinity}
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Elements::GejNormalize},
+                                                            1 => {Elements::GejNegate}
+                                                        },
+                                                        1 => {
+                                                            0 => {Elements::GeNegate},
+                                                            1 => {Elements::GejDouble}
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {Elements::GejAdd},
+                                                            1 => {Elements::GejGeAddEx}
+                                                        },
+                                                        1 => {
+                                                            0 => {Elements::GejGeAdd},
+                                                            1 => {Elements::GejRescale}
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Elements::GejIsInfinity},
+                                                                            1 => {Elements::GejEquiv}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Elements::GejGeEquiv},
+                                                                            1 => {Elements::GejXEquiv}
+                                                                        }
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Elements::GejYIsOdd},
+                                                                            1 => {Elements::GejIsOnCurve}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Elements::GeIsOnCurve},
+                                                                            1 => {Elements::ScalarNormalize}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Elements::ScalarNegate},
+                                                                            1 => {Elements::ScalarAdd}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Elements::ScalarSquare},
+                                                                            1 => {Elements::ScalarMultiply}
+                                                                        }
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Elements::ScalarMultiplyLambda},
+                                                                            1 => {Elements::ScalarInvert}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Elements::ScalarIsZero},
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {
+                                                                                0 => {},
+                                                                                1 => {Elements::FeNormalize}
+                                                                            }
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Elements::FeNegate},
+                                                                                1 => {Elements::FeAdd}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Elements::FeSquare},
+                                                                                1 => {Elements::FeMultiply}
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Elements::FeMultiplyBeta},
+                                                                                1 => {Elements::FeInvert}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Elements::FeSquareRoot},
+                                                                                1 => {Elements::FeIsZero}
+                                                                            }
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Elements::FeIsOdd},
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Elements::HashToCurve},
+                                                                                1 => {Elements::Swu}
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {Elements::CheckSigVerify},
+                                    1 => {
+                                        0 => {
+                                            0 => {Elements::Bip0340Verify},
+                                            1 => {}
+                                        },
+                                        1 => {}
+                                    }
+                                }
+                            },
+                            1 => {
+                                0 => {},
+                                1 => {
+                                    0 => {Elements::ParseLock},
+                                    1 => {
+                                        0 => {
+                                            0 => {Elements::ParseSequence},
+                                            1 => {Elements::TapdataInit}
+                                        },
+                                        1 => {}
+                                    }
+                                }
+                            }
+                        },
+                        1 => {}
+                    },
+                    1 => {}
+                }
+            }
+        },
+        1 => {
+            0 => {
+                0 => {Elements::SigAllHash},
+                1 => {
+                    0 => {
+                        0 => {Elements::TxHash},
+                        1 => {Elements::TapEnvHash}
+                    },
+                    1 => {
+                        0 => {
+                            0 => {
+                                0 => {
+                                    0 => {Elements::OutputsHash},
+                                    1 => {Elements::InputsHash}
+                                },
+                                1 => {
+                                    0 => {Elements::IssuancesHash},
+                                    1 => {Elements::InputUtxosHash}
+                                }
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {Elements::OutputHash},
+                                        1 => {Elements::OutputAmountsHash}
+                                    },
+                                    1 => {
+                                        0 => {Elements::OutputScriptsHash},
+                                        1 => {Elements::OutputNoncesHash}
+                                    }
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {Elements::OutputRangeProofsHash},
+                                        1 => {Elements::OutputSurjectionProofsHash}
+                                    },
+                                    1 => {
+                                        0 => {Elements::InputHash},
+                                        1 => {Elements::InputOutpointsHash}
+                                    }
+                                }
+                            }
+                        },
+                        1 => {
+                            0 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Elements::InputSequencesHash},
+                                                        1 => {Elements::InputAnnexesHash}
+                                                    },
+                                                    1 => {
+                                                        0 => {Elements::InputScriptSigsHash},
+                                                        1 => {Elements::IssuanceHash}
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {Elements::IssuanceAssetAmountsHash},
+                                                        1 => {Elements::IssuanceTokenAmountsHash}
+                                                    },
+                                                    1 => {
+                                                        0 => {Elements::IssuanceRangeProofsHash},
+                                                        1 => {Elements::IssuanceBlindingEntropyHash}
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Elements::InputUtxoHash},
+                                                        1 => {Elements::InputAmountsHash}
+                                                    },
+                                                    1 => {
+                                                        0 => {Elements::InputScriptsHash},
+                                                        1 => {Elements::TapleafHash}
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {Elements::TappathHash},
+                                                        1 => {Elements::OutpointHash}
+                                                    },
+                                                    1 => {
+                                                        0 => {Elements::AssetAmountHash},
+                                                        1 => {Elements::NonceHash}
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Elements::AnnexHash},
+                                                            1 => {Elements::BuildTapleafSimplicity}
+                                                        },
+                                                        1 => {
+                                                            0 => {Elements::BuildTapbranch},
+                                                            1 => {Elements::BuildTaptweak}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            },
+                                            1 => {}
+                                        }
+                                    },
+                                    1 => {}
+                                },
+                                1 => {}
+                            },
+                            1 => {}
+                        }
+                    }
+                }
+            },
+            1 => {
+                0 => {
+                    0 => {
+                        0 => {Elements::CheckLockHeight},
+                        1 => {
+                            0 => {
+                                0 => {Elements::CheckLockTime},
+                                1 => {Elements::BrokenDoNotUseCheckLockDistance}
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {Elements::BrokenDoNotUseCheckLockDuration},
+                                            1 => {Elements::TxLockHeight}
+                                        },
+                                        1 => {
+                                            0 => {Elements::TxLockTime},
+                                            1 => {Elements::BrokenDoNotUseTxLockDistance}
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {Elements::BrokenDoNotUseTxLockDuration},
+                                                1 => {Elements::TxIsFinal}
+                                            },
+                                            1 => {}
+                                        },
+                                        1 => {}
+                                    }
+                                },
+                                1 => {}
+                            }
+                        }
+                    },
+                    1 => {
+                        0 => {Elements::Issuance},
+                        1 => {
+                            0 => {
+                                0 => {Elements::IssuanceAsset},
+                                1 => {Elements::IssuanceToken}
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {Elements::IssuanceEntropy},
+                                            1 => {Elements::CalculateIssuanceEntropy}
+                                        },
+                                        1 => {
+                                            0 => {Elements::CalculateAsset},
+                                            1 => {Elements::CalculateExplicitToken}
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {Elements::CalculateConfidentialToken},
+                                                1 => {Elements::LbtcAsset}
+                                            },
+                                            1 => {}
+                                        },
+                                        1 => {}
+                                    }
+                                },
+                                1 => {}
+                            }
+                        }
+                    }
+                },
+                1 => {
+                    0 => {
+                        0 => {
+                            0 => {
+                                0 => {
+                                    0 => {Elements::ScriptCMR},
+                                    1 => {
+                                        0 => {
+                                            0 => {Elements::InternalKey},
+                                            1 => {Elements::CurrentIndex}
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Elements::NumInputs},
+                                                        1 => {Elements::NumOutputs}
+                                                    },
+                                                    1 => {
+                                                        0 => {Elements::LockTime},
+                                                        1 => {Elements::OutputAsset}
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Elements::OutputAmount},
+                                                            1 => {Elements::OutputNonce}
+                                                        },
+                                                        1 => {
+                                                            0 => {Elements::OutputScriptHash},
+                                                            1 => {Elements::OutputNullDatum}
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {Elements::OutputIsFee},
+                                                            1 => {Elements::OutputSurjectionProof}
+                                                        },
+                                                        1 => {
+                                                            0 => {Elements::OutputRangeProof},
+                                                            1 => {Elements::TotalFee}
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Elements::CurrentPegin},
+                                                                            1 => {Elements::CurrentPrevOutpoint}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Elements::CurrentAsset},
+                                                                            1 => {Elements::CurrentAmount}
+                                                                        }
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Elements::CurrentScriptHash},
+                                                                            1 => {Elements::CurrentSequence}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Elements::CurrentAnnexHash},
+                                                                            1 => {Elements::CurrentScriptSigHash}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Elements::CurrentReissuanceBlinding},
+                                                                            1 => {Elements::CurrentNewIssuanceContract}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Elements::CurrentReissuanceEntropy},
+                                                                            1 => {Elements::CurrentIssuanceAssetAmount}
+                                                                        }
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Elements::CurrentIssuanceTokenAmount},
+                                                                            1 => {Elements::CurrentIssuanceAssetProof}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Elements::CurrentIssuanceTokenProof},
+                                                                            1 => {Elements::InputPegin}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Elements::InputPrevOutpoint},
+                                                                                1 => {Elements::InputAsset}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Elements::InputAmount},
+                                                                                1 => {Elements::InputScriptHash}
+                                                                            }
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Elements::InputSequence},
+                                                                                1 => {Elements::InputAnnexHash}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Elements::InputScriptSigHash},
+                                                                                1 => {Elements::ReissuanceBlinding}
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Elements::NewIssuanceContract},
+                                                                                1 => {Elements::ReissuanceEntropy}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Elements::IssuanceAssetAmount},
+                                                                                1 => {Elements::IssuanceTokenAmount}
+                                                                            }
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Elements::IssuanceAssetProof},
+                                                                                1 => {Elements::IssuanceTokenProof}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Elements::TapleafVersion},
+                                                                                1 => {Elements::Tappath}
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Elements::Version},
+                                                                                1 => {Elements::GenesisBlockHash}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Elements::TransactionId},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    }
+                                },
+                                1 => {}
+                            },
+                            1 => {}
+                        },
+                        1 => {}
+                    },
+                    1 => {}
+                }
+            }
+        }
+    })
 }

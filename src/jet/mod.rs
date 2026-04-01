@@ -55,6 +55,10 @@ impl std::fmt::Display for JetFailed {
 
 impl std::error::Error for JetFailed {}
 
+// pub fn test_object_safety() -> Box<dyn Jet> {
+//     Box::new(Core::Verify)
+// }
+
 /// An environment for jets to read.
 pub trait JetEnvironment {
     /// The type of jet that this environment supports.
@@ -70,6 +74,9 @@ pub trait JetEnvironment {
     fn c_jet_ptr(
         jet: &Self::Jet,
     ) -> fn(&mut CFrameItem, CFrameItem, &Self::CJetEnvironment) -> bool;
+
+    /// Decode a jet from bits.
+    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self::Jet, decode::Error>;
 }
 
 /// Family of jets that share an encoding scheme and execution environment.
@@ -93,10 +100,7 @@ pub trait Jet:
     fn target_ty(&self) -> TypeName;
 
     /// Encode the jet to bits.
-    fn encode<W: Write>(&self, w: &mut BitWriter<W>) -> std::io::Result<usize>;
-
-    /// Decode a jet from bits.
-    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error>;
+    fn encode(&self, w: &mut BitWriter<&mut dyn Write>) -> std::io::Result<usize>;
 
     /// Return the cost of the jet.
     fn cost(&self) -> Cost;

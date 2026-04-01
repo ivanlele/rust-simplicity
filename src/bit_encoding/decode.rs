@@ -6,7 +6,7 @@
 //! Refer to [`crate::encode`] for information on the encoding.
 
 use crate::dag::{Dag, DagLike, InternalSharing};
-use crate::jet::Jet;
+use crate::jet::{Jet, JetEnvironment};
 use crate::merkle::cmr::Cmr;
 use crate::node::{
     ConstructNode, CoreConstructible, DisconnectConstructible, JetConstructible,
@@ -153,10 +153,10 @@ impl<J: Jet> DagLike for (usize, &'_ [DecodeNode<J>]) {
     }
 }
 
-pub fn decode_expression<'brand, I: Iterator<Item = u8>, J: Jet>(
+pub fn decode_expression<'brand, I: Iterator<Item = u8>, JE: JetEnvironment>(
     ctx: &types::Context<'brand>,
     bits: &mut BitIter<I>,
-) -> Result<ArcNode<'brand, J>, Error> {
+) -> Result<ArcNode<'brand, JE::Jet>, Error> {
     enum Converted<'brand, J: Jet> {
         Node(ArcNode<'brand, J>),
         Hidden(Cmr),
@@ -176,14 +176,14 @@ pub fn decode_expression<'brand, I: Iterator<Item = u8>, J: Jet>(
 
     let mut nodes = Vec::with_capacity(cmp::min(len, 10_000));
     for _ in 0..len {
-        let new_node = decode_node(bits, nodes.len())?;
+        let new_node = decode_node::<_, JE>(bits, nodes.len())?;
         nodes.push(new_node);
     }
 
     // It is a sharing violation for any hidden node to be repeated. Track them in this set.
     let mut hidden_set = HashSet::<Cmr>::new();
     // Convert the DecodeNode structure into a CommitNode structure
-    let mut converted = Vec::<Converted<J>>::with_capacity(len);
+    let mut converted = Vec::<Converted<JE::Jet>>::with_capacity(len);
     for data in (nodes.len() - 1, &nodes[..]).post_order_iter::<InternalSharing>() {
         // Check canonical order as we go
         if data.index != data.node.0 {
@@ -237,15 +237,15 @@ pub fn decode_expression<'brand, I: Iterator<Item = u8>, J: Jet>(
 
 /// Decode a single Simplicity node from bits and
 /// insert it into a hash map at its index for future reference by ancestor nodes.
-fn decode_node<I: Iterator<Item = u8>, J: Jet>(
+fn decode_node<I: Iterator<Item = u8>, JE: JetEnvironment>(
     bits: &mut BitIter<I>,
     index: usize,
-) -> Result<DecodeNode<J>, Error> {
+) -> Result<DecodeNode<JE::Jet>, Error> {
     // First bit: 1 for jets/words, 0 for normal combinators
     if bits.read_bit()? {
         // Second bit: 1 for jets, 0 for words
         if bits.read_bit()? {
-            J::decode(bits).map(|jet| DecodeNode::Jet(jet))
+            JE::decode(bits).map(|jet| DecodeNode::Jet(jet))
         } else {
             let n = bits.read_natural(Some(32))?;
             let word = Word::from_bits(bits, n - 1)?;
@@ -306,7 +306,7 @@ fn decode_node<I: Iterator<Item = u8>, J: Jet>(
 mod tests {
     use super::*;
     use crate::encode;
-    use crate::jet::Core;
+    use crate::jet::CoreEnv;
     use crate::node::{CommitNode, RedeemNode};
     use crate::BitWriter;
 
@@ -317,14 +317,14 @@ mod tests {
         // Should be able to decode this as an expression...
         let mut iter = BitIter::from(&justjet[..]);
         types::Context::with_context(|ctx| {
-            decode_expression::<_, Core>(&ctx, &mut iter).unwrap();
+            decode_expression::<_, CoreEnv>(&ctx, &mut iter).unwrap();
         });
         // ...but NOT as a CommitNode
         let iter = BitIter::from(&justjet[..]);
-        CommitNode::<Core>::decode(iter).unwrap_err();
+        CommitNode::decode::<_, CoreEnv>(iter).unwrap_err();
         // ...or as a RedeemNode
         let iter = BitIter::from(&justjet[..]);
-        RedeemNode::<Core>::decode(iter, BitIter::from(&[][..])).unwrap_err();
+        RedeemNode::decode::<_, _, CoreEnv>(iter, BitIter::from(&[][..])).unwrap_err();
     }
 
     #[test]

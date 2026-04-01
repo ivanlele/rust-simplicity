@@ -13,6 +13,7 @@
 //
 
 use simplicity::human_encoding::Forest;
+use simplicity::jet::JetEnvironment;
 use simplicity::node::CommitNode;
 use simplicity::{self, BitIter};
 
@@ -22,7 +23,8 @@ use std::{env, fs};
 
 /// What set of jets to use in the program.
 // FIXME this should probably be configurable.
-type DefaultJet = simplicity::jet::Elements;
+type DefaultJetEnv = simplicity::jet::ElementsTxEnv;
+type DefaultJet = <DefaultJetEnv as JetEnvironment>::Jet;
 
 fn usage(process_name: &str) {
     eprintln!("Usage:");
@@ -154,8 +156,8 @@ fn main() -> Result<(), String> {
             let v = simplicity::base64::Engine::decode(&STANDARD, first_arg.as_bytes())
                 .map_err(|e| format!("failed to parse base64: {}", e))?;
             let iter = BitIter::from(v.into_iter());
-            let commit =
-                CommitNode::decode(iter).map_err(|e| format!("failed to decode program: {}", e))?;
+            let commit = CommitNode::decode::<_, DefaultJetEnv>(iter)
+                .map_err(|e| format!("failed to decode program: {}", e))?;
             let prog = Forest::<DefaultJet>::from_program(commit);
             println!("{}", prog.string_serialize());
         }
@@ -163,7 +165,7 @@ fn main() -> Result<(), String> {
             let v = simplicity::base64::Engine::decode(&STANDARD, first_arg.as_bytes())
                 .map_err(|e| format!("failed to parse base64: {}", e))?;
             let iter = BitIter::from(v.into_iter());
-            let commit = CommitNode::<DefaultJet>::decode(iter)
+            let commit = CommitNode::decode::<_, DefaultJetEnv>(iter)
                 .map_err(|e| format!("failed to decode program: {}", e))?;
             println!("{}", commit.display_as_dot());
         }

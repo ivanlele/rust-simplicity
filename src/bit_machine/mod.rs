@@ -599,9 +599,11 @@ impl From<JetFailed> for ExecutionError {
 mod tests {
     use super::*;
 
+    #[cfg(feature = "elements")]
+    use crate::jet::elements::ElementsEnv;
     use crate::jet::CoreEnv;
     #[cfg(feature = "elements")]
-    use crate::jet::{elements::ElementsEnv, Elements};
+    use crate::jet::ElementsTxEnv;
     #[cfg(feature = "elements")]
     use crate::{node::RedeemNode, BitIter};
     #[cfg(feature = "elements")]
@@ -619,7 +621,7 @@ mod tests {
 
         let prog = BitIter::from(prog_bytes);
         let witness = BitIter::from(witness_bytes);
-        let prog = match RedeemNode::<Elements>::decode(prog, witness) {
+        let prog = match RedeemNode::decode::<_, _, ElementsTxEnv>(prog, witness) {
             Ok(prog) => prog,
             Err(e) => panic!("program {} failed: {}", prog_hex, e),
         };

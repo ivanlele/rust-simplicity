@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: CC0-1.0
 
 use crate::dag::{DagLike, MaxSharing, NoSharing, PostOrderIterItem};
-use crate::jet::Jet;
+use crate::jet::{Jet, JetEnvironment};
 use crate::types::arrow::{Arrow, FinalArrow};
 use crate::{encode, types, Value};
 use crate::{Amr, BitIter, BitWriter, Cmr, DecodeError, Ihr, Imr};
@@ -251,13 +251,15 @@ impl<J: Jet> CommitNode<J> {
     /// or the witness is provided by other means.
     ///
     /// If the serialization contains the witness data, then use [`RedeemNode::decode()`].
-    pub fn decode<I: Iterator<Item = u8>>(bits: BitIter<I>) -> Result<Arc<Self>, DecodeError> {
+    pub fn decode<I: Iterator<Item = u8>, JE: JetEnvironment<Jet = J>>(
+        bits: BitIter<I>,
+    ) -> Result<Arc<Self>, DecodeError> {
         use crate::decode;
 
         // 1. Decode program with out witnesses.
         let program = types::Context::with_context(|ctx| {
             let construct =
-                crate::ConstructNode::decode(&ctx, bits).map_err(DecodeError::Decode)?;
+                crate::ConstructNode::decode::<_, JE>(&ctx, bits).map_err(DecodeError::Decode)?;
             construct.finalize_types().map_err(DecodeError::Type)
         })?;
         // 2. Do sharing check, using incomplete IHRs
@@ -270,7 +272,7 @@ impl<J: Jet> CommitNode<J> {
 
     #[cfg(feature = "base64")]
     #[allow(clippy::should_implement_trait)] // returns Arc<Self>
-    pub fn from_str(s: &str) -> Result<Arc<Self>, crate::ParseError> {
+    pub fn from_str<JE: JetEnvironment<Jet = J>>(s: &str) -> Result<Arc<Self>, crate::ParseError> {
         use crate::base64::engine::general_purpose;
         use crate::base64::Engine as _;
 
@@ -278,12 +280,12 @@ impl<J: Jet> CommitNode<J> {
             .decode(s)
             .map_err(crate::ParseError::Base64)?;
         let iter = crate::BitIter::new(v.into_iter());
-        Self::decode(iter).map_err(crate::ParseError::Decode)
+        Self::decode::<_, JE>(iter).map_err(crate::ParseError::Decode)
     }
 
     /// Encode a Simplicity expression to bits without any witness data
     #[deprecated(since = "0.5.0", note = "use Self::encode_without_witness instead")]
-    pub fn encode<W: io::Write>(&self, w: &mut BitWriter<W>) -> io::Result<usize> {
+    pub fn encode(&self, w: &mut BitWriter<&mut dyn io::Write>) -> io::Result<usize> {
         let program_bits = encode::encode_program(self, w)?;
         w.flush_all()?;
         Ok(program_bits)
@@ -316,13 +318,13 @@ mod tests {
 
     #[cfg_attr(not(feature = "base64"), allow(unused_variables))]
     #[track_caller]
-    fn assert_program_deserializable<J: Jet>(
+    fn assert_program_deserializable<JE: JetEnvironment>(
         prog_str: &str,
         prog_bytes: &[u8],
         cmr_str: &str,
         b64_str: &str,
-    ) -> Arc<CommitNode<J>> {
-        let forest = match Forest::<J>::parse(prog_str) {
+    ) -> Arc<CommitNode<JE::Jet>> {
+        let forest = match Forest::<JE::Jet>::parse(prog_str) {
             Ok(forest) => forest,
             Err(e) => panic!("Failed to parse program `{}`: {}", prog_str, e),
         };
@@ -349,7 +351,7 @@ mod tests {
         );
 
         let iter = BitIter::from(prog_bytes);
-        let prog = match CommitNode::<J>::decode(iter) {
+        let prog = match CommitNode::decode::<_, JE>(iter) {
             Ok(prog) => prog,
             Err(e) => panic!("program {} failed: {}", prog_hex, e),
         };
@@ -376,19 +378,19 @@ mod tests {
         {
             assert_eq!(prog.to_string(), b64_str);
             assert_eq!(prog.display().program().to_string(), b64_str);
-            assert_eq!(prog, CommitNode::from_str(b64_str).unwrap());
+            assert_eq!(prog, CommitNode::from_str::<JE>(b64_str).unwrap());
         }
 
         prog
     }
 
     #[track_caller]
-    fn assert_program_not_deserializable<J: Jet>(prog: &[u8], err: &dyn fmt::Display) {
+    fn assert_program_not_deserializable<JE: JetEnvironment>(prog: &[u8], err: &dyn fmt::Display) {
         let prog_hex = prog.as_hex();
         let err_str = err.to_string();
 
         let iter = BitIter::from(prog);
-        match CommitNode::<J>::decode(iter) {
+        match CommitNode::decode::<_, JE>(iter) {
             Ok(prog) => panic!(
                 "Program {} succeded (expected error {}). Program parsed as:\n{:?}",
                 prog_hex, err, prog
@@ -406,10 +408,13 @@ mod tests {
         // "main = comp unit iden", but with the iden serialized before the unit
         // To obtain this test vector I temporarily swapped `get_left` and `get_right`
         // in the implementation of `PostOrderIter`
-        assert_program_not_deserializable::<Core>(&[0xa8, 0x48, 0x10], &Error::NotInCanonicalOrder);
+        assert_program_not_deserializable::<CoreEnv>(
+            &[0xa8, 0x48, 0x10],
+            &Error::NotInCanonicalOrder,
+        );
 
         // "main = iden", but prefixed by some unused nodes, the first of which is also iden.
-        assert_program_not_deserializable::<Core>(
+        assert_program_not_deserializable::<CoreEnv>(
             &[0xc1, 0x00, 0x06, 0x20],
             &Error::NotInCanonicalOrder,
         );
@@ -426,7 +431,7 @@ mod tests {
             0x7e, 0xf5, 0x6d, 0xf7, 0x7e, 0xf5, 0x6d, 0xf7,
             78,
         ];
-        assert_program_not_deserializable::<Core>(&hidden, &Error::HiddenNode);
+        assert_program_not_deserializable::<CoreEnv>(&hidden, &Error::HiddenNode);
 
         // main = comp witness hidden deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef
         let hidden = [
@@ -434,7 +439,7 @@ mod tests {
             0xd5, 0xb7, 0xdd, 0xfb, 0xd5, 0xb7, 0xdd, 0xfb, 0xd5, 0xb7, 0xdd, 0xfb, 0xd5, 0xb7,
             0xdd, 0xfb, 0xd5, 0xb7, 0xdd, 0xe0, 0x80,
         ];
-        assert_program_not_deserializable::<Core>(&hidden, &Error::HiddenNode);
+        assert_program_not_deserializable::<CoreEnv>(&hidden, &Error::HiddenNode);
     }
 
     #[test]
@@ -449,7 +454,7 @@ mod tests {
             0xdf, 0xbd, 0x5b, 0x7d, 0xdf, 0xbd, 0x5b, 0x7d,
             0xde, 0x10,
         ];
-        assert_program_not_deserializable::<Core>(&hidden, &Error::BothChildrenHidden);
+        assert_program_not_deserializable::<CoreEnv>(&hidden, &Error::BothChildrenHidden);
     }
 
     #[test]
@@ -469,12 +474,12 @@ mod tests {
             0x29, 0xdb, 0xa3, 0x3e, 0x60, 0x30, 0x2c, 0x00,
             0xd0, 0x48, 0x20,
         ];
-        assert_program_not_deserializable::<Core>(&hidden, &Error::SharingNotMaximal);
+        assert_program_not_deserializable::<CoreEnv>(&hidden, &Error::SharingNotMaximal);
     }
 
     #[test]
     fn shared_witnesses() {
-        assert_program_deserializable::<Core>(
+        assert_program_deserializable::<CoreEnv>(
             "main := witness",
             &[0x38],
             "a0fc8debd6796917c86b77aded82e6c61649889ae8f2ed65b57b41aa9d90e375",
@@ -499,7 +504,7 @@ mod tests {
             ],
         ];
         for bad_diff1 in bad_diff1s {
-            assert_program_not_deserializable::<Core>(&bad_diff1, &Error::SharingNotMaximal);
+            assert_program_not_deserializable::<CoreEnv>(&bad_diff1, &Error::SharingNotMaximal);
         }
 
         #[rustfmt::skip]
@@ -549,7 +554,7 @@ mod tests {
         ];
 
         for (prog_str, diff1, cmr, b64) in diff1s {
-            let diff1_prog = crate::node::commit::tests::assert_program_deserializable::<Core>(
+            let diff1_prog = crate::node::commit::tests::assert_program_deserializable::<CoreEnv>(
                 prog_str, &diff1, cmr, b64,
             );
 
@@ -573,7 +578,10 @@ mod tests {
     fn extra_nodes() {
         // main = comp unit unit # but with an extra unconnected `unit` stuck on the beginning
         // I created this unit test by hand
-        assert_program_not_deserializable::<Core>(&[0xa9, 0x48, 0x00], &Error::NotInCanonicalOrder);
+        assert_program_not_deserializable::<CoreEnv>(
+            &[0xa9, 0x48, 0x00],
+            &Error::NotInCanonicalOrder,
+        );
     }
 
     #[test]

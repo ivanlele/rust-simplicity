@@ -1,11 +1,11 @@
 /* This file has been automatically generated. */
 
+use crate::analysis::Cost;
+use crate::decode_bits;
 use crate::jet::type_name::TypeName;
 use crate::jet::Jet;
 use crate::merkle::cmr::Cmr;
-use crate::decode_bits;
 use crate::{decode, BitIter, BitWriter};
-use crate::analysis::Cost;
 use hashes::sha256::Midstate;
 use simplicity_sys::CFrameItem;
 use std::io::Write;
@@ -759,7 +759,6 @@ impl Core {
 }
 
 impl Jet for Core {
-
     fn cmr(&self) -> Cmr {
         let bytes = match self {
             Core::Add16 => [
@@ -3248,7 +3247,9 @@ impl Jet for Core {
             Core::Or64 => b"l",
             Core::Or8 => b"***22*22**22*22",
             Core::ParseLock => b"+ii",
-            Core::ParseSequence => b"+1+****22*22**22*22***22*22**22*22****22*22**22*22***22*22**22*22",
+            Core::ParseSequence => {
+                b"+1+****22*22**22*22***22*22**22*22****22*22**22*22***22*22**22*22"
+            }
             Core::PointVerify1 => b"1",
             Core::RightExtend16_32 => b"i",
             Core::RightExtend16_64 => b"l",
@@ -3316,19 +3317,43 @@ impl Jet for Core {
             Core::ScalarSquare => b"h",
             Core::Scale => b"**hhh",
             Core::Sha256Block => b"h",
-            Core::Sha256Ctx8Add1 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Core::Sha256Ctx8Add128 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Core::Sha256Ctx8Add16 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Core::Sha256Ctx8Add2 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Core::Sha256Ctx8Add256 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Core::Sha256Ctx8Add32 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Core::Sha256Ctx8Add4 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Core::Sha256Ctx8Add512 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Core::Sha256Ctx8Add64 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Core::Sha256Ctx8Add8 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Core::Sha256Ctx8AddBuffer511 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
+            Core::Sha256Ctx8Add1 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Core::Sha256Ctx8Add128 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Core::Sha256Ctx8Add16 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Core::Sha256Ctx8Add2 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Core::Sha256Ctx8Add256 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Core::Sha256Ctx8Add32 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Core::Sha256Ctx8Add4 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Core::Sha256Ctx8Add512 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Core::Sha256Ctx8Add64 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Core::Sha256Ctx8Add8 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Core::Sha256Ctx8AddBuffer511 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
             Core::Sha256Ctx8Finalize => b"h",
-            Core::Sha256Ctx8Init => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
+            Core::Sha256Ctx8Init => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
             Core::Sha256Iv => b"h",
             Core::Some1 => b"2",
             Core::Some16 => b"2",
@@ -3340,7 +3365,9 @@ impl Jet for Core {
             Core::Subtract64 => b"*2l",
             Core::Subtract8 => b"*2***22*22**22*22",
             Core::Swu => b"*hh",
-            Core::TapdataInit => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
+            Core::TapdataInit => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
             Core::Verify => b"1",
             Core::Xor1 => b"2",
             Core::Xor16 => b"****22*22**22*22***22*22**22*22",
@@ -3357,7 +3384,7 @@ impl Jet for Core {
         TypeName(name)
     }
 
-    fn encode<W: Write>(&self, w: &mut BitWriter<W>) -> std::io::Result<usize> {
+    fn encode(&self, w: &mut BitWriter<&mut dyn Write>) -> std::io::Result<usize> {
         let (n, len) = match self {
             Core::Verify => (0, 2),
             Core::Low1 => (8, 5),
@@ -3730,2287 +3757,6 @@ impl Jet for Core {
         };
 
         w.write_bits_be(n, len)
-    }
-
-    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error> {
-        decode_bits!(bits, {
-            0 => {
-                0 => {Core::Verify},
-                1 => {
-                    0 => {
-                        0 => {
-                            0 => {Core::Low1},
-                            1 => {
-                                0 => {
-                                    0 => {},
-                                    1 => {Core::Low8}
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {Core::Low16},
-                                                1 => {Core::Low32}
-                                            },
-                                            1 => {
-                                                0 => {Core::Low64},
-                                                1 => {}
-                                            }
-                                        },
-                                        1 => {}
-                                    },
-                                    1 => {}
-                                }
-                            }
-                        },
-                        1 => {
-                            0 => {Core::High1},
-                            1 => {
-                                0 => {
-                                    0 => {},
-                                    1 => {Core::High8}
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {Core::High16},
-                                                1 => {Core::High32}
-                                            },
-                                            1 => {
-                                                0 => {Core::High64},
-                                                1 => {}
-                                            }
-                                        },
-                                        1 => {}
-                                    },
-                                    1 => {}
-                                }
-                            }
-                        }
-                    },
-                    1 => {
-                        0 => {
-                            0 => {
-                                0 => {
-                                    0 => {
-                                        0 => {Core::Complement1},
-                                        1 => {
-                                            0 => {
-                                                0 => {},
-                                                1 => {Core::Complement8}
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Core::Complement16},
-                                                            1 => {Core::Complement32}
-                                                        },
-                                                        1 => {
-                                                            0 => {Core::Complement64},
-                                                            1 => {}
-                                                        }
-                                                    },
-                                                    1 => {}
-                                                },
-                                                1 => {}
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {Core::And1},
-                                        1 => {
-                                            0 => {
-                                                0 => {},
-                                                1 => {Core::And8}
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Core::And16},
-                                                            1 => {Core::And32}
-                                                        },
-                                                        1 => {
-                                                            0 => {Core::And64},
-                                                            1 => {}
-                                                        }
-                                                    },
-                                                    1 => {}
-                                                },
-                                                1 => {}
-                                            }
-                                        }
-                                    }
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {Core::Or1},
-                                        1 => {
-                                            0 => {
-                                                0 => {},
-                                                1 => {Core::Or8}
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Core::Or16},
-                                                            1 => {Core::Or32}
-                                                        },
-                                                        1 => {
-                                                            0 => {Core::Or64},
-                                                            1 => {}
-                                                        }
-                                                    },
-                                                    1 => {}
-                                                },
-                                                1 => {}
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {Core::Xor1},
-                                        1 => {
-                                            0 => {
-                                                0 => {},
-                                                1 => {Core::Xor8}
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Core::Xor16},
-                                                            1 => {Core::Xor32}
-                                                        },
-                                                        1 => {
-                                                            0 => {Core::Xor64},
-                                                            1 => {}
-                                                        }
-                                                    },
-                                                    1 => {}
-                                                },
-                                                1 => {}
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            1 => {
-                                0 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {Core::Maj1},
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {Core::Maj8}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Core::Maj16},
-                                                                1 => {Core::Maj32}
-                                                            },
-                                                            1 => {
-                                                                0 => {Core::Maj64},
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {Core::XorXor1},
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {Core::XorXor8}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Core::XorXor16},
-                                                                1 => {Core::XorXor32}
-                                                            },
-                                                            1 => {
-                                                                0 => {Core::XorXor64},
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {Core::Ch1},
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {Core::Ch8}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Core::Ch16},
-                                                                1 => {Core::Ch32}
-                                                            },
-                                                            1 => {
-                                                                0 => {Core::Ch64},
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {Core::Some1},
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {Core::Some8}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Core::Some16},
-                                                                1 => {Core::Some32}
-                                                            },
-                                                            1 => {
-                                                                0 => {Core::Some64},
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {},
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {Core::All8}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Core::All16},
-                                                                1 => {Core::All32}
-                                                            },
-                                                            1 => {
-                                                                0 => {Core::All64},
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {Core::Eq1},
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {Core::Eq8}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Core::Eq16},
-                                                                1 => {Core::Eq32}
-                                                            },
-                                                            1 => {
-                                                                0 => {Core::Eq64},
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Core::Eq256},
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Core::FullLeftShift8_1}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Core::FullLeftShift16_1},
-                                                                    1 => {Core::FullLeftShift32_1}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Core::FullLeftShift64_1},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {Core::FullLeftShift8_2},
-                                                                1 => {Core::FullLeftShift16_2}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Core::FullLeftShift32_2},
-                                                                            1 => {Core::FullLeftShift64_2}
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {Core::FullLeftShift8_4},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {Core::FullLeftShift16_4},
-                                                                1 => {Core::FullLeftShift32_4}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Core::FullLeftShift64_4},
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Core::FullLeftShift16_8},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {Core::FullLeftShift32_8},
-                                                                            1 => {Core::FullLeftShift64_8}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {Core::FullLeftShift32_16},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {Core::FullLeftShift64_16},
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {Core::FullLeftShift64_32},
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Core::FullRightShift8_1}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Core::FullRightShift16_1},
-                                                                    1 => {Core::FullRightShift32_1}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Core::FullRightShift64_1},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {Core::FullRightShift8_2},
-                                                                1 => {Core::FullRightShift16_2}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Core::FullRightShift32_2},
-                                                                            1 => {Core::FullRightShift64_2}
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {Core::FullRightShift8_4},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {Core::FullRightShift16_4},
-                                                                1 => {Core::FullRightShift32_4}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Core::FullRightShift64_4},
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Core::FullRightShift16_8},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {Core::FullRightShift32_8},
-                                                                            1 => {Core::FullRightShift64_8}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {Core::FullRightShift32_16},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {Core::FullRightShift64_16},
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {Core::FullRightShift64_32},
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        1 => {
-                            0 => {
-                                0 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Core::Leftmost8_1}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Core::Leftmost16_1},
-                                                                                    1 => {Core::Leftmost32_1}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Core::Leftmost64_1},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Core::Leftmost8_2},
-                                                                                1 => {Core::Leftmost16_2}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::Leftmost32_2},
-                                                                                            1 => {Core::Leftmost64_2}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Core::Leftmost8_4},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Core::Leftmost16_4},
-                                                                                1 => {Core::Leftmost32_4}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::Leftmost64_4},
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Core::Leftmost16_8},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::Leftmost32_8},
-                                                                                            1 => {Core::Leftmost64_8}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Core::Leftmost32_16},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::Leftmost64_16},
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                }
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Core::Leftmost64_32},
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Core::Rightmost8_1}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Core::Rightmost16_1},
-                                                                                    1 => {Core::Rightmost32_1}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Core::Rightmost64_1},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Core::Rightmost8_2},
-                                                                                1 => {Core::Rightmost16_2}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::Rightmost32_2},
-                                                                                            1 => {Core::Rightmost64_2}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Core::Rightmost8_4},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Core::Rightmost16_4},
-                                                                                1 => {Core::Rightmost32_4}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::Rightmost64_4},
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Core::Rightmost16_8},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::Rightmost32_8},
-                                                                                            1 => {Core::Rightmost64_8}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Core::Rightmost32_16},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::Rightmost64_16},
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                }
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Core::Rightmost64_32},
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Core::LeftPadLow1_8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Core::LeftPadLow1_16},
-                                                                                    1 => {Core::LeftPadLow1_32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Core::LeftPadLow1_64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Core::LeftPadLow8_16},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::LeftPadLow8_32},
-                                                                                            1 => {Core::LeftPadLow8_64}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Core::LeftPadLow16_32},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::LeftPadLow16_64},
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                }
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Core::LeftPadLow32_64},
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Core::LeftPadHigh1_8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Core::LeftPadHigh1_16},
-                                                                                    1 => {Core::LeftPadHigh1_32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Core::LeftPadHigh1_64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Core::LeftPadHigh8_16},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::LeftPadHigh8_32},
-                                                                                            1 => {Core::LeftPadHigh8_64}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Core::LeftPadHigh16_32},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::LeftPadHigh16_64},
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                }
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Core::LeftPadHigh32_64},
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Core::LeftExtend1_8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Core::LeftExtend1_16},
-                                                                                    1 => {Core::LeftExtend1_32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Core::LeftExtend1_64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Core::LeftExtend8_16},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::LeftExtend8_32},
-                                                                                            1 => {Core::LeftExtend8_64}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Core::LeftExtend16_32},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::LeftExtend16_64},
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                }
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Core::LeftExtend32_64},
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Core::RightPadLow1_8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Core::RightPadLow1_16},
-                                                                                    1 => {Core::RightPadLow1_32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Core::RightPadLow1_64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Core::RightPadLow8_16},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::RightPadLow8_32},
-                                                                                            1 => {Core::RightPadLow8_64}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Core::RightPadLow16_32},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::RightPadLow16_64},
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                }
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Core::RightPadLow32_64},
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Core::RightPadHigh1_8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Core::RightPadHigh1_16},
-                                                                                    1 => {Core::RightPadHigh1_32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Core::RightPadHigh1_64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Core::RightPadHigh8_16},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::RightPadHigh8_32},
-                                                                                            1 => {Core::RightPadHigh8_64}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Core::RightPadHigh16_32},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::RightPadHigh16_64},
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                }
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Core::RightPadHigh32_64},
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {},
-                                                            1 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Core::RightExtend8_16},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::RightExtend8_32},
-                                                                                            1 => {Core::RightExtend8_64}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Core::RightExtend16_32},
-                                                                                    1 => {
-                                                                                        0 => {
-                                                                                            0 => {Core::RightExtend16_64},
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    }
-                                                                                }
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Core::RightExtend32_64},
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {Core::LeftShiftWith8}
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Core::LeftShiftWith16},
-                                                                                1 => {Core::LeftShiftWith32}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Core::LeftShiftWith64},
-                                                                                1 => {}
-                                                                            }
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {},
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {Core::RightShiftWith8}
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Core::RightShiftWith16},
-                                                                                1 => {Core::RightShiftWith32}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Core::RightShiftWith64},
-                                                                                1 => {}
-                                                                            }
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {Core::LeftShift8}
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Core::LeftShift16},
-                                                                                1 => {Core::LeftShift32}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Core::LeftShift64},
-                                                                                1 => {}
-                                                                            }
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {},
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {Core::RightShift8}
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Core::RightShift16},
-                                                                                1 => {Core::RightShift32}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Core::RightShift64},
-                                                                                1 => {}
-                                                                            }
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {Core::LeftRotate8}
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Core::LeftRotate16},
-                                                                                1 => {Core::LeftRotate32}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Core::LeftRotate64},
-                                                                                1 => {}
-                                                                            }
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {},
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {Core::RightRotate8}
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Core::RightRotate16},
-                                                                                1 => {Core::RightRotate32}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Core::RightRotate64},
-                                                                                1 => {}
-                                                                            }
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        },
-                                        1 => {}
-                                    },
-                                    1 => {}
-                                },
-                                1 => {}
-                            },
-                            1 => {}
-                        }
-                    }
-                }
-            },
-            1 => {
-                0 => {
-                    0 => {
-                        0 => {
-                            0 => {},
-                            1 => {
-                                0 => {
-                                    0 => {},
-                                    1 => {Core::One8}
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {Core::One16},
-                                                1 => {Core::One32}
-                                            },
-                                            1 => {
-                                                0 => {Core::One64},
-                                                1 => {}
-                                            }
-                                        },
-                                        1 => {}
-                                    },
-                                    1 => {}
-                                }
-                            }
-                        },
-                        1 => {
-                            0 => {
-                                0 => {
-                                    0 => {},
-                                    1 => {
-                                        0 => {
-                                            0 => {},
-                                            1 => {Core::FullAdd8}
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {Core::FullAdd16},
-                                                        1 => {Core::FullAdd32}
-                                                    },
-                                                    1 => {
-                                                        0 => {Core::FullAdd64},
-                                                        1 => {}
-                                                    }
-                                                },
-                                                1 => {}
-                                            },
-                                            1 => {}
-                                        }
-                                    }
-                                },
-                                1 => {
-                                    0 => {},
-                                    1 => {
-                                        0 => {
-                                            0 => {},
-                                            1 => {Core::Add8}
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {Core::Add16},
-                                                        1 => {Core::Add32}
-                                                    },
-                                                    1 => {
-                                                        0 => {Core::Add64},
-                                                        1 => {}
-                                                    }
-                                                },
-                                                1 => {}
-                                            },
-                                            1 => {}
-                                        }
-                                    }
-                                }
-                            },
-                            1 => {
-                                0 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Core::FullIncrement8}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Core::FullIncrement16},
-                                                                    1 => {Core::FullIncrement32}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Core::FullIncrement64},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Core::Increment8}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Core::Increment16},
-                                                                    1 => {Core::Increment32}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Core::Increment64},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {},
-                                            1 => {
-                                                0 => {},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Core::FullSubtract8}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Core::FullSubtract16},
-                                                                    1 => {Core::FullSubtract32}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Core::FullSubtract64},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Core::Subtract8}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Core::Subtract16},
-                                                                        1 => {Core::Subtract32}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Core::Subtract64},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Core::Negate8}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Core::Negate16},
-                                                                        1 => {Core::Negate32}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Core::Negate64},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Core::FullDecrement8}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Core::FullDecrement16},
-                                                                        1 => {Core::FullDecrement32}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Core::FullDecrement64},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Core::Decrement8}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Core::Decrement16},
-                                                                        1 => {Core::Decrement32}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Core::Decrement64},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Core::FullMultiply8}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Core::FullMultiply16},
-                                                                        1 => {Core::FullMultiply32}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Core::FullMultiply64},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Core::Multiply8}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Core::Multiply16},
-                                                                        1 => {Core::Multiply32}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Core::Multiply64},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Core::IsZero8}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Core::IsZero16},
-                                                                        1 => {Core::IsZero32}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Core::IsZero64},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Core::IsOne8}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Core::IsOne16},
-                                                                        1 => {Core::IsOne32}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Core::IsOne64},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Core::Le8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Core::Le16},
-                                                                                        1 => {Core::Le32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Core::Le64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Core::Lt8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Core::Lt16},
-                                                                                        1 => {Core::Lt32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Core::Lt64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Core::Min8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Core::Min16},
-                                                                                        1 => {Core::Min32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Core::Min64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Core::Max8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Core::Max16},
-                                                                                        1 => {Core::Max32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Core::Max64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Core::Median8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Core::Median16},
-                                                                                        1 => {Core::Median32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Core::Median64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {},
-                                                                                    1 => {
-                                                                                        0 => {Core::DivMod128_64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Core::DivMod8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Core::DivMod16},
-                                                                                        1 => {Core::DivMod32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Core::DivMod64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Core::Divide8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Core::Divide16},
-                                                                                        1 => {Core::Divide32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Core::Divide64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Core::Modulo8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Core::Modulo16},
-                                                                                        1 => {Core::Modulo32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Core::Modulo64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Core::Divides8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Core::Divides16},
-                                                                                        1 => {Core::Divides32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Core::Divides64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                },
-                                                1 => {}
-                                            },
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    },
-                                    1 => {}
-                                }
-                            }
-                        }
-                    },
-                    1 => {
-                        0 => {
-                            0 => {Core::Sha256Block},
-                            1 => {
-                                0 => {
-                                    0 => {Core::Sha256Iv},
-                                    1 => {
-                                        0 => {Core::Sha256Ctx8Add1},
-                                        1 => {
-                                            0 => {
-                                                0 => {Core::Sha256Ctx8Add2},
-                                                1 => {Core::Sha256Ctx8Add4}
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Core::Sha256Ctx8Add8},
-                                                            1 => {Core::Sha256Ctx8Add16}
-                                                        },
-                                                        1 => {
-                                                            0 => {Core::Sha256Ctx8Add32},
-                                                            1 => {Core::Sha256Ctx8Add64}
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Core::Sha256Ctx8Add128},
-                                                                1 => {Core::Sha256Ctx8Add256}
-                                                            },
-                                                            1 => {
-                                                                0 => {Core::Sha256Ctx8Add512},
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                },
-                                                1 => {}
-                                            }
-                                        }
-                                    }
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {Core::Sha256Ctx8AddBuffer511},
-                                                1 => {Core::Sha256Ctx8Finalize}
-                                            },
-                                            1 => {
-                                                0 => {Core::Sha256Ctx8Init},
-                                                1 => {}
-                                            }
-                                        },
-                                        1 => {}
-                                    },
-                                    1 => {}
-                                }
-                            }
-                        },
-                        1 => {}
-                    }
-                },
-                1 => {
-                    0 => {
-                        0 => {
-                            0 => {
-                                0 => {
-                                    0 => {
-                                        0 => {Core::PointVerify1},
-                                        1 => {}
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {Core::Decompress},
-                                            1 => {
-                                                0 => {Core::LinearVerify1},
-                                                1 => {}
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Core::LinearCombination1},
-                                                            1 => {}
-                                                        },
-                                                        1 => {Core::Scale}
-                                                    },
-                                                    1 => {
-                                                        0 => {Core::Generate},
-                                                        1 => {Core::GejInfinity}
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Core::GejNormalize},
-                                                            1 => {Core::GejNegate}
-                                                        },
-                                                        1 => {
-                                                            0 => {Core::GeNegate},
-                                                            1 => {Core::GejDouble}
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {Core::GejAdd},
-                                                            1 => {Core::GejGeAddEx}
-                                                        },
-                                                        1 => {
-                                                            0 => {Core::GejGeAdd},
-                                                            1 => {Core::GejRescale}
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Core::GejIsInfinity},
-                                                                            1 => {Core::GejEquiv}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Core::GejGeEquiv},
-                                                                            1 => {Core::GejXEquiv}
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {Core::GejYIsOdd},
-                                                                            1 => {Core::GejIsOnCurve}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Core::GeIsOnCurve},
-                                                                            1 => {Core::ScalarNormalize}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Core::ScalarNegate},
-                                                                            1 => {Core::ScalarAdd}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Core::ScalarSquare},
-                                                                            1 => {Core::ScalarMultiply}
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {Core::ScalarMultiplyLambda},
-                                                                            1 => {Core::ScalarInvert}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Core::ScalarIsZero},
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {
-                                                                                0 => {},
-                                                                                1 => {Core::FeNormalize}
-                                                                            }
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Core::FeNegate},
-                                                                                1 => {Core::FeAdd}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Core::FeSquare},
-                                                                                1 => {Core::FeMultiply}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Core::FeMultiplyBeta},
-                                                                                1 => {Core::FeInvert}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Core::FeSquareRoot},
-                                                                                1 => {Core::FeIsZero}
-                                                                            }
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Core::FeIsOdd},
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Core::HashToCurve},
-                                                                                1 => {Core::Swu}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                },
-                                                1 => {}
-                                            }
-                                        }
-                                    }
-                                },
-                                1 => {
-                                    0 => {Core::CheckSigVerify},
-                                    1 => {
-                                        0 => {
-                                            0 => {Core::Bip0340Verify},
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    }
-                                }
-                            },
-                            1 => {
-                                0 => {},
-                                1 => {
-                                    0 => {Core::ParseLock},
-                                    1 => {
-                                        0 => {
-                                            0 => {Core::ParseSequence},
-                                            1 => {Core::TapdataInit}
-                                        },
-                                        1 => {}
-                                    }
-                                }
-                            }
-                        },
-                        1 => {}
-                    },
-                    1 => {}
-                }
-            }
-        })
     }
 
     fn cost(&self) -> Cost {
@@ -7484,7 +5230,9 @@ pub(crate) fn c_jet_ptr(jet: &Core) -> fn(&mut CFrameItem, CFrameItem, &()) -> b
         Core::Sha256Ctx8Add512 => simplicity_sys::c_jets::jets_wrapper::sha_256_ctx_8_add_512,
         Core::Sha256Ctx8Add64 => simplicity_sys::c_jets::jets_wrapper::sha_256_ctx_8_add_64,
         Core::Sha256Ctx8Add8 => simplicity_sys::c_jets::jets_wrapper::sha_256_ctx_8_add_8,
-        Core::Sha256Ctx8AddBuffer511 => simplicity_sys::c_jets::jets_wrapper::sha_256_ctx_8_add_buffer_511,
+        Core::Sha256Ctx8AddBuffer511 => {
+            simplicity_sys::c_jets::jets_wrapper::sha_256_ctx_8_add_buffer_511
+        }
         Core::Sha256Ctx8Finalize => simplicity_sys::c_jets::jets_wrapper::sha_256_ctx_8_finalize,
         Core::Sha256Ctx8Init => simplicity_sys::c_jets::jets_wrapper::sha_256_ctx_8_init,
         Core::Sha256Iv => simplicity_sys::c_jets::jets_wrapper::sha_256_iv,
@@ -7511,4 +5259,2285 @@ pub(crate) fn c_jet_ptr(jet: &Core) -> fn(&mut CFrameItem, CFrameItem, &()) -> b
         Core::XorXor64 => simplicity_sys::c_jets::jets_wrapper::xor_xor_64,
         Core::XorXor8 => simplicity_sys::c_jets::jets_wrapper::xor_xor_8,
     }
+}
+
+pub(crate) fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Core, decode::Error> {
+    decode_bits!(bits, {
+        0 => {
+            0 => {Core::Verify},
+            1 => {
+                0 => {
+                    0 => {
+                        0 => {Core::Low1},
+                        1 => {
+                            0 => {
+                                0 => {},
+                                1 => {Core::Low8}
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {Core::Low16},
+                                            1 => {Core::Low32}
+                                        },
+                                        1 => {
+                                            0 => {Core::Low64},
+                                            1 => {}
+                                        }
+                                    },
+                                    1 => {}
+                                },
+                                1 => {}
+                            }
+                        }
+                    },
+                    1 => {
+                        0 => {Core::High1},
+                        1 => {
+                            0 => {
+                                0 => {},
+                                1 => {Core::High8}
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {Core::High16},
+                                            1 => {Core::High32}
+                                        },
+                                        1 => {
+                                            0 => {Core::High64},
+                                            1 => {}
+                                        }
+                                    },
+                                    1 => {}
+                                },
+                                1 => {}
+                            }
+                        }
+                    }
+                },
+                1 => {
+                    0 => {
+                        0 => {
+                            0 => {
+                                0 => {
+                                    0 => {Core::Complement1},
+                                    1 => {
+                                        0 => {
+                                            0 => {},
+                                            1 => {Core::Complement8}
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Core::Complement16},
+                                                        1 => {Core::Complement32}
+                                                    },
+                                                    1 => {
+                                                        0 => {Core::Complement64},
+                                                        1 => {}
+                                                    }
+                                                },
+                                                1 => {}
+                                            },
+                                            1 => {}
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {Core::And1},
+                                    1 => {
+                                        0 => {
+                                            0 => {},
+                                            1 => {Core::And8}
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Core::And16},
+                                                        1 => {Core::And32}
+                                                    },
+                                                    1 => {
+                                                        0 => {Core::And64},
+                                                        1 => {}
+                                                    }
+                                                },
+                                                1 => {}
+                                            },
+                                            1 => {}
+                                        }
+                                    }
+                                }
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {Core::Or1},
+                                    1 => {
+                                        0 => {
+                                            0 => {},
+                                            1 => {Core::Or8}
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Core::Or16},
+                                                        1 => {Core::Or32}
+                                                    },
+                                                    1 => {
+                                                        0 => {Core::Or64},
+                                                        1 => {}
+                                                    }
+                                                },
+                                                1 => {}
+                                            },
+                                            1 => {}
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {Core::Xor1},
+                                    1 => {
+                                        0 => {
+                                            0 => {},
+                                            1 => {Core::Xor8}
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Core::Xor16},
+                                                        1 => {Core::Xor32}
+                                                    },
+                                                    1 => {
+                                                        0 => {Core::Xor64},
+                                                        1 => {}
+                                                    }
+                                                },
+                                                1 => {}
+                                            },
+                                            1 => {}
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        1 => {
+                            0 => {
+                                0 => {
+                                    0 => {
+                                        0 => {Core::Maj1},
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {Core::Maj8}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Core::Maj16},
+                                                            1 => {Core::Maj32}
+                                                        },
+                                                        1 => {
+                                                            0 => {Core::Maj64},
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {Core::XorXor1},
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {Core::XorXor8}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Core::XorXor16},
+                                                            1 => {Core::XorXor32}
+                                                        },
+                                                        1 => {
+                                                            0 => {Core::XorXor64},
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {Core::Ch1},
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {Core::Ch8}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Core::Ch16},
+                                                            1 => {Core::Ch32}
+                                                        },
+                                                        1 => {
+                                                            0 => {Core::Ch64},
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {Core::Some1},
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {Core::Some8}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Core::Some16},
+                                                            1 => {Core::Some32}
+                                                        },
+                                                        1 => {
+                                                            0 => {Core::Some64},
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {},
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {Core::All8}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Core::All16},
+                                                            1 => {Core::All32}
+                                                        },
+                                                        1 => {
+                                                            0 => {Core::All64},
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {Core::Eq1},
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {Core::Eq8}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Core::Eq16},
+                                                            1 => {Core::Eq32}
+                                                        },
+                                                        1 => {
+                                                            0 => {Core::Eq64},
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Core::Eq256},
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Core::FullLeftShift8_1}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Core::FullLeftShift16_1},
+                                                                1 => {Core::FullLeftShift32_1}
+                                                            },
+                                                            1 => {
+                                                                0 => {Core::FullLeftShift64_1},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {Core::FullLeftShift8_2},
+                                                            1 => {Core::FullLeftShift16_2}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Core::FullLeftShift32_2},
+                                                                        1 => {Core::FullLeftShift64_2}
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {Core::FullLeftShift8_4},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {Core::FullLeftShift16_4},
+                                                            1 => {Core::FullLeftShift32_4}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Core::FullLeftShift64_4},
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Core::FullLeftShift16_8},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {Core::FullLeftShift32_8},
+                                                                        1 => {Core::FullLeftShift64_8}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {Core::FullLeftShift32_16},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {Core::FullLeftShift64_16},
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {Core::FullLeftShift64_32},
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Core::FullRightShift8_1}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Core::FullRightShift16_1},
+                                                                1 => {Core::FullRightShift32_1}
+                                                            },
+                                                            1 => {
+                                                                0 => {Core::FullRightShift64_1},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {Core::FullRightShift8_2},
+                                                            1 => {Core::FullRightShift16_2}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Core::FullRightShift32_2},
+                                                                        1 => {Core::FullRightShift64_2}
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {Core::FullRightShift8_4},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {Core::FullRightShift16_4},
+                                                            1 => {Core::FullRightShift32_4}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Core::FullRightShift64_4},
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Core::FullRightShift16_8},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {Core::FullRightShift32_8},
+                                                                        1 => {Core::FullRightShift64_8}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {Core::FullRightShift32_16},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {Core::FullRightShift64_16},
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {Core::FullRightShift64_32},
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    1 => {
+                        0 => {
+                            0 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Core::Leftmost8_1}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Core::Leftmost16_1},
+                                                                                1 => {Core::Leftmost32_1}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Core::Leftmost64_1},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Core::Leftmost8_2},
+                                                                            1 => {Core::Leftmost16_2}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::Leftmost32_2},
+                                                                                        1 => {Core::Leftmost64_2}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {Core::Leftmost8_4},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Core::Leftmost16_4},
+                                                                            1 => {Core::Leftmost32_4}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::Leftmost64_4},
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Core::Leftmost16_8},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::Leftmost32_8},
+                                                                                        1 => {Core::Leftmost64_8}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Core::Leftmost32_16},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::Leftmost64_16},
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Core::Leftmost64_32},
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Core::Rightmost8_1}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Core::Rightmost16_1},
+                                                                                1 => {Core::Rightmost32_1}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Core::Rightmost64_1},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Core::Rightmost8_2},
+                                                                            1 => {Core::Rightmost16_2}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::Rightmost32_2},
+                                                                                        1 => {Core::Rightmost64_2}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {Core::Rightmost8_4},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Core::Rightmost16_4},
+                                                                            1 => {Core::Rightmost32_4}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::Rightmost64_4},
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Core::Rightmost16_8},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::Rightmost32_8},
+                                                                                        1 => {Core::Rightmost64_8}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Core::Rightmost32_16},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::Rightmost64_16},
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Core::Rightmost64_32},
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Core::LeftPadLow1_8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Core::LeftPadLow1_16},
+                                                                                1 => {Core::LeftPadLow1_32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Core::LeftPadLow1_64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Core::LeftPadLow8_16},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::LeftPadLow8_32},
+                                                                                        1 => {Core::LeftPadLow8_64}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Core::LeftPadLow16_32},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::LeftPadLow16_64},
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Core::LeftPadLow32_64},
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Core::LeftPadHigh1_8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Core::LeftPadHigh1_16},
+                                                                                1 => {Core::LeftPadHigh1_32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Core::LeftPadHigh1_64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Core::LeftPadHigh8_16},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::LeftPadHigh8_32},
+                                                                                        1 => {Core::LeftPadHigh8_64}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Core::LeftPadHigh16_32},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::LeftPadHigh16_64},
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Core::LeftPadHigh32_64},
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Core::LeftExtend1_8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Core::LeftExtend1_16},
+                                                                                1 => {Core::LeftExtend1_32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Core::LeftExtend1_64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Core::LeftExtend8_16},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::LeftExtend8_32},
+                                                                                        1 => {Core::LeftExtend8_64}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Core::LeftExtend16_32},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::LeftExtend16_64},
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Core::LeftExtend32_64},
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Core::RightPadLow1_8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Core::RightPadLow1_16},
+                                                                                1 => {Core::RightPadLow1_32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Core::RightPadLow1_64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Core::RightPadLow8_16},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::RightPadLow8_32},
+                                                                                        1 => {Core::RightPadLow8_64}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Core::RightPadLow16_32},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::RightPadLow16_64},
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Core::RightPadLow32_64},
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Core::RightPadHigh1_8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Core::RightPadHigh1_16},
+                                                                                1 => {Core::RightPadHigh1_32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Core::RightPadHigh1_64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Core::RightPadHigh8_16},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::RightPadHigh8_32},
+                                                                                        1 => {Core::RightPadHigh8_64}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Core::RightPadHigh16_32},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::RightPadHigh16_64},
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Core::RightPadHigh32_64},
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {},
+                                                        1 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Core::RightExtend8_16},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::RightExtend8_32},
+                                                                                        1 => {Core::RightExtend8_64}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Core::RightExtend16_32},
+                                                                                1 => {
+                                                                                    0 => {
+                                                                                        0 => {Core::RightExtend16_64},
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Core::RightExtend32_64},
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {Core::LeftShiftWith8}
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Core::LeftShiftWith16},
+                                                                            1 => {Core::LeftShiftWith32}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Core::LeftShiftWith64},
+                                                                            1 => {}
+                                                                        }
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {},
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {Core::RightShiftWith8}
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Core::RightShiftWith16},
+                                                                            1 => {Core::RightShiftWith32}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Core::RightShiftWith64},
+                                                                            1 => {}
+                                                                        }
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {Core::LeftShift8}
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Core::LeftShift16},
+                                                                            1 => {Core::LeftShift32}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Core::LeftShift64},
+                                                                            1 => {}
+                                                                        }
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {},
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {Core::RightShift8}
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Core::RightShift16},
+                                                                            1 => {Core::RightShift32}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Core::RightShift64},
+                                                                            1 => {}
+                                                                        }
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {Core::LeftRotate8}
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Core::LeftRotate16},
+                                                                            1 => {Core::LeftRotate32}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Core::LeftRotate64},
+                                                                            1 => {}
+                                                                        }
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {},
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {Core::RightRotate8}
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Core::RightRotate16},
+                                                                            1 => {Core::RightRotate32}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Core::RightRotate64},
+                                                                            1 => {}
+                                                                        }
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    },
+                                    1 => {}
+                                },
+                                1 => {}
+                            },
+                            1 => {}
+                        },
+                        1 => {}
+                    }
+                }
+            }
+        },
+        1 => {
+            0 => {
+                0 => {
+                    0 => {
+                        0 => {},
+                        1 => {
+                            0 => {
+                                0 => {},
+                                1 => {Core::One8}
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {Core::One16},
+                                            1 => {Core::One32}
+                                        },
+                                        1 => {
+                                            0 => {Core::One64},
+                                            1 => {}
+                                        }
+                                    },
+                                    1 => {}
+                                },
+                                1 => {}
+                            }
+                        }
+                    },
+                    1 => {
+                        0 => {
+                            0 => {
+                                0 => {},
+                                1 => {
+                                    0 => {
+                                        0 => {},
+                                        1 => {Core::FullAdd8}
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {Core::FullAdd16},
+                                                    1 => {Core::FullAdd32}
+                                                },
+                                                1 => {
+                                                    0 => {Core::FullAdd64},
+                                                    1 => {}
+                                                }
+                                            },
+                                            1 => {}
+                                        },
+                                        1 => {}
+                                    }
+                                }
+                            },
+                            1 => {
+                                0 => {},
+                                1 => {
+                                    0 => {
+                                        0 => {},
+                                        1 => {Core::Add8}
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {Core::Add16},
+                                                    1 => {Core::Add32}
+                                                },
+                                                1 => {
+                                                    0 => {Core::Add64},
+                                                    1 => {}
+                                                }
+                                            },
+                                            1 => {}
+                                        },
+                                        1 => {}
+                                    }
+                                }
+                            }
+                        },
+                        1 => {
+                            0 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Core::FullIncrement8}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Core::FullIncrement16},
+                                                                1 => {Core::FullIncrement32}
+                                                            },
+                                                            1 => {
+                                                                0 => {Core::FullIncrement64},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Core::Increment8}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Core::Increment16},
+                                                                1 => {Core::Increment32}
+                                                            },
+                                                            1 => {
+                                                                0 => {Core::Increment64},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {},
+                                        1 => {
+                                            0 => {},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Core::FullSubtract8}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Core::FullSubtract16},
+                                                                1 => {Core::FullSubtract32}
+                                                            },
+                                                            1 => {
+                                                                0 => {Core::FullSubtract64},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Core::Subtract8}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Core::Subtract16},
+                                                                    1 => {Core::Subtract32}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Core::Subtract64},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Core::Negate8}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Core::Negate16},
+                                                                    1 => {Core::Negate32}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Core::Negate64},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Core::FullDecrement8}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Core::FullDecrement16},
+                                                                    1 => {Core::FullDecrement32}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Core::FullDecrement64},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Core::Decrement8}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Core::Decrement16},
+                                                                    1 => {Core::Decrement32}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Core::Decrement64},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Core::FullMultiply8}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Core::FullMultiply16},
+                                                                    1 => {Core::FullMultiply32}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Core::FullMultiply64},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Core::Multiply8}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Core::Multiply16},
+                                                                    1 => {Core::Multiply32}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Core::Multiply64},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Core::IsZero8}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Core::IsZero16},
+                                                                    1 => {Core::IsZero32}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Core::IsZero64},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Core::IsOne8}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Core::IsOne16},
+                                                                    1 => {Core::IsOne32}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Core::IsOne64},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Core::Le8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Core::Le16},
+                                                                                    1 => {Core::Le32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Core::Le64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Core::Lt8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Core::Lt16},
+                                                                                    1 => {Core::Lt32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Core::Lt64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Core::Min8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Core::Min16},
+                                                                                    1 => {Core::Min32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Core::Min64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Core::Max8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Core::Max16},
+                                                                                    1 => {Core::Max32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Core::Max64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Core::Median8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Core::Median16},
+                                                                                    1 => {Core::Median32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Core::Median64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {},
+                                                                                1 => {
+                                                                                    0 => {Core::DivMod128_64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Core::DivMod8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Core::DivMod16},
+                                                                                    1 => {Core::DivMod32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Core::DivMod64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Core::Divide8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Core::Divide16},
+                                                                                    1 => {Core::Divide32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Core::Divide64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Core::Modulo8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Core::Modulo16},
+                                                                                    1 => {Core::Modulo32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Core::Modulo64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Core::Divides8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Core::Divides16},
+                                                                                    1 => {Core::Divides32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Core::Divides64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            },
+                                            1 => {}
+                                        },
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                },
+                                1 => {}
+                            }
+                        }
+                    }
+                },
+                1 => {
+                    0 => {
+                        0 => {Core::Sha256Block},
+                        1 => {
+                            0 => {
+                                0 => {Core::Sha256Iv},
+                                1 => {
+                                    0 => {Core::Sha256Ctx8Add1},
+                                    1 => {
+                                        0 => {
+                                            0 => {Core::Sha256Ctx8Add2},
+                                            1 => {Core::Sha256Ctx8Add4}
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Core::Sha256Ctx8Add8},
+                                                        1 => {Core::Sha256Ctx8Add16}
+                                                    },
+                                                    1 => {
+                                                        0 => {Core::Sha256Ctx8Add32},
+                                                        1 => {Core::Sha256Ctx8Add64}
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Core::Sha256Ctx8Add128},
+                                                            1 => {Core::Sha256Ctx8Add256}
+                                                        },
+                                                        1 => {
+                                                            0 => {Core::Sha256Ctx8Add512},
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                }
+                                            },
+                                            1 => {}
+                                        }
+                                    }
+                                }
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {Core::Sha256Ctx8AddBuffer511},
+                                            1 => {Core::Sha256Ctx8Finalize}
+                                        },
+                                        1 => {
+                                            0 => {Core::Sha256Ctx8Init},
+                                            1 => {}
+                                        }
+                                    },
+                                    1 => {}
+                                },
+                                1 => {}
+                            }
+                        }
+                    },
+                    1 => {}
+                }
+            },
+            1 => {
+                0 => {
+                    0 => {
+                        0 => {
+                            0 => {
+                                0 => {
+                                    0 => {Core::PointVerify1},
+                                    1 => {}
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {Core::Decompress},
+                                        1 => {
+                                            0 => {Core::LinearVerify1},
+                                            1 => {}
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Core::LinearCombination1},
+                                                        1 => {}
+                                                    },
+                                                    1 => {Core::Scale}
+                                                },
+                                                1 => {
+                                                    0 => {Core::Generate},
+                                                    1 => {Core::GejInfinity}
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Core::GejNormalize},
+                                                        1 => {Core::GejNegate}
+                                                    },
+                                                    1 => {
+                                                        0 => {Core::GeNegate},
+                                                        1 => {Core::GejDouble}
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {Core::GejAdd},
+                                                        1 => {Core::GejGeAddEx}
+                                                    },
+                                                    1 => {
+                                                        0 => {Core::GejGeAdd},
+                                                        1 => {Core::GejRescale}
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Core::GejIsInfinity},
+                                                                        1 => {Core::GejEquiv}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Core::GejGeEquiv},
+                                                                        1 => {Core::GejXEquiv}
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {Core::GejYIsOdd},
+                                                                        1 => {Core::GejIsOnCurve}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Core::GeIsOnCurve},
+                                                                        1 => {Core::ScalarNormalize}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Core::ScalarNegate},
+                                                                        1 => {Core::ScalarAdd}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Core::ScalarSquare},
+                                                                        1 => {Core::ScalarMultiply}
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {Core::ScalarMultiplyLambda},
+                                                                        1 => {Core::ScalarInvert}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Core::ScalarIsZero},
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {
+                                                                            0 => {},
+                                                                            1 => {Core::FeNormalize}
+                                                                        }
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Core::FeNegate},
+                                                                            1 => {Core::FeAdd}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Core::FeSquare},
+                                                                            1 => {Core::FeMultiply}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Core::FeMultiplyBeta},
+                                                                            1 => {Core::FeInvert}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Core::FeSquareRoot},
+                                                                            1 => {Core::FeIsZero}
+                                                                        }
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Core::FeIsOdd},
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Core::HashToCurve},
+                                                                            1 => {Core::Swu}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            },
+                                            1 => {}
+                                        }
+                                    }
+                                }
+                            },
+                            1 => {
+                                0 => {Core::CheckSigVerify},
+                                1 => {
+                                    0 => {
+                                        0 => {Core::Bip0340Verify},
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                }
+                            }
+                        },
+                        1 => {
+                            0 => {},
+                            1 => {
+                                0 => {Core::ParseLock},
+                                1 => {
+                                    0 => {
+                                        0 => {Core::ParseSequence},
+                                        1 => {Core::TapdataInit}
+                                    },
+                                    1 => {}
+                                }
+                            }
+                        }
+                    },
+                    1 => {}
+                },
+                1 => {}
+            }
+        }
+    })
 }

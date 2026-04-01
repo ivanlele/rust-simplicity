@@ -1,11 +1,11 @@
 /* This file has been automatically generated. */
 
+use crate::analysis::Cost;
+use crate::decode_bits;
 use crate::jet::type_name::TypeName;
 use crate::jet::Jet;
 use crate::merkle::cmr::Cmr;
-use crate::decode_bits;
 use crate::{decode, BitIter, BitWriter};
-use crate::analysis::Cost;
 use hashes::sha256::Midstate;
 use simplicity_sys::CFrameItem;
 use std::io::Write;
@@ -879,7 +879,6 @@ impl Bitcoin {
 }
 
 impl Jet for Bitcoin {
-
     fn cmr(&self) -> Cmr {
         unimplemented!("Bitcoin jet CMRs weights have not yet been implemented.")
     }
@@ -1334,7 +1333,9 @@ impl Jet for Bitcoin {
             Bitcoin::And32 => b"i",
             Bitcoin::And64 => b"l",
             Bitcoin::And8 => b"***22*22**22*22",
-            Bitcoin::AnnexHash => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
+            Bitcoin::AnnexHash => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
             Bitcoin::Bip0340Verify => b"1",
             Bitcoin::BuildTapbranch => b"h",
             Bitcoin::BuildTapleafSimplicity => b"h",
@@ -1620,7 +1621,9 @@ impl Jet for Bitcoin {
             Bitcoin::Or32 => b"i",
             Bitcoin::Or64 => b"l",
             Bitcoin::Or8 => b"***22*22**22*22",
-            Bitcoin::OutpointHash => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
+            Bitcoin::OutpointHash => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
             Bitcoin::OutputHash => b"+1h",
             Bitcoin::OutputScriptHash => b"+1h",
             Bitcoin::OutputScriptsHash => b"h",
@@ -1628,7 +1631,9 @@ impl Jet for Bitcoin {
             Bitcoin::OutputValuesHash => b"h",
             Bitcoin::OutputsHash => b"h",
             Bitcoin::ParseLock => b"+ii",
-            Bitcoin::ParseSequence => b"+1+****22*22**22*22***22*22**22*22****22*22**22*22***22*22**22*22",
+            Bitcoin::ParseSequence => {
+                b"+1+****22*22**22*22***22*22**22*22****22*22**22*22***22*22**22*22"
+            }
             Bitcoin::PointVerify1 => b"1",
             Bitcoin::RightExtend16_32 => b"i",
             Bitcoin::RightExtend16_64 => b"l",
@@ -1697,19 +1702,43 @@ impl Jet for Bitcoin {
             Bitcoin::Scale => b"**hhh",
             Bitcoin::ScriptCMR => b"h",
             Bitcoin::Sha256Block => b"h",
-            Bitcoin::Sha256Ctx8Add1 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Bitcoin::Sha256Ctx8Add128 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Bitcoin::Sha256Ctx8Add16 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Bitcoin::Sha256Ctx8Add2 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Bitcoin::Sha256Ctx8Add256 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Bitcoin::Sha256Ctx8Add32 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Bitcoin::Sha256Ctx8Add4 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Bitcoin::Sha256Ctx8Add512 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Bitcoin::Sha256Ctx8Add64 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Bitcoin::Sha256Ctx8Add8 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
-            Bitcoin::Sha256Ctx8AddBuffer511 => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
+            Bitcoin::Sha256Ctx8Add1 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Bitcoin::Sha256Ctx8Add128 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Bitcoin::Sha256Ctx8Add16 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Bitcoin::Sha256Ctx8Add2 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Bitcoin::Sha256Ctx8Add256 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Bitcoin::Sha256Ctx8Add32 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Bitcoin::Sha256Ctx8Add4 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Bitcoin::Sha256Ctx8Add512 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Bitcoin::Sha256Ctx8Add64 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Bitcoin::Sha256Ctx8Add8 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
+            Bitcoin::Sha256Ctx8AddBuffer511 => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
             Bitcoin::Sha256Ctx8Finalize => b"h",
-            Bitcoin::Sha256Ctx8Init => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
+            Bitcoin::Sha256Ctx8Init => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
             Bitcoin::Sha256Iv => b"h",
             Bitcoin::SigAllHash => b"h",
             Bitcoin::Some1 => b"2",
@@ -1723,7 +1752,9 @@ impl Jet for Bitcoin {
             Bitcoin::Subtract8 => b"*2***22*22**22*22",
             Bitcoin::Swu => b"*hh",
             Bitcoin::TapEnvHash => b"h",
-            Bitcoin::TapdataInit => b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh",
+            Bitcoin::TapdataInit => {
+                b"**+1h*+1*ll*+1l*+1i*+1****22*22**22*22***22*22**22*22+1***22*22**22*22*lh"
+            }
             Bitcoin::TapleafHash => b"h",
             Bitcoin::TapleafVersion => b"***22*22**22*22",
             Bitcoin::Tappath => b"+1h",
@@ -1754,7 +1785,7 @@ impl Jet for Bitcoin {
         TypeName(name)
     }
 
-    fn encode<W: Write>(&self, w: &mut BitWriter<W>) -> std::io::Result<usize> {
+    fn encode(&self, w: &mut BitWriter<&mut dyn Write>) -> std::io::Result<usize> {
         let (n, len) = match self {
             Bitcoin::Verify => (0, 3),
             Bitcoin::Low1 => (8, 6),
@@ -2187,2515 +2218,6 @@ impl Jet for Bitcoin {
         };
 
         w.write_bits_be(n, len)
-    }
-
-    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error> {
-        decode_bits!(bits, {
-            0 => {
-                0 => {
-                    0 => {Bitcoin::Verify},
-                    1 => {
-                        0 => {
-                            0 => {
-                                0 => {Bitcoin::Low1},
-                                1 => {
-                                    0 => {
-                                        0 => {},
-                                        1 => {Bitcoin::Low8}
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {Bitcoin::Low16},
-                                                    1 => {Bitcoin::Low32}
-                                                },
-                                                1 => {
-                                                    0 => {Bitcoin::Low64},
-                                                    1 => {}
-                                                }
-                                            },
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    }
-                                }
-                            },
-                            1 => {
-                                0 => {Bitcoin::High1},
-                                1 => {
-                                    0 => {
-                                        0 => {},
-                                        1 => {Bitcoin::High8}
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {Bitcoin::High16},
-                                                    1 => {Bitcoin::High32}
-                                                },
-                                                1 => {
-                                                    0 => {Bitcoin::High64},
-                                                    1 => {}
-                                                }
-                                            },
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    }
-                                }
-                            }
-                        },
-                        1 => {
-                            0 => {
-                                0 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {Bitcoin::Complement1},
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {Bitcoin::Complement8}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Bitcoin::Complement16},
-                                                                1 => {Bitcoin::Complement32}
-                                                            },
-                                                            1 => {
-                                                                0 => {Bitcoin::Complement64},
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {Bitcoin::And1},
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {Bitcoin::And8}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Bitcoin::And16},
-                                                                1 => {Bitcoin::And32}
-                                                            },
-                                                            1 => {
-                                                                0 => {Bitcoin::And64},
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {Bitcoin::Or1},
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {Bitcoin::Or8}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Bitcoin::Or16},
-                                                                1 => {Bitcoin::Or32}
-                                                            },
-                                                            1 => {
-                                                                0 => {Bitcoin::Or64},
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {Bitcoin::Xor1},
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {Bitcoin::Xor8}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Bitcoin::Xor16},
-                                                                1 => {Bitcoin::Xor32}
-                                                            },
-                                                            1 => {
-                                                                0 => {Bitcoin::Xor64},
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {Bitcoin::Maj1},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Bitcoin::Maj8}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Bitcoin::Maj16},
-                                                                    1 => {Bitcoin::Maj32}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Bitcoin::Maj64},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {Bitcoin::XorXor1},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Bitcoin::XorXor8}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Bitcoin::XorXor16},
-                                                                    1 => {Bitcoin::XorXor32}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Bitcoin::XorXor64},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {Bitcoin::Ch1},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Bitcoin::Ch8}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Bitcoin::Ch16},
-                                                                    1 => {Bitcoin::Ch32}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Bitcoin::Ch64},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {Bitcoin::Some1},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Bitcoin::Some8}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Bitcoin::Some16},
-                                                                    1 => {Bitcoin::Some32}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Bitcoin::Some64},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Bitcoin::All8}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Bitcoin::All16},
-                                                                    1 => {Bitcoin::All32}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Bitcoin::All64},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {Bitcoin::Eq1},
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {Bitcoin::Eq8}
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Bitcoin::Eq16},
-                                                                    1 => {Bitcoin::Eq32}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Bitcoin::Eq64},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Bitcoin::Eq256},
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Bitcoin::FullLeftShift8_1}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Bitcoin::FullLeftShift16_1},
-                                                                        1 => {Bitcoin::FullLeftShift32_1}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Bitcoin::FullLeftShift64_1},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {Bitcoin::FullLeftShift8_2},
-                                                                    1 => {Bitcoin::FullLeftShift16_2}
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Bitcoin::FullLeftShift32_2},
-                                                                                1 => {Bitcoin::FullLeftShift64_2}
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {Bitcoin::FullLeftShift8_4},
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {Bitcoin::FullLeftShift16_4},
-                                                                    1 => {Bitcoin::FullLeftShift32_4}
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Bitcoin::FullLeftShift64_4},
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Bitcoin::FullLeftShift16_8},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Bitcoin::FullLeftShift32_8},
-                                                                                1 => {Bitcoin::FullLeftShift64_8}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Bitcoin::FullLeftShift32_16},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Bitcoin::FullLeftShift64_16},
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {Bitcoin::FullLeftShift64_32},
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Bitcoin::FullRightShift8_1}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Bitcoin::FullRightShift16_1},
-                                                                        1 => {Bitcoin::FullRightShift32_1}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Bitcoin::FullRightShift64_1},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {Bitcoin::FullRightShift8_2},
-                                                                    1 => {Bitcoin::FullRightShift16_2}
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Bitcoin::FullRightShift32_2},
-                                                                                1 => {Bitcoin::FullRightShift64_2}
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {Bitcoin::FullRightShift8_4},
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {Bitcoin::FullRightShift16_4},
-                                                                    1 => {Bitcoin::FullRightShift32_4}
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Bitcoin::FullRightShift64_4},
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Bitcoin::FullRightShift16_8},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Bitcoin::FullRightShift32_8},
-                                                                                1 => {Bitcoin::FullRightShift64_8}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Bitcoin::FullRightShift32_16},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Bitcoin::FullRightShift64_16},
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {Bitcoin::FullRightShift64_32},
-                                                                        1 => {}
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            1 => {
-                                0 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Bitcoin::Leftmost8_1}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::Leftmost16_1},
-                                                                                        1 => {Bitcoin::Leftmost32_1}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Bitcoin::Leftmost64_1},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Bitcoin::Leftmost8_2},
-                                                                                    1 => {Bitcoin::Leftmost16_2}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::Leftmost32_2},
-                                                                                                1 => {Bitcoin::Leftmost64_2}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            }
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Bitcoin::Leftmost8_4},
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Bitcoin::Leftmost16_4},
-                                                                                    1 => {Bitcoin::Leftmost32_4}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::Leftmost64_4},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::Leftmost16_8},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::Leftmost32_8},
-                                                                                                1 => {Bitcoin::Leftmost64_8}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Bitcoin::Leftmost32_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::Leftmost64_16},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::Leftmost64_32},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Bitcoin::Rightmost8_1}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::Rightmost16_1},
-                                                                                        1 => {Bitcoin::Rightmost32_1}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Bitcoin::Rightmost64_1},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Bitcoin::Rightmost8_2},
-                                                                                    1 => {Bitcoin::Rightmost16_2}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::Rightmost32_2},
-                                                                                                1 => {Bitcoin::Rightmost64_2}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            }
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Bitcoin::Rightmost8_4},
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Bitcoin::Rightmost16_4},
-                                                                                    1 => {Bitcoin::Rightmost32_4}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::Rightmost64_4},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        },
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::Rightmost16_8},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::Rightmost32_8},
-                                                                                                1 => {Bitcoin::Rightmost64_8}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Bitcoin::Rightmost32_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::Rightmost64_16},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::Rightmost64_32},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Bitcoin::LeftPadLow1_8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::LeftPadLow1_16},
-                                                                                        1 => {Bitcoin::LeftPadLow1_32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Bitcoin::LeftPadLow1_64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::LeftPadLow8_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::LeftPadLow8_32},
-                                                                                                1 => {Bitcoin::LeftPadLow8_64}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Bitcoin::LeftPadLow16_32},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::LeftPadLow16_64},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::LeftPadLow32_64},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Bitcoin::LeftPadHigh1_8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::LeftPadHigh1_16},
-                                                                                        1 => {Bitcoin::LeftPadHigh1_32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Bitcoin::LeftPadHigh1_64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::LeftPadHigh8_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::LeftPadHigh8_32},
-                                                                                                1 => {Bitcoin::LeftPadHigh8_64}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Bitcoin::LeftPadHigh16_32},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::LeftPadHigh16_64},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::LeftPadHigh32_64},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Bitcoin::LeftExtend1_8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::LeftExtend1_16},
-                                                                                        1 => {Bitcoin::LeftExtend1_32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Bitcoin::LeftExtend1_64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::LeftExtend8_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::LeftExtend8_32},
-                                                                                                1 => {Bitcoin::LeftExtend8_64}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Bitcoin::LeftExtend16_32},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::LeftExtend16_64},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::LeftExtend32_64},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Bitcoin::RightPadLow1_8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::RightPadLow1_16},
-                                                                                        1 => {Bitcoin::RightPadLow1_32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Bitcoin::RightPadLow1_64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::RightPadLow8_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::RightPadLow8_32},
-                                                                                                1 => {Bitcoin::RightPadLow8_64}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Bitcoin::RightPadLow16_32},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::RightPadLow16_64},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::RightPadLow32_64},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {},
-                                                                            1 => {Bitcoin::RightPadHigh1_8}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::RightPadHigh1_16},
-                                                                                        1 => {Bitcoin::RightPadHigh1_32}
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Bitcoin::RightPadHigh1_64},
-                                                                                        1 => {}
-                                                                                    }
-                                                                                },
-                                                                                1 => {}
-                                                                            },
-                                                                            1 => {}
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::RightPadHigh8_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::RightPadHigh8_32},
-                                                                                                1 => {Bitcoin::RightPadHigh8_64}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Bitcoin::RightPadHigh16_32},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::RightPadHigh16_64},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::RightPadHigh32_64},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {},
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::RightExtend8_16},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::RightExtend8_32},
-                                                                                                1 => {Bitcoin::RightExtend8_64}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {
-                                                                                        0 => {Bitcoin::RightExtend16_32},
-                                                                                        1 => {
-                                                                                            0 => {
-                                                                                                0 => {Bitcoin::RightExtend16_64},
-                                                                                                1 => {}
-                                                                                            },
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    }
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {
-                                                                                        0 => {Bitcoin::RightExtend32_64},
-                                                                                        1 => {}
-                                                                                    },
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Bitcoin::LeftShiftWith8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Bitcoin::LeftShiftWith16},
-                                                                                    1 => {Bitcoin::LeftShiftWith32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Bitcoin::LeftShiftWith64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Bitcoin::RightShiftWith8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Bitcoin::RightShiftWith16},
-                                                                                    1 => {Bitcoin::RightShiftWith32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Bitcoin::RightShiftWith64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Bitcoin::LeftShift8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Bitcoin::LeftShift16},
-                                                                                    1 => {Bitcoin::LeftShift32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Bitcoin::LeftShift64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Bitcoin::RightShift8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Bitcoin::RightShift16},
-                                                                                    1 => {Bitcoin::RightShift32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Bitcoin::RightShift64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Bitcoin::LeftRotate8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Bitcoin::LeftRotate16},
-                                                                                    1 => {Bitcoin::LeftRotate32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Bitcoin::LeftRotate64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {},
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {Bitcoin::RightRotate8}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Bitcoin::RightRotate16},
-                                                                                    1 => {Bitcoin::RightRotate32}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Bitcoin::RightRotate64},
-                                                                                    1 => {}
-                                                                                }
-                                                                            },
-                                                                            1 => {}
-                                                                        },
-                                                                        1 => {}
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {}
-                                                    }
-                                                }
-                                            },
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    },
-                                    1 => {}
-                                },
-                                1 => {}
-                            }
-                        }
-                    }
-                },
-                1 => {
-                    0 => {
-                        0 => {
-                            0 => {
-                                0 => {},
-                                1 => {
-                                    0 => {
-                                        0 => {},
-                                        1 => {Bitcoin::One8}
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {Bitcoin::One16},
-                                                    1 => {Bitcoin::One32}
-                                                },
-                                                1 => {
-                                                    0 => {Bitcoin::One64},
-                                                    1 => {}
-                                                }
-                                            },
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    }
-                                }
-                            },
-                            1 => {
-                                0 => {
-                                    0 => {
-                                        0 => {},
-                                        1 => {
-                                            0 => {
-                                                0 => {},
-                                                1 => {Bitcoin::FullAdd8}
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Bitcoin::FullAdd16},
-                                                            1 => {Bitcoin::FullAdd32}
-                                                        },
-                                                        1 => {
-                                                            0 => {Bitcoin::FullAdd64},
-                                                            1 => {}
-                                                        }
-                                                    },
-                                                    1 => {}
-                                                },
-                                                1 => {}
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {},
-                                        1 => {
-                                            0 => {
-                                                0 => {},
-                                                1 => {Bitcoin::Add8}
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Bitcoin::Add16},
-                                                            1 => {Bitcoin::Add32}
-                                                        },
-                                                        1 => {
-                                                            0 => {Bitcoin::Add64},
-                                                            1 => {}
-                                                        }
-                                                    },
-                                                    1 => {}
-                                                },
-                                                1 => {}
-                                            }
-                                        }
-                                    }
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Bitcoin::FullIncrement8}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Bitcoin::FullIncrement16},
-                                                                        1 => {Bitcoin::FullIncrement32}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Bitcoin::FullIncrement64},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Bitcoin::Increment8}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Bitcoin::Increment16},
-                                                                        1 => {Bitcoin::Increment32}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Bitcoin::Increment64},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {},
-                                                1 => {
-                                                    0 => {},
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {},
-                                                            1 => {Bitcoin::FullSubtract8}
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {Bitcoin::FullSubtract16},
-                                                                        1 => {Bitcoin::FullSubtract32}
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {Bitcoin::FullSubtract64},
-                                                                        1 => {}
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Bitcoin::Subtract8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Bitcoin::Subtract16},
-                                                                            1 => {Bitcoin::Subtract32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Bitcoin::Subtract64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Bitcoin::Negate8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Bitcoin::Negate16},
-                                                                            1 => {Bitcoin::Negate32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Bitcoin::Negate64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Bitcoin::FullDecrement8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Bitcoin::FullDecrement16},
-                                                                            1 => {Bitcoin::FullDecrement32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Bitcoin::FullDecrement64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Bitcoin::Decrement8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Bitcoin::Decrement16},
-                                                                            1 => {Bitcoin::Decrement32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Bitcoin::Decrement64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Bitcoin::FullMultiply8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Bitcoin::FullMultiply16},
-                                                                            1 => {Bitcoin::FullMultiply32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Bitcoin::FullMultiply64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Bitcoin::Multiply8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Bitcoin::Multiply16},
-                                                                            1 => {Bitcoin::Multiply32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Bitcoin::Multiply64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Bitcoin::IsZero8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Bitcoin::IsZero16},
-                                                                            1 => {Bitcoin::IsZero32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Bitcoin::IsZero64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {},
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {},
-                                                                1 => {Bitcoin::IsOne8}
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {Bitcoin::IsOne16},
-                                                                            1 => {Bitcoin::IsOne32}
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {Bitcoin::IsOne64},
-                                                                            1 => {}
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                },
-                                                                1 => {}
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Bitcoin::Le8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Bitcoin::Le16},
-                                                                                            1 => {Bitcoin::Le32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Bitcoin::Le64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Bitcoin::Lt8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Bitcoin::Lt16},
-                                                                                            1 => {Bitcoin::Lt32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Bitcoin::Lt64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Bitcoin::Min8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Bitcoin::Min16},
-                                                                                            1 => {Bitcoin::Min32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Bitcoin::Min64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Bitcoin::Max8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Bitcoin::Max16},
-                                                                                            1 => {Bitcoin::Max32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Bitcoin::Max64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Bitcoin::Median8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Bitcoin::Median16},
-                                                                                            1 => {Bitcoin::Median32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Bitcoin::Median64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {},
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {},
-                                                                                        1 => {
-                                                                                            0 => {Bitcoin::DivMod128_64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Bitcoin::DivMod8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Bitcoin::DivMod16},
-                                                                                            1 => {Bitcoin::DivMod32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Bitcoin::DivMod64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Bitcoin::Divide8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Bitcoin::Divide16},
-                                                                                            1 => {Bitcoin::Divide32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Bitcoin::Divide64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Bitcoin::Modulo8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Bitcoin::Modulo16},
-                                                                                            1 => {Bitcoin::Modulo32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Bitcoin::Modulo64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {},
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {Bitcoin::Divides8}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {
-                                                                                        0 => {
-                                                                                            0 => {Bitcoin::Divides16},
-                                                                                            1 => {Bitcoin::Divides32}
-                                                                                        },
-                                                                                        1 => {
-                                                                                            0 => {Bitcoin::Divides64},
-                                                                                            1 => {}
-                                                                                        }
-                                                                                    },
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {}
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    },
-                                                    1 => {}
-                                                },
-                                                1 => {}
-                                            },
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    }
-                                }
-                            }
-                        },
-                        1 => {
-                            0 => {
-                                0 => {Bitcoin::Sha256Block},
-                                1 => {
-                                    0 => {
-                                        0 => {Bitcoin::Sha256Iv},
-                                        1 => {
-                                            0 => {Bitcoin::Sha256Ctx8Add1},
-                                            1 => {
-                                                0 => {
-                                                    0 => {Bitcoin::Sha256Ctx8Add2},
-                                                    1 => {Bitcoin::Sha256Ctx8Add4}
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Bitcoin::Sha256Ctx8Add8},
-                                                                1 => {Bitcoin::Sha256Ctx8Add16}
-                                                            },
-                                                            1 => {
-                                                                0 => {Bitcoin::Sha256Ctx8Add32},
-                                                                1 => {Bitcoin::Sha256Ctx8Add64}
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Bitcoin::Sha256Ctx8Add128},
-                                                                    1 => {Bitcoin::Sha256Ctx8Add256}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Bitcoin::Sha256Ctx8Add512},
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {Bitcoin::Sha256Ctx8AddBuffer511},
-                                                    1 => {Bitcoin::Sha256Ctx8Finalize}
-                                                },
-                                                1 => {
-                                                    0 => {Bitcoin::Sha256Ctx8Init},
-                                                    1 => {}
-                                                }
-                                            },
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    }
-                                }
-                            },
-                            1 => {}
-                        }
-                    },
-                    1 => {
-                        0 => {
-                            0 => {
-                                0 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {Bitcoin::PointVerify1},
-                                            1 => {}
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {Bitcoin::Decompress},
-                                                1 => {
-                                                    0 => {Bitcoin::LinearVerify1},
-                                                    1 => {}
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Bitcoin::LinearCombination1},
-                                                                1 => {}
-                                                            },
-                                                            1 => {Bitcoin::Scale}
-                                                        },
-                                                        1 => {
-                                                            0 => {Bitcoin::Generate},
-                                                            1 => {Bitcoin::GejInfinity}
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {Bitcoin::GejNormalize},
-                                                                1 => {Bitcoin::GejNegate}
-                                                            },
-                                                            1 => {
-                                                                0 => {Bitcoin::GeNegate},
-                                                                1 => {Bitcoin::GejDouble}
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {Bitcoin::GejAdd},
-                                                                1 => {Bitcoin::GejGeAddEx}
-                                                            },
-                                                            1 => {
-                                                                0 => {Bitcoin::GejGeAdd},
-                                                                1 => {Bitcoin::GejRescale}
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Bitcoin::GejIsInfinity},
-                                                                                1 => {Bitcoin::GejEquiv}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Bitcoin::GejGeEquiv},
-                                                                                1 => {Bitcoin::GejXEquiv}
-                                                                            }
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Bitcoin::GejYIsOdd},
-                                                                                1 => {Bitcoin::GejIsOnCurve}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Bitcoin::GeIsOnCurve},
-                                                                                1 => {Bitcoin::ScalarNormalize}
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {Bitcoin::ScalarNegate},
-                                                                                1 => {Bitcoin::ScalarAdd}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Bitcoin::ScalarSquare},
-                                                                                1 => {Bitcoin::ScalarMultiply}
-                                                                            }
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {Bitcoin::ScalarMultiplyLambda},
-                                                                                1 => {Bitcoin::ScalarInvert}
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {Bitcoin::ScalarIsZero},
-                                                                                1 => {}
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                },
-                                                                1 => {
-                                                                    0 => {
-                                                                        0 => {
-                                                                            0 => {
-                                                                                0 => {},
-                                                                                1 => {
-                                                                                    0 => {},
-                                                                                    1 => {Bitcoin::FeNormalize}
-                                                                                }
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Bitcoin::FeNegate},
-                                                                                    1 => {Bitcoin::FeAdd}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Bitcoin::FeSquare},
-                                                                                    1 => {Bitcoin::FeMultiply}
-                                                                                }
-                                                                            }
-                                                                        },
-                                                                        1 => {
-                                                                            0 => {
-                                                                                0 => {
-                                                                                    0 => {Bitcoin::FeMultiplyBeta},
-                                                                                    1 => {Bitcoin::FeInvert}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Bitcoin::FeSquareRoot},
-                                                                                    1 => {Bitcoin::FeIsZero}
-                                                                                }
-                                                                            },
-                                                                            1 => {
-                                                                                0 => {
-                                                                                    0 => {Bitcoin::FeIsOdd},
-                                                                                    1 => {}
-                                                                                },
-                                                                                1 => {
-                                                                                    0 => {Bitcoin::HashToCurve},
-                                                                                    1 => {Bitcoin::Swu}
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    1 => {}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {Bitcoin::CheckSigVerify},
-                                        1 => {
-                                            0 => {
-                                                0 => {Bitcoin::Bip0340Verify},
-                                                1 => {}
-                                            },
-                                            1 => {}
-                                        }
-                                    }
-                                },
-                                1 => {
-                                    0 => {},
-                                    1 => {
-                                        0 => {Bitcoin::ParseLock},
-                                        1 => {
-                                            0 => {
-                                                0 => {Bitcoin::ParseSequence},
-                                                1 => {Bitcoin::TapdataInit}
-                                            },
-                                            1 => {}
-                                        }
-                                    }
-                                }
-                            },
-                            1 => {}
-                        },
-                        1 => {}
-                    }
-                }
-            },
-            1 => {
-                0 => {
-                    0 => {Bitcoin::SigAllHash},
-                    1 => {
-                        0 => {
-                            0 => {Bitcoin::TxHash},
-                            1 => {Bitcoin::TapEnvHash}
-                        },
-                        1 => {
-                            0 => {
-                                0 => {
-                                    0 => {
-                                        0 => {Bitcoin::OutputsHash},
-                                        1 => {Bitcoin::InputsHash}
-                                    },
-                                    1 => {
-                                        0 => {Bitcoin::InputUtxosHash},
-                                        1 => {Bitcoin::OutputHash}
-                                    }
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {Bitcoin::OutputValuesHash},
-                                            1 => {Bitcoin::OutputScriptsHash}
-                                        },
-                                        1 => {
-                                            0 => {Bitcoin::InputHash},
-                                            1 => {Bitcoin::InputOutpointsHash}
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {Bitcoin::InputSequencesHash},
-                                            1 => {Bitcoin::InputAnnexesHash}
-                                        },
-                                        1 => {
-                                            0 => {Bitcoin::InputScriptSigsHash},
-                                            1 => {Bitcoin::InputUtxoHash}
-                                        }
-                                    }
-                                }
-                            },
-                            1 => {
-                                0 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Bitcoin::InputValuesHash},
-                                                            1 => {Bitcoin::InputScriptsHash}
-                                                        },
-                                                        1 => {
-                                                            0 => {Bitcoin::TapleafHash},
-                                                            1 => {Bitcoin::TappathHash}
-                                                        }
-                                                    },
-                                                    1 => {
-                                                        0 => {
-                                                            0 => {Bitcoin::OutpointHash},
-                                                            1 => {Bitcoin::AnnexHash}
-                                                        },
-                                                        1 => {
-                                                            0 => {Bitcoin::BuildTapleafSimplicity},
-                                                            1 => {Bitcoin::BuildTapbranch}
-                                                        }
-                                                    }
-                                                },
-                                                1 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {Bitcoin::BuildTaptweak},
-                                                            1 => {}
-                                                        },
-                                                        1 => {}
-                                                    },
-                                                    1 => {}
-                                                }
-                                            },
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    },
-                                    1 => {}
-                                },
-                                1 => {}
-                            }
-                        }
-                    }
-                },
-                1 => {
-                    0 => {
-                        0 => {
-                            0 => {Bitcoin::CheckLockHeight},
-                            1 => {
-                                0 => {
-                                    0 => {Bitcoin::CheckLockTime},
-                                    1 => {Bitcoin::CheckLockDistance}
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {Bitcoin::CheckLockDuration},
-                                                1 => {Bitcoin::TxLockHeight}
-                                            },
-                                            1 => {
-                                                0 => {Bitcoin::TxLockTime},
-                                                1 => {Bitcoin::TxLockDistance}
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {Bitcoin::TxLockDuration},
-                                                    1 => {Bitcoin::TxIsFinal}
-                                                },
-                                                1 => {}
-                                            },
-                                            1 => {}
-                                        }
-                                    },
-                                    1 => {}
-                                }
-                            }
-                        },
-                        1 => {
-                            0 => {Bitcoin::ScriptCMR},
-                            1 => {
-                                0 => {
-                                    0 => {Bitcoin::InternalKey},
-                                    1 => {Bitcoin::CurrentIndex}
-                                },
-                                1 => {
-                                    0 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {Bitcoin::NumInputs},
-                                                1 => {Bitcoin::NumOutputs}
-                                            },
-                                            1 => {
-                                                0 => {Bitcoin::LockTime},
-                                                1 => {Bitcoin::Fee}
-                                            }
-                                        },
-                                        1 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {Bitcoin::OutputValue},
-                                                    1 => {Bitcoin::OutputScriptHash}
-                                                },
-                                                1 => {
-                                                    0 => {Bitcoin::TotalOutputValue},
-                                                    1 => {Bitcoin::CurrentPrevOutpoint}
-                                                }
-                                            },
-                                            1 => {
-                                                0 => {
-                                                    0 => {Bitcoin::CurrentValue},
-                                                    1 => {Bitcoin::CurrentScriptHash}
-                                                },
-                                                1 => {
-                                                    0 => {Bitcoin::CurrentSequence},
-                                                    1 => {Bitcoin::CurrentAnnexHash}
-                                                }
-                                            }
-                                        }
-                                    },
-                                    1 => {
-                                        0 => {
-                                            0 => {
-                                                0 => {
-                                                    0 => {
-                                                        0 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Bitcoin::CurrentScriptSigHash},
-                                                                    1 => {Bitcoin::InputPrevOutpoint}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Bitcoin::InputValue},
-                                                                    1 => {Bitcoin::InputScriptHash}
-                                                                }
-                                                            },
-                                                            1 => {
-                                                                0 => {
-                                                                    0 => {Bitcoin::InputSequence},
-                                                                    1 => {Bitcoin::InputAnnexHash}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Bitcoin::InputScriptSigHash},
-                                                                    1 => {Bitcoin::TotalInputValue}
-                                                                }
-                                                            }
-                                                        },
-                                                        1 => {
-                                                            0 => {
-                                                                0 => {
-                                                                    0 => {Bitcoin::TapleafVersion},
-                                                                    1 => {Bitcoin::Tappath}
-                                                                },
-                                                                1 => {
-                                                                    0 => {Bitcoin::Version},
-                                                                    1 => {Bitcoin::TransactionId}
-                                                                }
-                                                            },
-                                                            1 => {}
-                                                        }
-                                                    },
-                                                    1 => {}
-                                                },
-                                                1 => {}
-                                            },
-                                            1 => {}
-                                        },
-                                        1 => {}
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    1 => {}
-                }
-            }
-        })
     }
 
     fn cost(&self) -> Cost {
@@ -5577,5 +3099,2516 @@ impl str::FromStr for Bitcoin {
 }
 
 pub(crate) fn c_jet_ptr(jet: &Bitcoin) -> fn(&mut CFrameItem, CFrameItem, &()) -> bool {
-        unimplemented!("Bitcoin jets have not yet been implemented.")
+    unimplemented!("Bitcoin jets have not yet been implemented.")
+}
+
+pub(crate) fn decode<I: Iterator<Item = u8>>(
+    bits: &mut BitIter<I>,
+) -> Result<Bitcoin, decode::Error> {
+    decode_bits!(bits, {
+        0 => {
+            0 => {
+                0 => {Bitcoin::Verify},
+                1 => {
+                    0 => {
+                        0 => {
+                            0 => {Bitcoin::Low1},
+                            1 => {
+                                0 => {
+                                    0 => {},
+                                    1 => {Bitcoin::Low8}
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {Bitcoin::Low16},
+                                                1 => {Bitcoin::Low32}
+                                            },
+                                            1 => {
+                                                0 => {Bitcoin::Low64},
+                                                1 => {}
+                                            }
+                                        },
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                }
+                            }
+                        },
+                        1 => {
+                            0 => {Bitcoin::High1},
+                            1 => {
+                                0 => {
+                                    0 => {},
+                                    1 => {Bitcoin::High8}
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {Bitcoin::High16},
+                                                1 => {Bitcoin::High32}
+                                            },
+                                            1 => {
+                                                0 => {Bitcoin::High64},
+                                                1 => {}
+                                            }
+                                        },
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                }
+                            }
+                        }
+                    },
+                    1 => {
+                        0 => {
+                            0 => {
+                                0 => {
+                                    0 => {
+                                        0 => {Bitcoin::Complement1},
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {Bitcoin::Complement8}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Bitcoin::Complement16},
+                                                            1 => {Bitcoin::Complement32}
+                                                        },
+                                                        1 => {
+                                                            0 => {Bitcoin::Complement64},
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {Bitcoin::And1},
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {Bitcoin::And8}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Bitcoin::And16},
+                                                            1 => {Bitcoin::And32}
+                                                        },
+                                                        1 => {
+                                                            0 => {Bitcoin::And64},
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {Bitcoin::Or1},
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {Bitcoin::Or8}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Bitcoin::Or16},
+                                                            1 => {Bitcoin::Or32}
+                                                        },
+                                                        1 => {
+                                                            0 => {Bitcoin::Or64},
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {Bitcoin::Xor1},
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {Bitcoin::Xor8}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Bitcoin::Xor16},
+                                                            1 => {Bitcoin::Xor32}
+                                                        },
+                                                        1 => {
+                                                            0 => {Bitcoin::Xor64},
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {Bitcoin::Maj1},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Bitcoin::Maj8}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Bitcoin::Maj16},
+                                                                1 => {Bitcoin::Maj32}
+                                                            },
+                                                            1 => {
+                                                                0 => {Bitcoin::Maj64},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {Bitcoin::XorXor1},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Bitcoin::XorXor8}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Bitcoin::XorXor16},
+                                                                1 => {Bitcoin::XorXor32}
+                                                            },
+                                                            1 => {
+                                                                0 => {Bitcoin::XorXor64},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {Bitcoin::Ch1},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Bitcoin::Ch8}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Bitcoin::Ch16},
+                                                                1 => {Bitcoin::Ch32}
+                                                            },
+                                                            1 => {
+                                                                0 => {Bitcoin::Ch64},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {Bitcoin::Some1},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Bitcoin::Some8}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Bitcoin::Some16},
+                                                                1 => {Bitcoin::Some32}
+                                                            },
+                                                            1 => {
+                                                                0 => {Bitcoin::Some64},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Bitcoin::All8}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Bitcoin::All16},
+                                                                1 => {Bitcoin::All32}
+                                                            },
+                                                            1 => {
+                                                                0 => {Bitcoin::All64},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {Bitcoin::Eq1},
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {Bitcoin::Eq8}
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Bitcoin::Eq16},
+                                                                1 => {Bitcoin::Eq32}
+                                                            },
+                                                            1 => {
+                                                                0 => {Bitcoin::Eq64},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Bitcoin::Eq256},
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Bitcoin::FullLeftShift8_1}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Bitcoin::FullLeftShift16_1},
+                                                                    1 => {Bitcoin::FullLeftShift32_1}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Bitcoin::FullLeftShift64_1},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {Bitcoin::FullLeftShift8_2},
+                                                                1 => {Bitcoin::FullLeftShift16_2}
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Bitcoin::FullLeftShift32_2},
+                                                                            1 => {Bitcoin::FullLeftShift64_2}
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {Bitcoin::FullLeftShift8_4},
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {Bitcoin::FullLeftShift16_4},
+                                                                1 => {Bitcoin::FullLeftShift32_4}
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Bitcoin::FullLeftShift64_4},
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Bitcoin::FullLeftShift16_8},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Bitcoin::FullLeftShift32_8},
+                                                                            1 => {Bitcoin::FullLeftShift64_8}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {Bitcoin::FullLeftShift32_16},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Bitcoin::FullLeftShift64_16},
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {Bitcoin::FullLeftShift64_32},
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Bitcoin::FullRightShift8_1}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Bitcoin::FullRightShift16_1},
+                                                                    1 => {Bitcoin::FullRightShift32_1}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Bitcoin::FullRightShift64_1},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {Bitcoin::FullRightShift8_2},
+                                                                1 => {Bitcoin::FullRightShift16_2}
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Bitcoin::FullRightShift32_2},
+                                                                            1 => {Bitcoin::FullRightShift64_2}
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {Bitcoin::FullRightShift8_4},
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {Bitcoin::FullRightShift16_4},
+                                                                1 => {Bitcoin::FullRightShift32_4}
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Bitcoin::FullRightShift64_4},
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Bitcoin::FullRightShift16_8},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Bitcoin::FullRightShift32_8},
+                                                                            1 => {Bitcoin::FullRightShift64_8}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {Bitcoin::FullRightShift32_16},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Bitcoin::FullRightShift64_16},
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {Bitcoin::FullRightShift64_32},
+                                                                    1 => {}
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        1 => {
+                            0 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Bitcoin::Leftmost8_1}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::Leftmost16_1},
+                                                                                    1 => {Bitcoin::Leftmost32_1}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Bitcoin::Leftmost64_1},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Bitcoin::Leftmost8_2},
+                                                                                1 => {Bitcoin::Leftmost16_2}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::Leftmost32_2},
+                                                                                            1 => {Bitcoin::Leftmost64_2}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Bitcoin::Leftmost8_4},
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Bitcoin::Leftmost16_4},
+                                                                                1 => {Bitcoin::Leftmost32_4}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::Leftmost64_4},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::Leftmost16_8},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::Leftmost32_8},
+                                                                                            1 => {Bitcoin::Leftmost64_8}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Bitcoin::Leftmost32_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::Leftmost64_16},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::Leftmost64_32},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Bitcoin::Rightmost8_1}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::Rightmost16_1},
+                                                                                    1 => {Bitcoin::Rightmost32_1}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Bitcoin::Rightmost64_1},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Bitcoin::Rightmost8_2},
+                                                                                1 => {Bitcoin::Rightmost16_2}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::Rightmost32_2},
+                                                                                            1 => {Bitcoin::Rightmost64_2}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Bitcoin::Rightmost8_4},
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Bitcoin::Rightmost16_4},
+                                                                                1 => {Bitcoin::Rightmost32_4}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::Rightmost64_4},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    },
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::Rightmost16_8},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::Rightmost32_8},
+                                                                                            1 => {Bitcoin::Rightmost64_8}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Bitcoin::Rightmost32_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::Rightmost64_16},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::Rightmost64_32},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Bitcoin::LeftPadLow1_8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::LeftPadLow1_16},
+                                                                                    1 => {Bitcoin::LeftPadLow1_32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Bitcoin::LeftPadLow1_64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::LeftPadLow8_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::LeftPadLow8_32},
+                                                                                            1 => {Bitcoin::LeftPadLow8_64}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Bitcoin::LeftPadLow16_32},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::LeftPadLow16_64},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::LeftPadLow32_64},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Bitcoin::LeftPadHigh1_8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::LeftPadHigh1_16},
+                                                                                    1 => {Bitcoin::LeftPadHigh1_32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Bitcoin::LeftPadHigh1_64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::LeftPadHigh8_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::LeftPadHigh8_32},
+                                                                                            1 => {Bitcoin::LeftPadHigh8_64}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Bitcoin::LeftPadHigh16_32},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::LeftPadHigh16_64},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::LeftPadHigh32_64},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Bitcoin::LeftExtend1_8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::LeftExtend1_16},
+                                                                                    1 => {Bitcoin::LeftExtend1_32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Bitcoin::LeftExtend1_64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::LeftExtend8_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::LeftExtend8_32},
+                                                                                            1 => {Bitcoin::LeftExtend8_64}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Bitcoin::LeftExtend16_32},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::LeftExtend16_64},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::LeftExtend32_64},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Bitcoin::RightPadLow1_8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::RightPadLow1_16},
+                                                                                    1 => {Bitcoin::RightPadLow1_32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Bitcoin::RightPadLow1_64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::RightPadLow8_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::RightPadLow8_32},
+                                                                                            1 => {Bitcoin::RightPadLow8_64}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Bitcoin::RightPadLow16_32},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::RightPadLow16_64},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::RightPadLow32_64},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {},
+                                                                        1 => {Bitcoin::RightPadHigh1_8}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::RightPadHigh1_16},
+                                                                                    1 => {Bitcoin::RightPadHigh1_32}
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Bitcoin::RightPadHigh1_64},
+                                                                                    1 => {}
+                                                                                }
+                                                                            },
+                                                                            1 => {}
+                                                                        },
+                                                                        1 => {}
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::RightPadHigh8_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::RightPadHigh8_32},
+                                                                                            1 => {Bitcoin::RightPadHigh8_64}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Bitcoin::RightPadHigh16_32},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::RightPadHigh16_64},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::RightPadHigh32_64},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {},
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::RightExtend8_16},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::RightExtend8_32},
+                                                                                            1 => {Bitcoin::RightExtend8_64}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {
+                                                                                    0 => {Bitcoin::RightExtend16_32},
+                                                                                    1 => {
+                                                                                        0 => {
+                                                                                            0 => {Bitcoin::RightExtend16_64},
+                                                                                            1 => {}
+                                                                                        },
+                                                                                        1 => {}
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {
+                                                                                    0 => {Bitcoin::RightExtend32_64},
+                                                                                    1 => {}
+                                                                                },
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Bitcoin::LeftShiftWith8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Bitcoin::LeftShiftWith16},
+                                                                                1 => {Bitcoin::LeftShiftWith32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Bitcoin::LeftShiftWith64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Bitcoin::RightShiftWith8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Bitcoin::RightShiftWith16},
+                                                                                1 => {Bitcoin::RightShiftWith32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Bitcoin::RightShiftWith64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Bitcoin::LeftShift8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Bitcoin::LeftShift16},
+                                                                                1 => {Bitcoin::LeftShift32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Bitcoin::LeftShift64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Bitcoin::RightShift8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Bitcoin::RightShift16},
+                                                                                1 => {Bitcoin::RightShift32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Bitcoin::RightShift64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Bitcoin::LeftRotate8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Bitcoin::LeftRotate16},
+                                                                                1 => {Bitcoin::LeftRotate32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Bitcoin::LeftRotate64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {},
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {Bitcoin::RightRotate8}
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Bitcoin::RightRotate16},
+                                                                                1 => {Bitcoin::RightRotate32}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Bitcoin::RightRotate64},
+                                                                                1 => {}
+                                                                            }
+                                                                        },
+                                                                        1 => {}
+                                                                    },
+                                                                    1 => {}
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {}
+                                                }
+                                            }
+                                        },
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                },
+                                1 => {}
+                            },
+                            1 => {}
+                        }
+                    }
+                }
+            },
+            1 => {
+                0 => {
+                    0 => {
+                        0 => {
+                            0 => {},
+                            1 => {
+                                0 => {
+                                    0 => {},
+                                    1 => {Bitcoin::One8}
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {Bitcoin::One16},
+                                                1 => {Bitcoin::One32}
+                                            },
+                                            1 => {
+                                                0 => {Bitcoin::One64},
+                                                1 => {}
+                                            }
+                                        },
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                }
+                            }
+                        },
+                        1 => {
+                            0 => {
+                                0 => {
+                                    0 => {},
+                                    1 => {
+                                        0 => {
+                                            0 => {},
+                                            1 => {Bitcoin::FullAdd8}
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Bitcoin::FullAdd16},
+                                                        1 => {Bitcoin::FullAdd32}
+                                                    },
+                                                    1 => {
+                                                        0 => {Bitcoin::FullAdd64},
+                                                        1 => {}
+                                                    }
+                                                },
+                                                1 => {}
+                                            },
+                                            1 => {}
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {},
+                                    1 => {
+                                        0 => {
+                                            0 => {},
+                                            1 => {Bitcoin::Add8}
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Bitcoin::Add16},
+                                                        1 => {Bitcoin::Add32}
+                                                    },
+                                                    1 => {
+                                                        0 => {Bitcoin::Add64},
+                                                        1 => {}
+                                                    }
+                                                },
+                                                1 => {}
+                                            },
+                                            1 => {}
+                                        }
+                                    }
+                                }
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Bitcoin::FullIncrement8}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Bitcoin::FullIncrement16},
+                                                                    1 => {Bitcoin::FullIncrement32}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Bitcoin::FullIncrement64},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Bitcoin::Increment8}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Bitcoin::Increment16},
+                                                                    1 => {Bitcoin::Increment32}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Bitcoin::Increment64},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {},
+                                            1 => {
+                                                0 => {},
+                                                1 => {
+                                                    0 => {
+                                                        0 => {},
+                                                        1 => {Bitcoin::FullSubtract8}
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {Bitcoin::FullSubtract16},
+                                                                    1 => {Bitcoin::FullSubtract32}
+                                                                },
+                                                                1 => {
+                                                                    0 => {Bitcoin::FullSubtract64},
+                                                                    1 => {}
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Bitcoin::Subtract8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Bitcoin::Subtract16},
+                                                                        1 => {Bitcoin::Subtract32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Bitcoin::Subtract64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Bitcoin::Negate8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Bitcoin::Negate16},
+                                                                        1 => {Bitcoin::Negate32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Bitcoin::Negate64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Bitcoin::FullDecrement8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Bitcoin::FullDecrement16},
+                                                                        1 => {Bitcoin::FullDecrement32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Bitcoin::FullDecrement64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Bitcoin::Decrement8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Bitcoin::Decrement16},
+                                                                        1 => {Bitcoin::Decrement32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Bitcoin::Decrement64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Bitcoin::FullMultiply8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Bitcoin::FullMultiply16},
+                                                                        1 => {Bitcoin::FullMultiply32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Bitcoin::FullMultiply64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Bitcoin::Multiply8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Bitcoin::Multiply16},
+                                                                        1 => {Bitcoin::Multiply32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Bitcoin::Multiply64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Bitcoin::IsZero8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Bitcoin::IsZero16},
+                                                                        1 => {Bitcoin::IsZero32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Bitcoin::IsZero64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {},
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {},
+                                                            1 => {Bitcoin::IsOne8}
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {Bitcoin::IsOne16},
+                                                                        1 => {Bitcoin::IsOne32}
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {Bitcoin::IsOne64},
+                                                                        1 => {}
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            },
+                                                            1 => {}
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Bitcoin::Le8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Bitcoin::Le16},
+                                                                                        1 => {Bitcoin::Le32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Bitcoin::Le64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Bitcoin::Lt8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Bitcoin::Lt16},
+                                                                                        1 => {Bitcoin::Lt32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Bitcoin::Lt64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Bitcoin::Min8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Bitcoin::Min16},
+                                                                                        1 => {Bitcoin::Min32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Bitcoin::Min64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Bitcoin::Max8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Bitcoin::Max16},
+                                                                                        1 => {Bitcoin::Max32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Bitcoin::Max64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Bitcoin::Median8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Bitcoin::Median16},
+                                                                                        1 => {Bitcoin::Median32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Bitcoin::Median64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {},
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {},
+                                                                                    1 => {
+                                                                                        0 => {Bitcoin::DivMod128_64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Bitcoin::DivMod8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Bitcoin::DivMod16},
+                                                                                        1 => {Bitcoin::DivMod32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Bitcoin::DivMod64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Bitcoin::Divide8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Bitcoin::Divide16},
+                                                                                        1 => {Bitcoin::Divide32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Bitcoin::Divide64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Bitcoin::Modulo8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Bitcoin::Modulo16},
+                                                                                        1 => {Bitcoin::Modulo32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Bitcoin::Modulo64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {},
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {Bitcoin::Divides8}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {
+                                                                                    0 => {
+                                                                                        0 => {Bitcoin::Divides16},
+                                                                                        1 => {Bitcoin::Divides32}
+                                                                                    },
+                                                                                    1 => {
+                                                                                        0 => {Bitcoin::Divides64},
+                                                                                        1 => {}
+                                                                                    }
+                                                                                },
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {}
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                },
+                                                1 => {}
+                                            },
+                                            1 => {}
+                                        },
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                }
+                            }
+                        }
+                    },
+                    1 => {
+                        0 => {
+                            0 => {Bitcoin::Sha256Block},
+                            1 => {
+                                0 => {
+                                    0 => {Bitcoin::Sha256Iv},
+                                    1 => {
+                                        0 => {Bitcoin::Sha256Ctx8Add1},
+                                        1 => {
+                                            0 => {
+                                                0 => {Bitcoin::Sha256Ctx8Add2},
+                                                1 => {Bitcoin::Sha256Ctx8Add4}
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Bitcoin::Sha256Ctx8Add8},
+                                                            1 => {Bitcoin::Sha256Ctx8Add16}
+                                                        },
+                                                        1 => {
+                                                            0 => {Bitcoin::Sha256Ctx8Add32},
+                                                            1 => {Bitcoin::Sha256Ctx8Add64}
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Bitcoin::Sha256Ctx8Add128},
+                                                                1 => {Bitcoin::Sha256Ctx8Add256}
+                                                            },
+                                                            1 => {
+                                                                0 => {Bitcoin::Sha256Ctx8Add512},
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {Bitcoin::Sha256Ctx8AddBuffer511},
+                                                1 => {Bitcoin::Sha256Ctx8Finalize}
+                                            },
+                                            1 => {
+                                                0 => {Bitcoin::Sha256Ctx8Init},
+                                                1 => {}
+                                            }
+                                        },
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                }
+                            }
+                        },
+                        1 => {}
+                    }
+                },
+                1 => {
+                    0 => {
+                        0 => {
+                            0 => {
+                                0 => {
+                                    0 => {
+                                        0 => {Bitcoin::PointVerify1},
+                                        1 => {}
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {Bitcoin::Decompress},
+                                            1 => {
+                                                0 => {Bitcoin::LinearVerify1},
+                                                1 => {}
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Bitcoin::LinearCombination1},
+                                                            1 => {}
+                                                        },
+                                                        1 => {Bitcoin::Scale}
+                                                    },
+                                                    1 => {
+                                                        0 => {Bitcoin::Generate},
+                                                        1 => {Bitcoin::GejInfinity}
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {Bitcoin::GejNormalize},
+                                                            1 => {Bitcoin::GejNegate}
+                                                        },
+                                                        1 => {
+                                                            0 => {Bitcoin::GeNegate},
+                                                            1 => {Bitcoin::GejDouble}
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {Bitcoin::GejAdd},
+                                                            1 => {Bitcoin::GejGeAddEx}
+                                                        },
+                                                        1 => {
+                                                            0 => {Bitcoin::GejGeAdd},
+                                                            1 => {Bitcoin::GejRescale}
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Bitcoin::GejIsInfinity},
+                                                                            1 => {Bitcoin::GejEquiv}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Bitcoin::GejGeEquiv},
+                                                                            1 => {Bitcoin::GejXEquiv}
+                                                                        }
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Bitcoin::GejYIsOdd},
+                                                                            1 => {Bitcoin::GejIsOnCurve}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Bitcoin::GeIsOnCurve},
+                                                                            1 => {Bitcoin::ScalarNormalize}
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {Bitcoin::ScalarNegate},
+                                                                            1 => {Bitcoin::ScalarAdd}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Bitcoin::ScalarSquare},
+                                                                            1 => {Bitcoin::ScalarMultiply}
+                                                                        }
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {Bitcoin::ScalarMultiplyLambda},
+                                                                            1 => {Bitcoin::ScalarInvert}
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {Bitcoin::ScalarIsZero},
+                                                                            1 => {}
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            1 => {
+                                                                0 => {
+                                                                    0 => {
+                                                                        0 => {
+                                                                            0 => {},
+                                                                            1 => {
+                                                                                0 => {},
+                                                                                1 => {Bitcoin::FeNormalize}
+                                                                            }
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Bitcoin::FeNegate},
+                                                                                1 => {Bitcoin::FeAdd}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Bitcoin::FeSquare},
+                                                                                1 => {Bitcoin::FeMultiply}
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    1 => {
+                                                                        0 => {
+                                                                            0 => {
+                                                                                0 => {Bitcoin::FeMultiplyBeta},
+                                                                                1 => {Bitcoin::FeInvert}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Bitcoin::FeSquareRoot},
+                                                                                1 => {Bitcoin::FeIsZero}
+                                                                            }
+                                                                        },
+                                                                        1 => {
+                                                                            0 => {
+                                                                                0 => {Bitcoin::FeIsOdd},
+                                                                                1 => {}
+                                                                            },
+                                                                            1 => {
+                                                                                0 => {Bitcoin::HashToCurve},
+                                                                                1 => {Bitcoin::Swu}
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                1 => {}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {Bitcoin::CheckSigVerify},
+                                    1 => {
+                                        0 => {
+                                            0 => {Bitcoin::Bip0340Verify},
+                                            1 => {}
+                                        },
+                                        1 => {}
+                                    }
+                                }
+                            },
+                            1 => {
+                                0 => {},
+                                1 => {
+                                    0 => {Bitcoin::ParseLock},
+                                    1 => {
+                                        0 => {
+                                            0 => {Bitcoin::ParseSequence},
+                                            1 => {Bitcoin::TapdataInit}
+                                        },
+                                        1 => {}
+                                    }
+                                }
+                            }
+                        },
+                        1 => {}
+                    },
+                    1 => {}
+                }
+            }
+        },
+        1 => {
+            0 => {
+                0 => {Bitcoin::SigAllHash},
+                1 => {
+                    0 => {
+                        0 => {Bitcoin::TxHash},
+                        1 => {Bitcoin::TapEnvHash}
+                    },
+                    1 => {
+                        0 => {
+                            0 => {
+                                0 => {
+                                    0 => {Bitcoin::OutputsHash},
+                                    1 => {Bitcoin::InputsHash}
+                                },
+                                1 => {
+                                    0 => {Bitcoin::InputUtxosHash},
+                                    1 => {Bitcoin::OutputHash}
+                                }
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {Bitcoin::OutputValuesHash},
+                                        1 => {Bitcoin::OutputScriptsHash}
+                                    },
+                                    1 => {
+                                        0 => {Bitcoin::InputHash},
+                                        1 => {Bitcoin::InputOutpointsHash}
+                                    }
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {Bitcoin::InputSequencesHash},
+                                        1 => {Bitcoin::InputAnnexesHash}
+                                    },
+                                    1 => {
+                                        0 => {Bitcoin::InputScriptSigsHash},
+                                        1 => {Bitcoin::InputUtxoHash}
+                                    }
+                                }
+                            }
+                        },
+                        1 => {
+                            0 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Bitcoin::InputValuesHash},
+                                                        1 => {Bitcoin::InputScriptsHash}
+                                                    },
+                                                    1 => {
+                                                        0 => {Bitcoin::TapleafHash},
+                                                        1 => {Bitcoin::TappathHash}
+                                                    }
+                                                },
+                                                1 => {
+                                                    0 => {
+                                                        0 => {Bitcoin::OutpointHash},
+                                                        1 => {Bitcoin::AnnexHash}
+                                                    },
+                                                    1 => {
+                                                        0 => {Bitcoin::BuildTapleafSimplicity},
+                                                        1 => {Bitcoin::BuildTapbranch}
+                                                    }
+                                                }
+                                            },
+                                            1 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {Bitcoin::BuildTaptweak},
+                                                        1 => {}
+                                                    },
+                                                    1 => {}
+                                                },
+                                                1 => {}
+                                            }
+                                        },
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                },
+                                1 => {}
+                            },
+                            1 => {}
+                        }
+                    }
+                }
+            },
+            1 => {
+                0 => {
+                    0 => {
+                        0 => {Bitcoin::CheckLockHeight},
+                        1 => {
+                            0 => {
+                                0 => {Bitcoin::CheckLockTime},
+                                1 => {Bitcoin::CheckLockDistance}
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {Bitcoin::CheckLockDuration},
+                                            1 => {Bitcoin::TxLockHeight}
+                                        },
+                                        1 => {
+                                            0 => {Bitcoin::TxLockTime},
+                                            1 => {Bitcoin::TxLockDistance}
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {Bitcoin::TxLockDuration},
+                                                1 => {Bitcoin::TxIsFinal}
+                                            },
+                                            1 => {}
+                                        },
+                                        1 => {}
+                                    }
+                                },
+                                1 => {}
+                            }
+                        }
+                    },
+                    1 => {
+                        0 => {Bitcoin::ScriptCMR},
+                        1 => {
+                            0 => {
+                                0 => {Bitcoin::InternalKey},
+                                1 => {Bitcoin::CurrentIndex}
+                            },
+                            1 => {
+                                0 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {Bitcoin::NumInputs},
+                                            1 => {Bitcoin::NumOutputs}
+                                        },
+                                        1 => {
+                                            0 => {Bitcoin::LockTime},
+                                            1 => {Bitcoin::Fee}
+                                        }
+                                    },
+                                    1 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {Bitcoin::OutputValue},
+                                                1 => {Bitcoin::OutputScriptHash}
+                                            },
+                                            1 => {
+                                                0 => {Bitcoin::TotalOutputValue},
+                                                1 => {Bitcoin::CurrentPrevOutpoint}
+                                            }
+                                        },
+                                        1 => {
+                                            0 => {
+                                                0 => {Bitcoin::CurrentValue},
+                                                1 => {Bitcoin::CurrentScriptHash}
+                                            },
+                                            1 => {
+                                                0 => {Bitcoin::CurrentSequence},
+                                                1 => {Bitcoin::CurrentAnnexHash}
+                                            }
+                                        }
+                                    }
+                                },
+                                1 => {
+                                    0 => {
+                                        0 => {
+                                            0 => {
+                                                0 => {
+                                                    0 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Bitcoin::CurrentScriptSigHash},
+                                                                1 => {Bitcoin::InputPrevOutpoint}
+                                                            },
+                                                            1 => {
+                                                                0 => {Bitcoin::InputValue},
+                                                                1 => {Bitcoin::InputScriptHash}
+                                                            }
+                                                        },
+                                                        1 => {
+                                                            0 => {
+                                                                0 => {Bitcoin::InputSequence},
+                                                                1 => {Bitcoin::InputAnnexHash}
+                                                            },
+                                                            1 => {
+                                                                0 => {Bitcoin::InputScriptSigHash},
+                                                                1 => {Bitcoin::TotalInputValue}
+                                                            }
+                                                        }
+                                                    },
+                                                    1 => {
+                                                        0 => {
+                                                            0 => {
+                                                                0 => {Bitcoin::TapleafVersion},
+                                                                1 => {Bitcoin::Tappath}
+                                                            },
+                                                            1 => {
+                                                                0 => {Bitcoin::Version},
+                                                                1 => {Bitcoin::TransactionId}
+                                                            }
+                                                        },
+                                                        1 => {}
+                                                    }
+                                                },
+                                                1 => {}
+                                            },
+                                            1 => {}
+                                        },
+                                        1 => {}
+                                    },
+                                    1 => {}
+                                }
+                            }
+                        }
+                    }
+                },
+                1 => {}
+            }
+        }
+    })
 }

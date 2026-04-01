@@ -462,7 +462,7 @@ impl<J: Jet> RedeemNode<J> {
     }
 
     /// Decode a Simplicity program from bits, including the witness data.
-    pub fn decode<I1, I2>(
+    pub fn decode<I1, I2, JE: JetEnvironment<Jet = J>>(
         program: BitIter<I1>,
         mut witness: BitIter<I2>,
     ) -> Result<Arc<Self>, DecodeError>
@@ -526,8 +526,8 @@ impl<J: Jet> RedeemNode<J> {
 
         // 1. Decode program without witnesses as ConstructNode
         let program: Arc<Self> = types::Context::with_context(|ctx| {
-            let construct =
-                crate::ConstructNode::decode(&ctx, program).map_err(DecodeError::Decode)?;
+            let construct = crate::ConstructNode::decode::<_, JE>(&ctx, program)
+                .map_err(DecodeError::Decode)?;
             construct
                 .set_arrow_to_program()
                 .map_err(DecodeError::Type)?;
@@ -561,7 +561,10 @@ impl<J: Jet> RedeemNode<J> {
 
     #[cfg(feature = "base64")]
     #[allow(clippy::should_implement_trait)] // returns Arc<Self>
-    pub fn from_str(prog: &str, wit: &str) -> Result<Arc<Self>, crate::ParseError> {
+    pub fn from_str<JE: JetEnvironment<Jet = J>>(
+        prog: &str,
+        wit: &str,
+    ) -> Result<Arc<Self>, crate::ParseError> {
         use crate::base64::engine::general_purpose;
         use crate::base64::Engine as _;
         use crate::hex::FromHex as _;
@@ -573,22 +576,18 @@ impl<J: Jet> RedeemNode<J> {
 
         let v = Vec::from_hex(wit).map_err(crate::ParseError::Hex)?;
         let wit_iter = crate::BitIter::new(v.into_iter());
-        Self::decode(prog_iter, wit_iter).map_err(crate::ParseError::Decode)
+        Self::decode::<_, _, JE>(prog_iter, wit_iter).map_err(crate::ParseError::Decode)
     }
 
     /// Encode the program to bits.
     ///
     /// Includes witness data. Returns the number of written bits.
     #[deprecated(since = "0.5.0", note = "use Self::encode_with_witness instead")]
-    pub fn encode<W1, W2>(
+    pub fn encode(
         &self,
-        prog: &mut BitWriter<W1>,
-        witness: &mut BitWriter<W2>,
-    ) -> io::Result<usize>
-    where
-        W1: io::Write,
-        W2: io::Write,
-    {
+        prog: &mut BitWriter<&mut dyn io::Write>,
+        witness: &mut BitWriter<&mut dyn io::Write>,
+    ) -> io::Result<usize> {
         let sharing_iter = self.post_order_iter::<MaxSharing<Redeem<J>>>();
         let program_bits = encode::encode_program(self, prog)?;
         prog.flush_all()?;
@@ -611,7 +610,7 @@ impl<J: Jet> RedeemNode<J> {
 mod tests {
     use super::*;
     use crate::human_encoding::Forest;
-    use crate::jet::Core;
+    use crate::jet::CoreEnv;
     use crate::node::SimpleFinalizer;
     use crate::types::Final;
     use hex::DisplayHex;
@@ -620,20 +619,20 @@ mod tests {
 
     #[cfg_attr(not(feature = "base64"), allow(unused_variables))]
     #[track_caller]
-    fn assert_program_deserializable<J: Jet>(
+    fn assert_program_deserializable<JE: JetEnvironment>(
         prog_bytes: &[u8],
         witness_bytes: &[u8],
         cmr_str: &str,
         amr_str: &str,
         ihr_str: &str,
         b64_str: &str,
-    ) -> Arc<RedeemNode<J>> {
+    ) -> Arc<RedeemNode<JE::Jet>> {
         let prog_hex = prog_bytes.as_hex();
         let witness_hex = witness_bytes.as_hex();
 
         let prog = BitIter::from(prog_bytes);
         let witness = BitIter::from(witness_bytes);
-        let prog = match RedeemNode::<J>::decode(prog, witness) {
+        let prog = match RedeemNode::decode::<_, _, JE>(prog, witness) {
             Ok(prog) => prog,
             Err(e) => panic!("program {} failed: {}", prog_hex, e),
         };
@@ -695,7 +694,7 @@ mod tests {
     }
 
     #[track_caller]
-    fn assert_program_not_deserializable<J: Jet>(
+    fn assert_program_not_deserializable<JE: JetEnvironment>(
         prog_bytes: &[u8],
         witness_bytes: &[u8],
         err: &dyn fmt::Display,
@@ -706,7 +705,7 @@ mod tests {
 
         let prog = BitIter::from(prog_bytes);
         let witness = BitIter::from(witness_bytes);
-        match RedeemNode::<J>::decode(prog, witness) {
+        match RedeemNode::decode::<_, _, JE>(prog, witness) {
             Ok(prog) => panic!(
                 "Program {} wit {} succeded (expected error {}). Program parsed as:\n{:?}",
                 prog_hex, witness_hex, err, prog
@@ -729,7 +728,7 @@ mod tests {
         // main = comp wits_are_equal jet_verify            :: 1 -> 1
         let eqwits = [0xcd, 0xdc, 0x51, 0xb6, 0xe2, 0x08, 0xc0, 0x40];
         let iter = BitIter::from(&eqwits[..]);
-        let eqwits_prog = CommitNode::<Core>::decode(iter).unwrap();
+        let eqwits_prog = CommitNode::decode::<_, CoreEnv>(iter).unwrap();
 
         let eqwits_final = eqwits_prog
             .finalize(&mut SimpleFinalizer::new(std::iter::repeat(Value::u32(
@@ -755,7 +754,7 @@ mod tests {
         // This program is exactly the output from the `encode_shared_witnesses` test.
         // The point of this is to make sure that our witness-unsharing logic doesn't
         // get confused here and try to read two witnesses when there are only one.
-        assert_program_deserializable::<Core>(
+        assert_program_deserializable::<CoreEnv>(
             &[0xc9, 0xc4, 0x6d, 0xb8, 0x82, 0x30, 0x10],
             &[0xde, 0xad, 0xbe, 0xef],
             "ee2d966aeccfba7f1f1e54bc130237a6ae575db9c1132193d513aeb14b18151a",
@@ -772,7 +771,7 @@ mod tests {
         // id2 = iden          :: A -> A # cmr dbfefcfc...
         // cp3 = comp id1 id2  :: A -> A # cmr c1ae55b5...
         // main = comp cp3 cp3 :: A -> A # cmr 314e2879...
-        assert_program_not_deserializable::<Core>(
+        assert_program_not_deserializable::<CoreEnv>(
             &[0xc1, 0x08, 0x04, 0x00],
             &[],
             &DecodeError::Decode(crate::decode::Error::SharingNotMaximal),
@@ -784,7 +783,7 @@ mod tests {
         // "main = unit", but with a witness attached. Found by fuzzer.
         let prog = BitIter::from(&[0x24][..]);
         let wit = BitIter::from(&[0x00][..]);
-        match RedeemNode::<Core>::decode(prog, wit) {
+        match RedeemNode::decode::<_, _, CoreEnv>(prog, wit) {
             Err(DecodeError::Decode(crate::decode::Error::BitIter(
                 crate::BitIterCloseError::TrailingBytes { first_byte: 0 },
             ))) => {} // ok,
@@ -803,7 +802,7 @@ mod tests {
         // cp2 = comp id1 id1
         // cp3 = comp cp2 cp2
         // main = comp cp3 cp2
-        assert_program_deserializable::<Core>(
+        assert_program_deserializable::<CoreEnv>(
             &[0xc1, 0x00, 0x00, 0x01, 0x00],
             &[],
             "8a54101335ca2cf7e933d74cdb15f99becc4e540799ba5e2d19c00c9d7219e71",
@@ -819,7 +818,7 @@ mod tests {
         // asst = assertl unit deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef
         // input0 = pair (injl unit) unit
         // main = comp input0 asst
-        assert_program_deserializable::<Core>(
+        assert_program_deserializable::<CoreEnv>(
             &[
                 0xcd, 0x24, 0x08, 0x4b, 0x6f, 0x56, 0xdf, 0x77,
                 0xef, 0x56, 0xdf, 0x77, 0xef, 0x56, 0xdf, 0x77,
@@ -838,7 +837,7 @@ mod tests {
         // asst = assertr deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef unit
         // input1 = pair (injr unit) unit
         // main = comp input1 asst
-        assert_program_deserializable::<Core>(
+        assert_program_deserializable::<CoreEnv>(
             &[
                 0xcd, 0x25, 0x08, 0x6d, 0xea, 0xdb, 0xee, 0xfd,
                 0xea, 0xdb, 0xee, 0xfd, 0xea, 0xdb, 0xee, 0xfd,
@@ -862,7 +861,7 @@ mod tests {
         // disc3 = disconnect pr2 pr2 :: B -> ((2^256 * B) * ((2^256 * B) * (2^256 * B))) # cmr d81d6f28...
         // ut4 = unit                 :: ((2^256 * B) * ((2^256 * B) * (2^256 * B))) -> 1 # cmr 62274a89...
         // main = comp disc3 ut4      :: B -> 1                                           # cmr a453360c...
-        assert_program_deserializable::<Core>(
+        assert_program_deserializable::<CoreEnv>(
             &[0xc5, 0x02, 0x06, 0x24, 0x10],
             &[],
             "afe8f5f8bd3f64bfa51d2f29ffa22523604d9654c0d9862dbf2dc67ba097cbb2",
@@ -895,7 +894,7 @@ mod tests {
         // jt6 = jet_check_sig_verify :: ((2^256 * 2^512) * 2^512) -> 1 # cmr 297459d8...
         //
         // main = comp pr5 jt6        :: 1 -> 1                         # cmr 14a5e0cc...
-        assert_program_deserializable::<crate::jet::Elements>(
+        assert_program_deserializable::<crate::jet::ElementsTxEnv>(
             &[
                 0xd3, 0x69, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3b, 0x78, 0xce,
                 0x56, 0x3f, 0x89, 0xa0, 0xed, 0x94, 0x14, 0xf5, 0xaa, 0x28, 0xad, 0x0d, 0x96, 0xd6, 0x79, 0x5f,
@@ -927,7 +926,7 @@ mod tests {
         // disc4 = disconnect id1 jl3 :: 1 -> (2^256 * 2)           # cmr 6968f10e...
         // ut5 = unit                 :: (2^256 * 2) -> 1           # cmr 62274a89...
         // main = comp disc4 ut5      :: 1 -> 1                     # cmr a8c9cc7a...
-        assert_program_deserializable::<crate::jet::Elements>(
+        assert_program_deserializable::<crate::jet::ElementsTxEnv>(
             &[0xc9, 0x09, 0x20, 0x74, 0x90, 0x40],
             &[],
             "b689bdee289c8dd4e2e283358d187813363d441776cf826dafc27cc8a81ec441",
@@ -955,7 +954,7 @@ mod tests {
             0x25, 0xf6, 0x6a, 0x4a, 0x85, 0xea, 0x8b, 0x71, 0xe4, 0x82, 0xa7, 0x4f, 0x38, 0x2d, 0x2c, 0xe5,
             0xeb, 0xee, 0xe8, 0xfd, 0xb2, 0x17, 0x2f, 0x47, 0x7d, 0xf4, 0x90, 0x0d, 0x31, 0x05, 0x36, 0xc0,
         ];
-        assert_program_deserializable::<crate::jet::Elements>(
+        assert_program_deserializable::<crate::jet::ElementsTxEnv>(
             &schnorr0,
             &schnorr0_wit,
             "8a9e97676b24be7797d9ee0bf32dd76bcd78028e973025f785eae8dc91c8a0da",

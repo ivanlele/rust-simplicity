@@ -229,18 +229,18 @@ impl<'brand, J: Jet> ConstructNode<'brand, J> {
     /// or the witness is provided by other means.
     ///
     /// If the serialization contains the witness data, then use [`crate::RedeemNode::decode()`].
-    pub fn decode<I: Iterator<Item = u8>>(
+    pub fn decode<I: Iterator<Item = u8>, JE: JetEnvironment<Jet = J>>(
         context: &types::Context<'brand>,
         mut bits: BitIter<I>,
     ) -> Result<Arc<Self>, crate::decode::Error> {
-        let res = crate::decode::decode_expression(context, &mut bits)?;
+        let res = crate::decode::decode_expression::<_, JE>(context, &mut bits)?;
         bits.close()?;
         Ok(res)
     }
 
     #[cfg(feature = "base64")]
     #[allow(clippy::should_implement_trait)] // returns Arc<Self>, needs tyctx
-    pub fn from_str(
+    pub fn from_str<JE: JetEnvironment<Jet = J>>(
         context: &types::Context<'brand>,
         s: &str,
     ) -> Result<Arc<Self>, crate::ParseError> {
@@ -251,14 +251,14 @@ impl<'brand, J: Jet> ConstructNode<'brand, J> {
             .decode(s)
             .map_err(crate::ParseError::Base64)?;
         let iter = crate::BitIter::new(v.into_iter());
-        Self::decode(context, iter)
+        Self::decode::<_, JE>(context, iter)
             .map_err(crate::DecodeError::Decode)
             .map_err(crate::ParseError::Decode)
     }
 
     /// Encode a Simplicity expression to bits, with no witness data
     #[deprecated(since = "0.5.0", note = "use Self::encode_without_witness instead")]
-    pub fn encode<W: io::Write>(&self, w: &mut BitWriter<W>) -> io::Result<usize> {
+    pub fn encode(&self, w: &mut BitWriter<&mut dyn io::Write>) -> io::Result<usize> {
         let program_bits = encode::encode_program(self, w)?;
         w.flush_all()?;
         Ok(program_bits)
@@ -422,7 +422,7 @@ impl<'brand, J: Jet> JetConstructible<'brand, J> for ConstructData<'brand, J> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::jet::Core;
+    use crate::jet::{Core, CoreEnv};
     use crate::types::Final;
     use crate::Value;
 
@@ -589,7 +589,7 @@ mod tests {
             );
 
             let prog = BitIter::from(prog);
-            let decode = CommitNode::<Core>::decode(prog).unwrap();
+            let decode = CommitNode::decode::<_, CoreEnv>(prog).unwrap();
 
             // ...but then during decoding we read the program incorrectly and this assertion fails.
             assert_eq!(finalized, decode);

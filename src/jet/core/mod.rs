@@ -29,4 +29,10 @@ impl JetEnvironment for CoreEnv {
     ) -> fn(&mut CFrameItem, CFrameItem, &Self::CJetEnvironment) -> bool {
         super::init::core::c_jet_ptr(jet)
     }
+
+    fn decode<I: Iterator<Item = u8>>(
+        bits: &mut crate::BitIter<I>,
+    ) -> Result<Self::Jet, crate::decode::Error> {
+        super::init::core::decode(bits)
+    }
 }
