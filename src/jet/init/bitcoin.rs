@@ -10,6 +10,7 @@ use hashes::sha256::Midstate;
 use simplicity_sys::CFrameItem;
 use std::io::Write;
 use std::{fmt, str};
+use crate::jet::bitcoin::BitcoinEnv;
 
 /// The Bitcoin jet family.
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Debug, Hash)]
@@ -879,6 +880,13 @@ impl Bitcoin {
 }
 
 impl Jet for Bitcoin {
+
+    type Environment = BitcoinEnv;
+    type CJetEnvironment = ();
+
+    fn c_jet_env(_env: &Self::Environment) -> &Self::CJetEnvironment {
+        unimplemented!("Unspecified CJetEnvironment for Bitcoin jets")
+    }
 
     fn cmr(&self) -> Cmr {
         unimplemented!("Bitcoin jet CMRs weights have not yet been implemented.")
@@ -1754,7 +1762,7 @@ impl Jet for Bitcoin {
         TypeName(name)
     }
 
-    fn encode(&self, w: &mut BitWriter<&mut dyn Write>) -> std::io::Result<usize> {
+    fn encode<W: Write>(&self, w: &mut BitWriter<W>) -> std::io::Result<usize> {
         let (n, len) = match self {
             Bitcoin::Verify => (0, 3),
             Bitcoin::Low1 => (8, 6),
@@ -2189,7 +2197,7 @@ impl Jet for Bitcoin {
         w.write_bits_be(n, len)
     }
 
-    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error> where Self: Sized {
+    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error> {
         decode_bits!(bits, {
             0 => {
                 0 => {
@@ -4698,12 +4706,12 @@ impl Jet for Bitcoin {
         })
     }
 
-    fn cost(&self) -> Cost {
-        unimplemented!("Unspecified cost of Bitcoin jets")
+    fn c_jet_ptr(&self) -> &dyn Fn(&mut CFrameItem, CFrameItem, &Self::CJetEnvironment) -> bool {
+        unimplemented!("Bitcoin jets have not yet been implemented.")
     }
 
-    fn parse(s: &str) -> Result<Self, crate::Error> where Self: Sized {
-        str::FromStr::from_str(s)
+    fn cost(&self) -> Cost {
+        unimplemented!("Unspecified cost of Bitcoin jets")
     }
 }
 
@@ -5578,8 +5586,4 @@ impl str::FromStr for Bitcoin {
             x => Err(crate::Error::InvalidJetName(x.to_owned())),
         }
     }
-}
-
-pub(crate) fn c_jet_ptr(jet: &Bitcoin) -> fn(&mut CFrameItem, CFrameItem, &()) -> bool {
-        unimplemented!("Bitcoin jets have not yet been implemented.")
 }

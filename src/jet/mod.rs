@@ -60,16 +60,8 @@ pub trait JetEnvironment {
     /// The type of jet that this environment supports.
     type Jet: Jet;
 
-    /// CJetEnvironment to interact with C FFI.
-    type CJetEnvironment;
-
     /// Obtains a C FFI compatible environment for the jet.
-    fn c_jet_env(&self) -> &Self::CJetEnvironment;
-
-    /// Obtain the FFI C pointer for the jet.
-    fn c_jet_ptr(
-        jet: &Self::Jet,
-    ) -> fn(&mut CFrameItem, CFrameItem, &Self::CJetEnvironment) -> bool;
+    fn c_jet_env(&self) -> &<Self::Jet as Jet>::CJetEnvironment;
 }
 
 /// Family of jets that share an encoding scheme and execution environment.
@@ -80,7 +72,14 @@ pub trait JetEnvironment {
 /// Jets may read values from their _environment_.
 ///
 /// Jets are **always** leaves in a Simplicity DAG.
-pub trait Jet: Copy + Eq + Ord + Hash + std::fmt::Debug + std::fmt::Display + 'static {
+pub trait Jet:
+    Copy + Eq + Ord + Hash + std::fmt::Debug + std::fmt::Display + std::str::FromStr + 'static
+{
+    /// Environment for jet to read from
+    type Environment;
+    /// CJetEnvironment to interact with C FFI.
+    type CJetEnvironment;
+
     /// Return the CMR of the jet.
     fn cmr(&self) -> Cmr;
 
@@ -91,20 +90,21 @@ pub trait Jet: Copy + Eq + Ord + Hash + std::fmt::Debug + std::fmt::Display + 's
     fn target_ty(&self) -> TypeName;
 
     /// Encode the jet to bits.
-    fn encode(&self, w: &mut BitWriter<&mut dyn Write>) -> std::io::Result<usize>;
+    fn encode<W: Write>(&self, w: &mut BitWriter<W>) -> std::io::Result<usize>;
 
     /// Decode a jet from bits.
     fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error>
     where
         Self: Sized;
 
+    /// Obtains a C FFI compatible environment for the jet.
+    fn c_jet_env(env: &Self::Environment) -> &Self::CJetEnvironment;
+
+    /// Obtain the FFI C pointer for the jet.
+    fn c_jet_ptr(&self) -> &dyn Fn(&mut CFrameItem, CFrameItem, &Self::CJetEnvironment) -> bool;
+
     /// Return the cost of the jet.
     fn cost(&self) -> Cost;
-
-    /// Parse a jet from a string.
-    fn parse(s: &str) -> Result<Self, crate::Error>
-    where
-        Self: Sized;
 }
 
 #[cfg(test)]

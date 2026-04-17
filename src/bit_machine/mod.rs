@@ -525,7 +525,7 @@ impl BitMachine {
         let (input_read_frame, _input_buffer) = unsafe { get_input_frame(self, input_width) };
         let (mut output_write_frame, output_buffer) = unsafe { get_output_frame(output_width) };
 
-        let jet_fn = JE::c_jet_ptr(&jet);
+        let jet_fn = jet.c_jet_ptr();
         let c_env = env.c_jet_env();
         let success = jet_fn(&mut output_write_frame, input_read_frame, c_env);
 
