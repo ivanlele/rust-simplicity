@@ -9,6 +9,7 @@ pub use environment::{ElementsEnv, ElementsUtxo};
 
 use super::init::elements::Elements;
 use super::JetEnvironment;
+use crate::jet::Jet;
 use simplicity_sys::c_jets::frame_ffi::CFrameItem;
 use simplicity_sys::CElementsTxEnv;
 
@@ -25,7 +26,7 @@ impl JetEnvironment for ElementsTxEnv {
 
     fn c_jet_ptr(
         jet: &Self::Jet,
-    ) -> fn(&mut CFrameItem, CFrameItem, &Self::CJetEnvironment) -> bool {
-        super::init::elements::c_jet_ptr(jet)
+    ) -> &dyn Fn(&mut CFrameItem, CFrameItem, &Self::CJetEnvironment) -> bool {
+        jet.c_jet_ptr()
     }
 }
