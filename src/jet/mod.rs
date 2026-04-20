@@ -80,7 +80,9 @@ pub trait JetEnvironment {
 /// Jets may read values from their _environment_.
 ///
 /// Jets are **always** leaves in a Simplicity DAG.
-pub trait Jet: Copy + Eq + Ord + Hash + std::fmt::Debug + std::fmt::Display + 'static {
+pub trait Jet:
+    Copy + Eq + Ord + Hash + std::fmt::Debug + std::fmt::Display + std::str::FromStr + 'static
+{
     /// Environment for jet to read from
     type Environment;
     /// CJetEnvironment to interact with C FFI.
@@ -96,12 +98,10 @@ pub trait Jet: Copy + Eq + Ord + Hash + std::fmt::Debug + std::fmt::Display + 's
     fn target_ty(&self) -> TypeName;
 
     /// Encode the jet to bits.
-    fn encode(&self, w: &mut BitWriter<&mut dyn Write>) -> std::io::Result<usize>;
+    fn encode<W: Write>(&self, w: &mut BitWriter<W>) -> std::io::Result<usize>;
 
     /// Decode a jet from bits.
-    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error>
-    where
-        Self: Sized;
+    fn decode<I: Iterator<Item = u8>>(bits: &mut BitIter<I>) -> Result<Self, decode::Error>;
 
     /// Obtains a C FFI compatible environment for the jet.
     fn c_jet_env(env: &Self::Environment) -> &Self::CJetEnvironment;
@@ -111,11 +111,6 @@ pub trait Jet: Copy + Eq + Ord + Hash + std::fmt::Debug + std::fmt::Display + 's
 
     /// Return the cost of the jet.
     fn cost(&self) -> Cost;
-
-    /// Parse a jet from a string.
-    fn parse(s: &str) -> Result<Self, crate::Error>
-    where
-        Self: Sized;
 }
 
 #[cfg(test)]
